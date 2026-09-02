@@ -1,11 +1,11 @@
 "use client";
+// Force HMR refresh
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PriceCalendar } from "@/components/booking/PriceCalendar";
-import { MapModal } from "@/components/booking/MapModal";
 import {
   STATIONS,
   POPULAR_ROUTES,
@@ -33,14 +33,22 @@ import {
   Tag,
 } from "lucide-react";
 
-export default function LandingPage() {
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
+function LandingPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const today = new Date().toISOString().split("T")[0];
+
+  // Read initial origin/dest from query params if coming from map page
+  const queryOrigin = searchParams.get("origin") || "";
+  const queryDest = searchParams.get("dest") || "";
 
   // Form state
   const [tripType, setTripType] = useState<"one-way" | "round-trip">("one-way");
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  const [origin, setOrigin] = useState(queryOrigin);
+  const [destination, setDestination] = useState(queryDest);
   const [departDate, setDepartDate] = useState(today);
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
@@ -69,7 +77,6 @@ export default function LandingPage() {
   }, []);
 
   // Modals
-  const [showMap, setShowMap] = useState(false);
   const [showDepartCal, setShowDepartCal] = useState(false);
   const [showReturnCal, setShowReturnCal] = useState(false);
 
@@ -222,20 +229,19 @@ export default function LandingPage() {
                     </p>
                     <button
                       onClick={() => { setShowOriginList(true); setShowDestList(false); }}
-                      className={`w-full text-left cursor-pointer border rounded-xl px-3 py-2 transition-all group relative overflow-hidden ${
-                        origin ? "border-[var(--color-primary)] shadow-sm" : "border-gray-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-info-bg)]"
-                      }`}
+                      className={`w-full text-left cursor-pointer border rounded-xl px-3 py-2 transition-all group relative overflow-hidden ${origin ? "border-[var(--color-primary)] shadow-sm" : "border-gray-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-info-bg)]"
+                        }`}
                     >
                       {origin && originStation && (
                         <>
-                          <div 
-                            className="absolute inset-0 bg-cover bg-center z-0 transition-transform duration-700 group-hover:scale-105" 
+                          <div
+                            className="absolute inset-0 bg-cover bg-center z-0 transition-transform duration-700 group-hover:scale-105"
                             style={{ backgroundImage: `url('${getCityImage(originStation.city)}')` }}
                           />
                           <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary)]/80 to-[var(--color-primary)]/10 z-10" />
                         </>
                       )}
-                      
+
                       <div className="flex items-center justify-between relative z-20">
                         <div>
                           {origin ? (
@@ -343,21 +349,20 @@ export default function LandingPage() {
                     </p>
                     <button
                       onClick={() => { setShowDestList(true); setShowOriginList(false); }}
-                      className={`w-full text-right cursor-pointer border rounded-xl px-3 py-2 transition-all group relative overflow-hidden ${
-                        destination ? "border-[var(--color-accent)] shadow-sm" : "border-gray-200 hover:border-[var(--color-accent)] hover:bg-orange-50"
-                      }`}
+                      className={`w-full text-right cursor-pointer border rounded-xl px-3 py-2 transition-all group relative overflow-hidden ${destination ? "border-[var(--color-accent)] shadow-sm" : "border-gray-200 hover:border-[var(--color-accent)] hover:bg-orange-50"
+                        }`}
                     >
                       {destination && destStation && (
                         <>
-                          <div 
-                            className="absolute inset-0 bg-cover bg-center z-0 transition-transform duration-700 group-hover:scale-105" 
+                          <div
+                            className="absolute inset-0 bg-cover bg-center z-0 transition-transform duration-700 group-hover:scale-105"
                             style={{ backgroundImage: `url('${getCityImage(destStation.city)}')` }}
                           />
                           {/* Right-to-left gradient for destination to keep text readable on the right side */}
                           <div className="absolute inset-0 bg-gradient-to-l from-[var(--color-accent)] via-[var(--color-accent)]/80 to-[var(--color-accent)]/10 z-10" />
                         </>
                       )}
-                      
+
                       <div className="flex items-center justify-between relative z-20">
                         <ChevronDown size={16} className={`${destination ? 'text-white/80' : 'text-gray-300 group-hover:text-[var(--color-accent)]'} transition-colors flex-shrink-0`} />
                         <div>
@@ -444,7 +449,7 @@ export default function LandingPage() {
                 {/* Map route link */}
                 <div className="flex justify-end -mt-2">
                   <button
-                    onClick={() => setShowMap(true)}
+                    onClick={() => router.push(`/peta-rute?origin=${origin}&dest=${destination}`)}
                     className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 border border-gray-300 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] hover:bg-blue-50 transition-colors cursor-pointer bg-white"
                   >
                     <Map size={16} />
@@ -489,9 +494,6 @@ export default function LandingPage() {
                   <div className="w-full flex items-center justify-between">
                     <div>
                       <div className="font-bold text-[var(--color-text)] text-sm">{formatDateDisplay(departDate)}</div>
-                      {selectedPrice && (
-                        <div className="text-[11px] text-green-600 font-semibold mt-0.5">{formatPrice(selectedPrice)}</div>
-                      )}
                     </div>
                     <Calendar size={22} className="text-gray-300 group-hover:text-[var(--color-primary)] transition-colors flex-shrink-0" />
                   </div>
@@ -511,9 +513,6 @@ export default function LandingPage() {
                         <div className="font-bold text-[var(--color-text)] text-sm">
                           {returnDate ? formatDateDisplay(returnDate) : "Pilih tanggal"}
                         </div>
-                        {selectedReturnPrice && (
-                          <div className="text-[11px] text-green-600 font-semibold mt-0.5">{formatPrice(selectedReturnPrice)}</div>
-                        )}
                       </div>
                       <Calendar size={22} className="text-gray-300 group-hover:text-[var(--color-accent)] transition-colors flex-shrink-0" />
                     </div>
@@ -656,14 +655,6 @@ export default function LandingPage() {
       </div>
 
       {/* ── Modals ── */}
-      {showMap && (
-        <MapModal
-          originCode={origin}
-          destinationCode={destination}
-          onApply={(o, d) => { setOrigin(o); setDestination(d); }}
-          onClose={() => setShowMap(false)}
-        />
-      )}
       {showDepartCal && (
         <PriceCalendar
           selectedDate={departDate}
@@ -698,5 +689,13 @@ export default function LandingPage() {
 
       {/* Modals are kept here */}
     </MainLayout>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Memuat...</div>}>
+      <LandingPageContent />
+    </Suspense>
   );
 }

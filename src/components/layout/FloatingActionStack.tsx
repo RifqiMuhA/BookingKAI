@@ -28,7 +28,7 @@ export function FloatingActionStack() {
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const [activePanel, setActivePanel] = useState<"none" | "accessibility" | "chat">("none");
   const pathname = usePathname();
-  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password";
+  const isHiddenPage = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/peta-rute";
 
   // Local UI states for the drawer
   const [textSize, setTextSize] = useState(100);
@@ -73,7 +73,7 @@ export function FloatingActionStack() {
     }
   };
 
-  if (isAuthPage) {
+  if (isHiddenPage) {
     return null;
   }
 

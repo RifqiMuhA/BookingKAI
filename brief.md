@@ -33,10 +33,9 @@ Redesign booking.kai.id dengan menambahkan 6 fitur pada UI, tanpa mengubah alur 
 
 ### 2.3 Pilih Lokasi/Rute via Peta 2D
 - Trigger: link kecil "Pilih lewat peta rute" di bawah field asal/tujuan pada form pemesanan
-- Dibuka sebagai **modal (desktop) / bottom sheet (mobile)**, bukan inline expand di dalam form — peta butuh ruang penuh agar titik stasiun tidak berdempetan
-- Isi modal: toggle "Set sebagai ASAL/TUJUAN", peta dengan titik-titik stasiun yang bisa diklik, search box tetap ada sebagai fallback (penting untuk rute berstasiun banyak, mis. Jabodetabek), tombol "Terapkan" untuk konfirmasi dan menutup modal
+- Dibuka sebagai **halaman tersendiri (dedicated page)** (full page ala Amtrak plan-your-trip), bukan inline expand di dalam form.
+- Isi halaman: panel pencarian di kiri (desktop) atau atas (mobile) berisi input asal dan tujuan secara berurutan, toggle "Set sebagai ASAL/TUJUAN", peta interaktif Leaflet.js yang mendominasi layar dengan titik-titik stasiun yang bisa diklik. Tombol "Terapkan" untuk konfirmasi dan kembali ke form utama.
 - Titik stasiun aktif/terpilih pakai warna aksen oranye, titik lain navy/abu-abu netral
-- Tidak perlu data geospasial real / peta live — mockup titik statis di atas gambar/svg peta cukup
 
 ### 2.4 Kalender + Harga Sekaligus
 - Kalender bulan yang menampilkan estimasi harga tiket langsung di tiap tanggal (bukan harus klik dulu)
@@ -161,7 +160,8 @@ Login/Register hanya opsi tambahan, bukan step wajib — lihat bagian 6.
 ### 6.1 Alur Booking Inti (guest, tanpa login)
 | Halaman | Isi |
 |---|---|
-| Landing / Search | Form pesan: asal, tujuan, penumpang, tanggal — plus peta rute (2.3) & kalender+harga (2.4) menyisip di sini |
+| Landing / Search | Form pesan: asal, tujuan, penumpang, tanggal — kalender+harga (2.4) menyisip di sini |
+| Pilih Rute via Peta | Halaman interaktif Leaflet peta stasiun 2D (2.3) |
 | Hasil Pencarian | List kereta + harga per kereta |
 | Pilih Kursi | Denah kursi visual (2.2) |
 | Isi Data Penumpang | Form nama, identitas, email |
@@ -202,7 +202,7 @@ Chatbot (2.5) dan Accessibility mode (2.6) tidak perlu halaman sendiri — kedua
 
 | Step existing | Fitur baru yang menyisip | Perubahan |
 |---|---|---|
-| 1. Search — input stasiun asal/tujuan | Peta 2D pilih rute (2.3) | Tambah opsi peta di samping search box, titik stasiun bisa diklik jadi "dari"/"ke" |
+| 1. Search — input stasiun asal/tujuan | Peta 2D pilih rute (2.3) | Tambah opsi peta di bawah kotak pencarian, mengarahkan ke halaman peta interaktif tersendiri |
 | 1. Search — input tanggal | Kalender + harga (2.4) | Ganti date-picker polos jadi kalender yang langsung menampilkan estimasi harga per tanggal |
 | 2. List hasil kereta + harga | — | Tidak berubah, hanya ikut restyle warna/font sesuai design system (bagian 3) |
 | 3. Pilih kursi | Denah kursi visual (2.2) | Ganti komponen jadi ilustrasi kereta yang bisa diklik, ganti tabel/dropdown lama |
