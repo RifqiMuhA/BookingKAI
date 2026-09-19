@@ -2,9 +2,15 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+export interface UserProfile {
+  name: string;
+  email: string;
+}
+
 interface AuthContextType {
   isLoggedIn: boolean;
-  login: () => void;
+  user: UserProfile | null;
+  login: (userData?: { name?: string; email?: string }) => void;
   logout: () => void;
 }
 
@@ -12,29 +18,53 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
-  // In a real app, you might check localStorage or cookies here on initial load.
-  // For now, we just rely on local state.
   useEffect(() => {
-    const savedState = localStorage.getItem("mock_auth_is_logged_in");
-    if (savedState === "true") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsLoggedIn(true);
+    try {
+      const savedLogin = localStorage.getItem("mock_auth_is_logged_in");
+      const savedUser = localStorage.getItem("mock_auth_user");
+      if (savedLogin === "true") {
+        setIsLoggedIn(true);
+        if (savedUser) {
+          setUser(JSON.parse(savedUser));
+        } else {
+          setUser({ name: "Pengguna KAI", email: "user@email.com" });
+        }
+      }
+    } catch (e) {
+      console.error(e);
     }
   }, []);
 
-  const login = () => {
+  const login = (userData?: { name?: string; email?: string }) => {
+    const finalUser = {
+      name: userData?.name || user?.name || "Pengguna KAI",
+      email: userData?.email || user?.email || "user@email.com",
+    };
     setIsLoggedIn(true);
-    localStorage.setItem("mock_auth_is_logged_in", "true");
+    setUser(finalUser);
+    try {
+      localStorage.setItem("mock_auth_is_logged_in", "true");
+      localStorage.setItem("mock_auth_user", JSON.stringify(finalUser));
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    localStorage.setItem("mock_auth_is_logged_in", "false");
+    setUser(null);
+    try {
+      localStorage.setItem("mock_auth_is_logged_in", "false");
+      localStorage.removeItem("mock_auth_user");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

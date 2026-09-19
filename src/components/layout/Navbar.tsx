@@ -21,7 +21,7 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, user, logout } = useAuth();
   
   const isSolid = isScrolled || pathname !== "/";
 
@@ -41,10 +41,25 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
         <div className="flex items-center gap-4 ml-auto font-medium">
           <Link href="/faq" className="hover:underline hidden sm:block">FAQ</Link>
           <Link href="/hubungi-kami" className="hover:underline hidden sm:block">Hubungi Kami</Link>
-          {!isLoggedIn && (
+          {!isLoggedIn ? (
             <>
               <div className="hidden sm:block w-px h-3 bg-white/30"></div>
               <Link href="/login" className="hover:underline hidden sm:block font-bold">Login</Link>
+              <span className="text-white/40 hidden sm:block">/</span>
+              <Link href="/register" className="hover:underline hidden sm:block font-bold">Daftar</Link>
+            </>
+          ) : (
+            <>
+              <div className="hidden sm:block w-px h-3 bg-white/30"></div>
+              <span className="hidden sm:inline font-bold text-amber-300">
+                Halo, {user?.name || "Penumpang"}
+              </span>
+              <button
+                onClick={logout}
+                className="hidden sm:inline hover:underline text-red-300 hover:text-red-100 cursor-pointer text-xs ml-1"
+              >
+                (Keluar)
+              </button>
             </>
           )}
 
@@ -258,11 +273,17 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
               
               {isLoggedIn ? (
                 <>
-                  <Link href="#" className="font-semibold text-[var(--color-primary)] hover:text-[#002f59] transition-colors">Akun Saya</Link>
-                  <button onClick={logout} className="text-left font-semibold text-red-600 hover:text-red-800 transition-colors cursor-pointer">Logout</button>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-[var(--color-primary)]">Halo, {user?.name || "Penumpang"}</span>
+                    <button onClick={logout} className="text-sm font-semibold text-red-600 hover:text-red-800 transition-colors cursor-pointer">Logout</button>
+                  </div>
                 </>
               ) : (
-                <Link href="/login" className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors">Login</Link>
+                <div className="flex items-center gap-3">
+                  <Link href="/login" className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors">Login</Link>
+                  <span className="text-gray-300">/</span>
+                  <Link href="/register" className="font-bold text-[#F58220] hover:text-[#d46a10] transition-colors">Daftar Akun</Link>
+                </div>
               )}
               <div className="flex items-center gap-3 mt-2">
                 <button
