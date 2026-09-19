@@ -17,7 +17,6 @@ import {
   ArrowRight,
   QrCode,
   Download,
-  AlertCircle,
   ExternalLink,
   ChevronRight,
   X
@@ -365,22 +364,6 @@ export default function RiwayatPesananPage() {
                 </div>
               ))
             )}
-          </div>
-
-          {/* Card Bantuan / Layanan Informasi */}
-          <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <AlertCircle size={18} className="text-[#003C71] shrink-0" />
-              <p className="text-xs text-gray-700">
-                Memiliki kendala dengan tiket atau ingin melakukan pembatalan & perubahan jadwal?
-              </p>
-            </div>
-            <Link
-              href="/hubungi-kami"
-              className="text-xs font-bold text-[#003C71] hover:underline shrink-0"
-            >
-              Hubungi CS KAI 121 &rarr;
-            </Link>
           </div>
 
         </div>
