@@ -22,7 +22,8 @@ import {
   FileText,
   Calendar,
   CreditCard,
-  CheckCheck
+  CheckCheck,
+  X
 } from "lucide-react";
 import { formatPrice } from "@/lib/mockData";
 
@@ -31,6 +32,7 @@ function CekPesananContent() {
   const searchParams = useSearchParams();
   const initialCode = searchParams.get("code") || "";
 
+  const [isBannerDismissed, setIsBannerDismissed] = useState(false);
   const [bookingCode, setBookingCode] = useState(initialCode || "");
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -144,28 +146,37 @@ function CekPesananContent() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
 
         {/* Notifikasi Cepat Riwayat Pesanan Pengguna Terdaftar */}
-        {isLoggedIn && (
-          <div className="mb-6 p-3 sm:p-4 bg-white border-l-4 border-[#003C71] border-y border-r border-gray-200 rounded-sm shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-sm bg-blue-50 text-[#003C71] flex items-center justify-center shrink-0">
-                <FileText size={16} />
-              </div>
+        {isLoggedIn && !isBannerDismissed && (
+          <div className="relative mb-6 p-4 sm:p-5 bg-white border border-gray-200 border-l-4 border-l-[#003C71] rounded-sm shadow-xs">
+            {/* Tombol Tutup (Silang) */}
+            <button
+              onClick={() => setIsBannerDismissed(true)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 p-1.5 rounded-sm hover:bg-gray-100 transition-colors cursor-pointer"
+              aria-label="Tutup pemberitahuan"
+              title="Tutup"
+            >
+              <X size={16} />
+            </button>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pr-7 sm:pr-8">
               <div>
-                <p className="text-xs font-bold text-[#003C71]">
+                <h2 className="text-[15px] sm:text-base font-bold text-[#003C71] tracking-tight leading-snug">
                   Halo, {user?.name || "Pelanggan KAI"}! Anda memiliki 3 tiket perjalanan yang tersimpan di akun Anda.
-                </p>
-                <p className="text-[11px] text-gray-500">
+                </h2>
+                <p className="text-xs sm:text-[13px] text-gray-600 mt-1 leading-relaxed">
                   Lihat tiket aktif dan riwayat pemesanan langsung tanpa perlu mengetik kode booking.
                 </p>
               </div>
+
+              <div className="shrink-0 pt-1 sm:pt-0">
+                <Link
+                  href="/riwayat-pesanan"
+                  className="inline-block px-5 py-2.5 bg-[#003C71] hover:bg-[#002a50] text-white text-xs sm:text-sm font-bold rounded-sm transition-colors shadow-xs whitespace-nowrap text-center"
+                >
+                  Buka Riwayat Pesanan
+                </Link>
+              </div>
             </div>
-            <Link
-              href="/riwayat-pesanan"
-              className="px-4 py-2 bg-[#003C71] hover:bg-[#002a50] text-white text-xs font-bold rounded-sm transition-colors shrink-0 shadow-xs flex items-center gap-1.5"
-            >
-              <span>Buka Riwayat Pesanan</span>
-              <ArrowRight size={13} />
-            </Link>
           </div>
         )}
 
