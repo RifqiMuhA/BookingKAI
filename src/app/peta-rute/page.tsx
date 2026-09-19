@@ -4,8 +4,8 @@ import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { STATIONS, Station } from "@/lib/mockData";
-import { ArrowLeft, Search, MapPin, Navigation, HelpCircle, X, Menu, ArrowDownUp } from "lucide-react";
+import { STATIONS } from "@/lib/mockData";
+import { ArrowLeft, MapPin, Navigation, HelpCircle, Menu, ArrowDownUp } from "lucide-react";
 import StationInfoPanel from "@/components/map/StationInfoPanel";
 
 // Dynamic import for Leaflet to prevent SSR window is not defined error

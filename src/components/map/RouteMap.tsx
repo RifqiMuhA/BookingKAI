@@ -5,9 +5,10 @@ import { MapContainer, TileLayer, Marker, Popup, LayersControl, ZoomControl, Geo
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { STATIONS, Station } from "@/lib/mockData";
+import { STATIONS } from "@/lib/mockData";
 
 // Fix leaflet icon issues with webpack
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -71,6 +72,7 @@ export default function RouteMap({ origin, destination, onSetOrigin, onSetDestin
   const originStation = STATIONS.find(s => s.code === origin);
   const destStation = STATIONS.find(s => s.code === destination);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createClusterIcon = (cluster: any) => {
     const count = cluster.getChildCount();
     const markers = cluster.getAllChildMarkers();
@@ -108,6 +110,7 @@ export default function RouteMap({ origin, destination, onSetOrigin, onSetDestin
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [railwayData, setRailwayData] = useState<any>(null);
 
   useEffect(() => {

@@ -285,7 +285,8 @@ export function formatPrice(price: number): string {
 }
 
 export function getStationByCode(code: string): Station | undefined {
-  return STATIONS.find((s) => s.code === code);
+  const normalized = code === "BD" ? "BDO" : code;
+  return STATIONS.find((s) => s.code === normalized || s.id === normalized);
 }
 
 // ---- City Backgrounds ----

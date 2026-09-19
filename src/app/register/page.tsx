@@ -94,7 +94,7 @@ export default function RegisterPage() {
           <div className="border border-gray-300 rounded-none p-2.5 flex items-center justify-between bg-gray-50 mt-1">
             <div className="flex items-center gap-3">
               <input type="checkbox" className="w-6 h-6 rounded border-gray-300 text-[#003C71] focus:ring-[#003C71]" required />
-              <span className="text-sm font-medium text-gray-700">I'm not a robot</span>
+              <span className="text-sm font-medium text-gray-700">I&apos;m not a robot</span>
             </div>
             <div className="flex flex-col items-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4285F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>

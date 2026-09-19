@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# docs and temp scripts
+*.docx
+*.pdf
+Makalah_*.md
+__pycache__/
+*.py
+makalah_data.json
+fix-icon.js
+gambar_2_1_skala_pssuq.png

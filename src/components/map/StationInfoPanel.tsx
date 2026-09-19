@@ -6,7 +6,7 @@ interface StationInfoPanelProps {
   station: Station;
 }
 
-export default function StationInfoPanel({ station }: StationInfoPanelProps) {
+export default function StationInfoPanel({ station: _station }: StationInfoPanelProps) {
   const [activeTab, setActiveTab] = useState<'features' | 'accessibility' | 'hours'>('features');
 
   const features = [

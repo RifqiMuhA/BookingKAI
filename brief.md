@@ -32,10 +32,21 @@ Redesign booking.kai.id dengan menambahkan 6 fitur pada UI, tanpa mengubah alur 
 - Menampilkan nomor kursi & harga per kursi jika ada perbedaan kelas
 
 ### 2.3 Pilih Lokasi/Rute via Peta 2D
-- Trigger: link kecil "Pilih lewat peta rute" di bawah field asal/tujuan pada form pemesanan
-- Dibuka sebagai **halaman tersendiri (dedicated page)** (full page ala Amtrak plan-your-trip), bukan inline expand di dalam form.
-- Isi halaman: panel pencarian di kiri (desktop) atau atas (mobile) berisi input asal dan tujuan secara berurutan, toggle "Set sebagai ASAL/TUJUAN", peta interaktif Leaflet.js yang mendominasi layar dengan titik-titik stasiun yang bisa diklik. Tombol "Terapkan" untuk konfirmasi dan kembali ke form utama.
-- Titik stasiun aktif/terpilih pakai warna aksen oranye, titik lain navy/abu-abu netral
+- Trigger: pill full-width "Pilih Stasiun Lewat Peta Rute" di bawah card asal/tujuan pada form pemesanan
+- Dibuka sebagai **halaman tersendiri (dedicated page)**, bukan modal/bottom sheet — referensi: Amtrak plan-your-trip
+- **Teknologi: Leaflet.js + OpenStreetMap (OSM) tile** — open source, gratis, tidak perlu API key. Tile default pakai `tile.openstreetmap.org` untuk fase prototype; kalau traffic produksi tinggi, ganti ke provider tile berbasis OSM dengan free tier lebih besar (mis. MapTiler, Stadia Maps) — cukup ganti tile URL, kode Leaflet tidak berubah
+- Isi halaman: search box asal (atas) dan tujuan (bawah) berurutan, toggle "Set sebagai ASAL/TUJUAN" untuk menentukan field mana yang aktif diisi, peta Leaflet dengan pin stasiun asli mengisi sebagian besar layar, tombol "Cari Kereta"/"Terapkan" di bagian bawah untuk konfirmasi lalu lanjut (balik ke form terisi atau langsung ke hasil pencarian — pilih salah satu, jangan dua-duanya)
+- Layout responsive: desktop — panel search di kiri, peta dominan di kanan (mirip Amtrak); mobile — search box di atas, peta mengisi sisa layar di bawah (stacked)
+- Pin stasiun terpilih pakai warna aksen oranye, pin lain navy/abu-abu netral
+- **Data yang perlu disiapkan:** koordinat (lat/long) tiap stasiun KAI — mulai dari stasiun-stasiun utama dulu, tidak perlu lengkap semua di awal. Polyline rute/jalur kereta di atas peta bersifat opsional untuk fase awal, bisa ditambahkan belakangan setelah pin stasiun berfungsi. Sumber data: dataset resmi Kemenhub Hubnet (lat/lon siap pakai) dan/atau query Overpass API dari data OpenStreetMap
+- Opsional (nice-to-have, ambil inspirasi dari Amtrak plan-your-trip): panel info stasiun singkat saat pin diklik — fasilitas yang tersedia (toilet, wifi, akses difabel, dll)
+- **Skema warna peta:**
+  ```
+  --map-rail-line: #003C71;      /* rel/jalur kereta */
+  --map-pin-default: #003C71;    /* pin stasiun belum dipilih */
+  --map-pin-selected: #F58220;   /* pin stasiun asal/tujuan aktif */
+  --map-cluster-badge: #003C71;  /* background angka saat beberapa stasiun berdekatan di-cluster jadi satu pin */
+  ```
 
 ### 2.4 Kalender + Harga Sekaligus
 - Kalender bulan yang menampilkan estimasi harga tiket langsung di tiap tanggal (bukan harus klik dulu)
@@ -75,6 +86,21 @@ Redesign booking.kai.id dengan menambahkan 6 fitur pada UI, tanpa mengubah alur 
 - Kode promo/voucher — input collapsible, tersembunyi default agar form tidak penuh
 - CTA utama "Cari Kereta"
 - Rute populer / rute terakhir dicari — chip shortcut di bawah form
+
+### 2.9 Hasil Pencarian
+- Referensi pola: halaman search results Eurostar (eurostar.com), diadaptasi untuk konteks KAI
+- **Sticky bar ringkasan pencarian** di paling atas — rute (asal → tujuan), tanggal, jumlah penumpang, plus link "Ubah Pencarian" agar user bisa edit tanpa balik ke landing/reload form dari nol
+- **Strip tanggal horizontal** di bawah sticky bar — beberapa tanggal berdekatan (mis. H-2 sampai H+2 dari tanggal terpilih) ditampilkan sebagai tab, tiap tab menunjukkan harga termurah hari itu, bisa digeser/scroll. Ini pelengkap ringkas dari kalender+harga (2.4), bukan pengganti
+- **Matriks jam keberangkatan × kelas** sebagai konten utama:
+  - Baris = jam berangkat–tiba, durasi perjalanan
+  - Kolom = kelas kereta (Ekonomi / Bisnis / Eksekutif)
+  - Cell kosong/tidak tersedia ditandai jelas ("Tidak tersedia"), bukan dikosongkan begitu saja
+  - Badge kecil pada cell: "Harga termurah" untuk opsi termurah di baris/kolom tsb, dan indikator sisa kursi (mis. "12 kursi tersisa") sebagai urgency info bila relevan
+  - Header kolom kelas dibedakan lewat label & garis tipis (bukan warna-warni beda-beda per kelas), tetap konsisten dengan design system navy/oranye
+- **Sidebar "Ringkasan Perjalanan"** (sticky di desktop, collapsible/bottom bar di mobile):
+  - Total harga real-time, update begitu user pilih kereta+kelas
+  - Tombol "Lanjutkan" — **disabled** selama belum ada kereta yang dipilih, kasih placeholder jelas ("Belum ada kereta dipilih")
+  - Begitu kereta+kelas dipilih, tombol aktif dan lanjut ke step Pilih Kursi (3)
 
 ---
 
@@ -136,7 +162,6 @@ Accessibility toggle **tidak** ada di navbar — pindah ke Floating Action Stack
 - Real-time tracking posisi kereta
 - AR Whoosh
 - Integrasi AI/NLP nyata untuk chatbot (fase awal cukup scripted)
-- Data geospasial real untuk peta
 
 ---
 
@@ -161,8 +186,8 @@ Login/Register hanya opsi tambahan, bukan step wajib — lihat bagian 6.
 | Halaman | Isi |
 |---|---|
 | Landing / Search | Form pesan: asal, tujuan, penumpang, tanggal — kalender+harga (2.4) menyisip di sini |
-| Pilih Rute via Peta | Halaman interaktif Leaflet peta stasiun 2D (2.3) |
-| Hasil Pencarian | List kereta + harga per kereta |
+| Pilih Rute via Peta | Halaman tersendiri, dibuka dari pill "Pilih Stasiun Lewat Peta Rute" (2.3) |
+| Hasil Pencarian | Sticky ringkasan pencarian, strip tanggal, matriks jam×kelas, sidebar ringkasan perjalanan (2.9) |
 | Pilih Kursi | Denah kursi visual (2.2) |
 | Isi Data Penumpang | Form nama, identitas, email |
 | Ringkasan Pesanan | Recap rute, kursi, penumpang, total harga sebelum bayar |
@@ -202,7 +227,7 @@ Chatbot (2.5) dan Accessibility mode (2.6) tidak perlu halaman sendiri — kedua
 
 | Step existing | Fitur baru yang menyisip | Perubahan |
 |---|---|---|
-| 1. Search — input stasiun asal/tujuan | Peta 2D pilih rute (2.3) | Tambah opsi peta di bawah kotak pencarian, mengarahkan ke halaman peta interaktif tersendiri |
+| 1. Search — input stasiun asal/tujuan | Peta 2D pilih rute (2.3) | Tambah opsi peta di samping search box, titik stasiun bisa diklik jadi "dari"/"ke" |
 | 1. Search — input tanggal | Kalender + harga (2.4) | Ganti date-picker polos jadi kalender yang langsung menampilkan estimasi harga per tanggal |
 | 2. List hasil kereta + harga | — | Tidak berubah, hanya ikut restyle warna/font sesuai design system (bagian 3) |
 | 3. Pilih kursi | Denah kursi visual (2.2) | Ganti komponen jadi ilustrasi kereta yang bisa diklik, ganti tabel/dropdown lama |
