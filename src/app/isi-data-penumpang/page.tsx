@@ -760,41 +760,36 @@ function IsiDataContent() {
                 </div>
               </div>
 
-              {/* Data Penumpang */}
-              {/* Tombol Di Atas Penumpang 1: Jadikan data pemesan ke data penumpang 1 */}
-              <div className="bg-white rounded-md border border-gray-200 p-3.5 sm:p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-sm bg-[#003C71]/10 text-[#003C71] flex items-center justify-center flex-shrink-0">
-                    <UserCheck size={18} strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
-                      Penumpang 1 sama dengan Pemesan?
-                    </h3>
-                    <p className="text-[11px] text-gray-500 leading-normal">
-                      Salin nama dan nomor identitas pemesan langsung ke Penumpang 1
-                    </p>
-                  </div>
-                </div>
+              {/* Data Penumpang Header & Tombol Di Atas Penumpang 1 */}
+              <div className="flex items-center justify-between pt-2 pb-1">
+                <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">
+                  Data Penumpang
+                </h2>
 
                 <button
                   type="button"
                   onClick={handleToggleSameAsBooker}
-                  className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-sm text-xs font-bold transition-all cursor-pointer flex-shrink-0 select-none ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all cursor-pointer shadow-2xs ${
                     isSameAsBooker
-                      ? "bg-[#003C71] text-white border border-[#003C71] shadow-2xs hover:bg-[#002B52]"
-                      : "bg-white text-[#003C71] border border-[#003C71]/40 hover:border-[#003C71] hover:bg-blue-50/70"
+                      ? "bg-[#003C71] text-white border border-[#003C71] hover:bg-[#002B52]"
+                      : "bg-white hover:bg-gray-50 text-[#003C71] border border-gray-300 hover:border-[#003C71]"
                   }`}
                 >
                   {isSameAsBooker ? (
                     <>
-                      <Check size={14} strokeWidth={3} className="text-white" />
+                      <Check size={13} strokeWidth={3} className="text-white" />
                       <span>Data Pemesan Diterapkan</span>
                     </>
                   ) : (
                     <>
-                      <Copy size={13} strokeWidth={2.2} />
-                      <span>Gunakan Data Pemesan</span>
+                      {/* Icon mengambil data dari pemesan di atas */}
+                      <svg className="w-3.5 h-3.5 text-[#003C71]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M15 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8" cy="7" r="4" />
+                        <polyline points="16 11 19 14 22 11" />
+                        <line x1="19" y1="7" x2="19" y2="14" />
+                      </svg>
+                      <span>Sama dengan Pemesan</span>
                     </>
                   )}
                 </button>
@@ -819,13 +814,6 @@ function IsiDataContent() {
                         {p.type}
                       </span>
                     </h2>
-
-                    {idx === 0 && isSameAsBooker && (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-sm">
-                        <Check size={12} strokeWidth={3} />
-                        <span>Sama dengan Pemesan</span>
-                      </span>
-                    )}
                   </div>
                   {p.type === "Bayi" && (
                     <div className="mx-6 mt-4 p-3 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800 flex items-center gap-2">
