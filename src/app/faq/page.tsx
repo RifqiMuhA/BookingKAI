@@ -238,11 +238,30 @@ export default function FAQPage() {
       <div className="min-h-screen bg-white text-gray-900 pt-[72px] sm:pt-[84px] selection:bg-[#003C71] selection:text-white">
         
         {/* ============================================================ */}
-        {/* HERO SECTION — Navy Hero with Official KAI Badge & Search */}
+        {/* HERO SECTION — Atmospheric Background with Blue/Orange Orbs */}
         {/* ============================================================ */}
-        <section className="bg-[#001F3F] text-white border-b border-white/10 relative overflow-hidden">
-          {/* Subtle architectural grid pattern */}
-          <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-5 pointer-events-none" />
+        <section className="relative overflow-hidden bg-[#001F3F] text-white border-b border-white/10">
+          {/* Background Image: background_cs.webp */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/Background/background_cs.webp"
+              alt="Background Customer Service KAI"
+              fill
+              className="object-cover object-center opacity-30"
+              priority
+            />
+            {/* Deep Navy Gradient Tint to prevent clashing with text */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#001F3F]/90 via-[#001F3F]/85 to-[#001F3F]/95" />
+          </div>
+
+          {/* Top Left Blue Glow Orb (like login) */}
+          <div className="absolute -top-28 -left-28 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] bg-[#003C71] rounded-full blur-[120px] opacity-75 pointer-events-none z-1" />
+
+          {/* Bottom Right Orange Glow Orb (like login) */}
+          <div className="absolute -bottom-24 -right-24 w-[450px] h-[450px] sm:w-[520px] sm:h-[520px] bg-[#F58220] rounded-full blur-[130px] opacity-45 pointer-events-none z-1" />
+
+          {/* Subtle architectural grid pattern overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none z-1" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 sm:pb-14 relative z-10">
             {/* Official KAI Badge (Consistent with Cek Pesanan) */}
