@@ -437,6 +437,28 @@ function PembayaranContent() {
   const [copiedBooking, setCopiedBooking] = useState(false);
   const [isMobileSummaryOpen, setIsMobileSummaryOpen] = useState(false);
 
+  // Jika URL mengandung ?status=success, otomatis buka modal
+  useEffect(() => {
+    if (searchParams.get("status") === "success") {
+      setShowSuccessModal(true);
+    }
+  }, [searchParams]);
+
+  const handlePaymentSuccess = () => {
+    setShowSuccessModal(true);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("status", "success");
+    router.replace(`/pembayaran?${params.toString()}`, { scroll: false });
+  };
+
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("status");
+    const query = params.toString() ? `?${params.toString()}` : "";
+    router.replace(`/pembayaran${query}`, { scroll: false });
+  };
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedVa(true);
@@ -1080,7 +1102,7 @@ function PembayaranContent() {
                         </ol>
 
                         <button
-                          onClick={() => setShowSuccessModal(true)}
+                          onClick={handlePaymentSuccess}
                           className="px-5 py-2.5 bg-[#003C71] hover:bg-[#002555] text-white text-sm font-semibold rounded cursor-pointer transition-colors"
                         >
                           Konfirmasi Pembayaran
@@ -1128,7 +1150,7 @@ function PembayaranContent() {
                           <p className="text-gray-700">{ewallet.action}</p>
                         )}
                         <button
-                          onClick={() => setShowSuccessModal(true)}
+                          onClick={handlePaymentSuccess}
                           className="px-5 py-2.5 bg-[#003C71] hover:bg-[#002555] text-white text-sm font-semibold rounded cursor-pointer transition-colors"
                         >
                           Lanjutkan via {ewallet.name}
@@ -1170,7 +1192,7 @@ function PembayaranContent() {
                           {retail.steps.map((step, i) => <li key={i}>{step}</li>)}
                         </ol>
                         <button
-                          onClick={() => setShowSuccessModal(true)}
+                          onClick={handlePaymentSuccess}
                           className="px-5 py-2.5 bg-[#003C71] hover:bg-[#002555] text-white text-sm font-semibold rounded cursor-pointer transition-colors"
                         >
                           Saya Sudah Membayar
@@ -1212,7 +1234,7 @@ function PembayaranContent() {
                           {pp.steps.map((step, i) => <li key={i}>{step}</li>)}
                         </ol>
                         <button
-                          onClick={() => setShowSuccessModal(true)}
+                          onClick={handlePaymentSuccess}
                           className="px-5 py-2.5 bg-[#003C71] hover:bg-[#002555] text-white text-sm font-semibold rounded cursor-pointer transition-colors"
                         >
                           Konfirmasi Pembayaran
@@ -1321,7 +1343,7 @@ function PembayaranContent() {
             </div>
 
             <button
-              onClick={() => setShowSuccessModal(true)}
+              onClick={handlePaymentSuccess}
               className="w-full py-3.5 rounded-md font-bold text-base transition-colors flex justify-center items-center gap-2 bg-[#F58220] hover:bg-[#E07015] text-white cursor-pointer shadow-sm"
             >
               <span>Konfirmasi Pembayaran</span>
@@ -1369,7 +1391,7 @@ function PembayaranContent() {
                     </h3>
                   </div>
                   <button
-                    onClick={() => setShowSuccessModal(false)}
+                    onClick={handleCloseSuccessModal}
                     className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors text-xs font-bold"
                     aria-label="Tutup"
                   >
