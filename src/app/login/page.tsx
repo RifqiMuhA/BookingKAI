@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthLayout } from "@/components/layout/AuthLayout";
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isCaptchaChecked, setIsCaptchaChecked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showTestingModal, setShowTestingModal] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,12 +135,64 @@ export default function LoginPage() {
           </Button>
         </form>
 
+        <div className="relative flex items-center py-1">
+          <div className="flex-grow border-t border-gray-200"></div>
+          <span className="flex-shrink-0 mx-4 text-gray-400 text-xs">atau</span>
+          <div className="flex-grow border-t border-gray-200"></div>
+        </div>
+
+        {/* Tombol Google dengan Modal Notifikasi Testing */}
+        <button
+          type="button"
+          onClick={() => setShowTestingModal(true)}
+          className="w-full h-11 text-sm font-semibold rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-3 transition-colors cursor-pointer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18px" height="18px">
+            <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+            <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+            <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+            <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+          </svg>
+          <span>Masuk dengan Google</span>
+        </button>
+
         <p className="text-center text-gray-600 text-sm pt-3">
           Belum punya akun?{" "}
           <Link href="/register" className="font-bold text-[#F58220] hover:underline">
             Daftar Sekarang
           </Link>
         </p>
+
+        {/* Modal Simpel untuk Kebutuhan Testing */}
+        {showTestingModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl max-w-sm w-full p-6 text-center shadow-2xl border border-gray-100">
+              <div className="w-24 h-24 mx-auto mb-3 relative">
+                <Image
+                  src="/Maskot/maskot_lambai.webp"
+                  alt="Maskot KAI"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
+              <h3 className="text-base font-bold text-gray-900 mb-1.5">
+                Pemberitahuan Testing
+              </h3>
+              <p className="text-sm text-gray-600 mb-5 leading-relaxed">
+                Untuk kebutuhan testing, silakan gunakan login manual dengan mengisi formulir di atas.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowTestingModal(false)}
+                className="w-full py-2.5 bg-[#003C71] hover:bg-[#002B52] text-white text-sm font-bold rounded-md transition-colors cursor-pointer"
+              >
+                Mengerti
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </AuthLayout>
   );
