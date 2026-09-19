@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { MainLayout } from "@/components/layout/MainLayout";
 import {
@@ -11,7 +11,6 @@ import {
   Phone,
   MessageSquare,
   Building2,
-  HelpCircle,
   Sparkles,
 } from "lucide-react";
 
@@ -140,6 +139,15 @@ const CATEGORIES = [
   { key: "ketentuan", label: "Ketentuan Khusus" },
 ];
 
+const PLACEHOLDER_PROMPTS = [
+  "Cari batas waktu pembayaran...",
+  "Cari reschedule jadwal kereta...",
+  "Cari ketentuan refund & pembatalan...",
+  "Cari batas berat bagasi gratis...",
+  "Cari tiket anak dan infant...",
+  "Cari face recognition boarding...",
+];
+
 const QUICK_SEARCH_TOPICS = [
   "Batas Waktu Pembayaran",
   "Reschedule",
@@ -177,6 +185,30 @@ export default function FAQPage() {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({
     "faq-1": true,
   });
+
+  // Animasi slide-up teks placeholder berganti-ganti secara berkala
+  const [currentPromptIdx, setCurrentPromptIdx] = useState(0);
+  const [slideStyle, setSlideStyle] = useState<string>("translate-y-0 opacity-100");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // 1. Slide up & fade out
+      setSlideStyle("-translate-y-3 opacity-0 transition-all duration-300 ease-in");
+
+      setTimeout(() => {
+        // 2. Set next prompt and place below
+        setCurrentPromptIdx((prev) => (prev + 1) % PLACEHOLDER_PROMPTS.length);
+        setSlideStyle("translate-y-3 opacity-0 transition-none");
+
+        // 3. Slide in to center
+        setTimeout(() => {
+          setSlideStyle("translate-y-0 opacity-100 transition-all duration-300 ease-out");
+        }, 50);
+      }, 300);
+    }, 3200);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) => ({
@@ -234,21 +266,33 @@ export default function FAQPage() {
               </h1>
             </div>
 
-            {/* Search Input with Live Match Highlighting */}
+            {/* Search Input with Animated Slide-Up Placeholder */}
             <div className="mt-7 max-w-2xl">
-              <div className="relative flex items-center bg-white/10 backdrop-blur-md rounded-sm border border-white/25 focus-within:border-white focus-within:bg-white/15 transition-all">
-                <Search size={20} className="absolute left-4 text-gray-300 pointer-events-none" />
+              <div className="relative flex items-center bg-white/10 backdrop-blur-md rounded-sm border border-white/25 focus-within:border-white focus-within:bg-white/15 transition-all overflow-hidden">
+                <Search size={20} className="absolute left-4 text-gray-300 pointer-events-none z-10" />
+
+                {/* Animated Slide-Up Placeholder Text */}
+                {!searchQuery && (
+                  <div className="absolute left-12 right-12 pointer-events-none overflow-hidden h-7 flex items-center z-0">
+                    <span
+                      className={`text-base text-gray-300/90 font-normal whitespace-nowrap will-change-transform ${slideStyle}`}
+                    >
+                      {PLACEHOLDER_PROMPTS[currentPromptIdx]}
+                    </span>
+                  </div>
+                )}
+
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari topik (contoh: reschedule, refund, bagasi, qris, tiket anak)..."
-                  className="w-full pl-12 pr-11 py-3.5 bg-transparent text-white placeholder-gray-300 text-base font-medium outline-none"
+                  className="w-full pl-12 pr-11 py-3.5 bg-transparent text-white text-base font-medium outline-none z-10"
                 />
+
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-3.5 p-1 rounded-sm text-gray-300 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
+                    className="absolute right-3.5 p-1 rounded-sm text-gray-300 hover:text-white hover:bg-white/20 transition-colors cursor-pointer z-20"
                     title="Hapus pencarian"
                   >
                     <X size={18} />
@@ -330,15 +374,22 @@ export default function FAQPage() {
             {/* Right Column: FAQ Accordion List with Highlighting */}
             <div className="flex-1 min-w-0 w-full">
               {filteredFAQs.length === 0 ? (
-                /* Empty state jika pencarian tidak cocok */
-                <div className="py-16 text-center border border-dashed border-gray-200 rounded-sm bg-gray-50/50 max-w-md mx-auto">
-                  <div className="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
-                    <HelpCircle size={24} strokeWidth={1.5} />
+                /* Empty state jika pencarian tidak cocok (Pakai Maskot Resmi KAI Bingung) */
+                <div className="py-14 text-center border border-dashed border-gray-200 rounded-sm bg-gray-50/60 max-w-md mx-auto">
+                  <div className="w-28 h-28 mx-auto mb-4 relative drop-shadow-sm">
+                    <Image
+                      src="/Maskot/maskot_bingung.webp"
+                      alt="Topik Tidak Ditemukan"
+                      width={112}
+                      height={112}
+                      className="w-full h-full object-contain"
+                      priority
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 mb-1">
                     Topik Tidak Ditemukan
                   </h3>
-                  <p className="text-sm text-gray-500 mb-5 px-4">
+                  <p className="text-sm text-gray-500 mb-5 px-6 leading-relaxed">
                     Tidak ada pertanyaan yang cocok dengan kata kunci &ldquo;{searchQuery}&rdquo;.
                   </p>
                   <button
@@ -346,7 +397,7 @@ export default function FAQPage() {
                       setSearchQuery("");
                       setSelectedCategory("all");
                     }}
-                    className="px-5 py-2.5 bg-[#003C71] text-white text-sm font-bold rounded-sm hover:bg-[#002B52] transition-colors cursor-pointer"
+                    className="px-5 py-2.5 bg-[#003C71] text-white text-sm font-bold rounded-sm hover:bg-[#002B52] transition-colors cursor-pointer shadow-xs"
                   >
                     Reset Pencarian
                   </button>
