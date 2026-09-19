@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Menu, X, ArrowRight, User } from "lucide-react";
@@ -20,6 +20,7 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
   const [lang, setLang] = useState("ID");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
   
   const { isLoggedIn, user, logout } = useAuth();
   
@@ -34,6 +35,16 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-300">
       {/* Top Bar - Always Navy */}
@@ -41,25 +52,12 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
         <div className="flex items-center gap-4 ml-auto font-medium">
           <Link href="/faq" className="hover:underline hidden sm:block">FAQ</Link>
           <Link href="/hubungi-kami" className="hover:underline hidden sm:block">Hubungi Kami</Link>
-          {!isLoggedIn ? (
+          {!isLoggedIn && (
             <>
               <div className="hidden sm:block w-px h-3 bg-white/30"></div>
               <Link href="/login" className="hover:underline hidden sm:block font-bold">Login</Link>
               <span className="text-white/40 hidden sm:block">/</span>
               <Link href="/register" className="hover:underline hidden sm:block font-bold">Daftar</Link>
-            </>
-          ) : (
-            <>
-              <div className="hidden sm:block w-px h-3 bg-white/30"></div>
-              <span className="hidden sm:inline font-bold text-amber-300">
-                Halo, {user?.name || "Penumpang"}
-              </span>
-              <button
-                onClick={logout}
-                className="hidden sm:inline hover:underline text-red-300 hover:text-red-100 cursor-pointer text-xs ml-1"
-              >
-                (Keluar)
-              </button>
             </>
           )}
 
@@ -162,24 +160,25 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
 
           {/* Profile Dropdown */}
           {isLoggedIn && (
-            <div className="relative ml-2">
+            <div className="relative ml-2" ref={profileRef}>
               <button 
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all cursor-pointer",
                   isSolid ? "border-[#003C71] text-[#003C71] hover:bg-[#003C71] hover:text-white" : "border-white text-white hover:bg-white hover:text-[#003C71]"
                 )}
+                title={user?.name || "Profil Akun"}
               >
                 <User size={16} />
               </button>
               
               {isProfileOpen && (
-                <div className="absolute top-full right-0 mt-3 bg-white text-[var(--color-text)] rounded-xl shadow-xl overflow-hidden w-48 flex flex-col z-50 border border-gray-100">
+                <div className="absolute top-full right-0 mt-3 bg-white text-[var(--color-text)] rounded-xl shadow-xl overflow-hidden w-52 flex flex-col z-50 border border-gray-100">
                   <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
-                    <p className="text-sm font-semibold text-[#003C71]">Pengguna KAI</p>
-                    <p className="text-xs text-gray-500">pengguna@email.com</p>
+                    <p className="text-sm font-semibold text-[#003C71] truncate">{user?.name || "Pengguna KAI"}</p>
+                    <p className="text-xs text-gray-500 truncate">{user?.email || "pengguna@email.com"}</p>
                   </div>
-                  <Link href="#" className="px-4 py-2.5 text-sm font-medium hover:bg-gray-100 transition-colors" onClick={() => setIsProfileOpen(false)}>
+                  <Link href="#" className="px-4 py-2.5 text-sm font-medium hover:bg-gray-100 transition-colors text-gray-700" onClick={() => setIsProfileOpen(false)}>
                     Akun Saya
                   </Link>
                   <button 
@@ -187,9 +186,9 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
                       logout();
                       setIsProfileOpen(false);
                     }} 
-                    className="px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 text-left transition-colors cursor-pointer"
+                    className="px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 text-left transition-colors cursor-pointer border-t border-gray-100"
                   >
-                    Logout
+                    Logout (Keluar)
                   </button>
                 </div>
               )}
@@ -272,12 +271,26 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
               <div className="h-px bg-gray-100 my-1"></div>
               
               {isLoggedIn ? (
-                <>
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-[var(--color-primary)]">Halo, {user?.name || "Penumpang"}</span>
-                    <button onClick={logout} className="text-sm font-semibold text-red-600 hover:text-red-800 transition-colors cursor-pointer">Logout</button>
+                <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className="w-8 h-8 shrink-0 rounded-full bg-[#003C71] text-white flex items-center justify-center">
+                      <User size={16} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold text-sm text-[#003C71] truncate">{user?.name || "Pengguna KAI"}</p>
+                      <p className="text-xs text-gray-500 truncate">{user?.email || "pengguna@email.com"}</p>
+                    </div>
                   </div>
-                </>
+                  <button 
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }} 
+                    className="shrink-0 text-xs font-semibold text-red-600 hover:text-red-800 transition-colors cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-red-50 ml-2"
+                  >
+                    Logout
+                  </button>
+                </div>
               ) : (
                 <div className="flex items-center gap-3">
                   <Link href="/login" className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors">Login</Link>
