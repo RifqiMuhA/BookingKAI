@@ -7,6 +7,7 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { ChevronRight, ChevronUp, ChevronDown, ArrowRight, User, AlertCircle, Phone, Mail, CheckCircle2, X, AlertTriangle, Tag, UserCheck, Copy, Check } from "lucide-react";
 import { TRAIN_SCHEDULES, formatPrice, getStationByCode } from "@/lib/mockData";
 import { calculatePromoDiscount, getPromoByCode } from "@/lib/promosData";
+import { useAuth } from "@/contexts/AuthContext";
 
 const MOCK_REGIONS: Record<string, string[]> = {
   "DKI Jakarta": [
@@ -38,6 +39,7 @@ const MOCK_REGIONS: Record<string, string[]> = {
 function IsiDataContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { isLoggedIn, user } = useAuth();
 
   const trainId = searchParams.get("trainId") || "";
   const returnTrainId = searchParams.get("returnTrainId") || "";
@@ -63,6 +65,77 @@ function IsiDataContent() {
   const [citySearchTerm, setCitySearchTerm] = useState("");
   const cityDropdownRef = useRef<HTMLDivElement>(null);
   const [agreed, setAgreed] = useState(false);
+
+  // Popover State untuk Pilih KTP Tersimpan di Kartu Penumpang
+  const [activePassengerPopover, setActivePassengerPopover] = useState<number | null>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  // Close passenger popover on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setActivePassengerPopover(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Daftar KTP Penumpang yang Tersimpan di Akun KAI
+  const savedAccountPassengers = [
+    {
+      id: "self",
+      name: user?.name ? user.name.toUpperCase() : "RIFQI MUHADZIB AHDAN",
+      idType: "KTP",
+      idNumber: "3271022804980003",
+      title: "Tuan",
+      label: "Akun Saya",
+    },
+    {
+      id: "family-1",
+      name: "SITI RAHMAH",
+      idType: "KTP",
+      idNumber: "3271035506990001",
+      title: "Nyonya",
+      label: "Keluarga",
+    },
+    {
+      id: "friend-1",
+      name: "BUDI SANTOSO",
+      idType: "KTP",
+      idNumber: "3271041208950002",
+      title: "Tuan",
+      label: "Rekan Perjalanan",
+    },
+  ];
+
+  // Auto-fill data pemesan jika pengguna sudah login
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      setBooker((prev) => {
+        if (!prev.name && !prev.idNumber) {
+          return {
+            idType: "KTP",
+            idNumber: "3271022804980003",
+            name: user.name.toUpperCase(),
+            email: user.email,
+            phone: "081298765432",
+            province: "DKI Jakarta",
+            city: "Jakarta Pusat",
+          };
+        }
+        return prev;
+      });
+    }
+  }, [isLoggedIn, user]);
+
+  const handleSelectSavedPassenger = (passengerIndex: number, saved: typeof savedAccountPassengers[0]) => {
+    updatePassenger(passengerIndex, "title", saved.title);
+    updatePassenger(passengerIndex, "name", saved.name);
+    updatePassenger(passengerIndex, "idType", saved.idType);
+    updatePassenger(passengerIndex, "idNumber", saved.idNumber);
+    setActivePassengerPopover(null);
+  };
 
   // Close dropdowns on click outside
   useEffect(() => {
@@ -491,11 +564,19 @@ function IsiDataContent() {
 
               {/* Data Pemesan */}
               <div className="bg-white rounded-md shadow-md border border-gray-200 relative z-30">
-                <div className="bg-[var(--color-primary-dark)] px-6 py-4 flex items-center gap-3 text-white rounded-t-md">
-                  <User size={20} className="text-white/80" />
-                  <h2 className="font-bold text-lg tracking-wide">
-                    Data Pemesan
-                  </h2>
+                <div className="bg-[var(--color-primary-dark)] px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-white rounded-t-md">
+                  <div className="flex items-center gap-3">
+                    <User size={20} className="text-white/80" />
+                    <h2 className="font-bold text-lg tracking-wide">
+                      Data Pemesan
+                    </h2>
+                  </div>
+                  {isLoggedIn ? (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 rounded text-xs font-bold self-start sm:self-auto">
+                      <CheckCircle2 size={13} className="text-emerald-300 shrink-0" />
+                      <span>Auto-fill dari Akun KAI (KTP Terverifikasi)</span>
+                    </div>
+                  ) : null}
                 </div>
                 <div className="p-6 md:p-8 space-y-5">
                   <div className="flex flex-col sm:flex-row gap-5">
@@ -528,12 +609,24 @@ function IsiDataContent() {
                         required
                         type="text"
                         value={booker.idNumber}
-                        onChange={(e) =>
-                          setBooker({ ...booker, idNumber: e.target.value })
-                        }
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          const matched = savedAccountPassengers.find((s) => s.idNumber === val.trim());
+                          if (matched && !booker.name) {
+                            setBooker({ ...booker, idNumber: val, name: matched.name });
+                          } else {
+                            setBooker({ ...booker, idNumber: val });
+                          }
+                        }}
                         className="w-full px-4 py-3 bg-white border border-gray-300 rounded-sm outline-none focus:bg-white focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all font-medium text-black placeholder:font-normal"
                         placeholder="NIK / No Paspor"
                       />
+                      {savedAccountPassengers.some((s) => s.idNumber === booker.idNumber.trim()) && (
+                        <p className="text-[11px] text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                          <CheckCircle2 size={12} className="text-emerald-600 shrink-0" />
+                          <span>KTP Akun Terdaftar & Terverifikasi</span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div>
@@ -761,7 +854,7 @@ function IsiDataContent() {
               </div>
 
               {/* Data Penumpang Header & Tombol Di Atas Penumpang 1 */}
-              <div className="flex items-center justify-between pt-2 pb-1">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 pb-1">
                 <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Data Penumpang
                 </h2>
@@ -769,7 +862,7 @@ function IsiDataContent() {
                 <button
                   type="button"
                   onClick={handleToggleSameAsBooker}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-bold transition-all cursor-pointer shadow-2xs self-start sm:self-auto ${
                     isSameAsBooker
                       ? "bg-[#003C71] text-white border border-[#003C71] hover:bg-[#002B52]"
                       : "bg-white hover:bg-gray-50 text-[#003C71] border border-gray-300 hover:border-[#003C71]"
@@ -778,18 +871,12 @@ function IsiDataContent() {
                   {isSameAsBooker ? (
                     <>
                       <Check size={13} strokeWidth={3} className="text-white" />
-                      <span>Data Pemesan Diterapkan</span>
+                      <span>KTP Pemesan Terpasang (P1)</span>
                     </>
                   ) : (
                     <>
-                      {/* Icon mengambil data dari pemesan di atas */}
-                      <svg className="w-3.5 h-3.5 text-[#003C71]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M15 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="8" cy="7" r="4" />
-                        <polyline points="16 11 19 14 22 11" />
-                        <line x1="19" y1="7" x2="19" y2="14" />
-                      </svg>
-                      <span>Sama dengan Pemesan</span>
+                      <UserCheck size={14} className="text-[#003C71]" />
+                      <span>Gunakan KTP Pemesan (Penumpang 1)</span>
                     </>
                   )}
                 </button>
@@ -801,7 +888,7 @@ function IsiDataContent() {
                   className="bg-white rounded-md shadow-md border border-gray-200 overflow-hidden relative"
                 >
                   <div className="absolute top-0 left-0 w-1 h-full bg-[var(--color-accent)]"></div>
-                  <div className="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between ml-1">
+                  <div className="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between ml-1 relative">
                     <h2 className="font-extrabold text-lg text-[var(--color-primary-dark)] flex items-center gap-2">
                       Penumpang {idx + 1}
                       <span
@@ -814,6 +901,55 @@ function IsiDataContent() {
                         {p.type}
                       </span>
                     </h2>
+
+                    {/* Tombol Pilih dari KTP Tersimpan di Akun */}
+                    {p.type !== "Bayi" && (
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() => setActivePassengerPopover(activePassengerPopover === idx ? null : idx)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold text-[#003C71] bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors cursor-pointer"
+                        >
+                          <UserCheck size={13} />
+                          <span>Pilih KTP Tersimpan</span>
+                          <ChevronDown size={13} className={activePassengerPopover === idx ? "rotate-180 transition-transform" : "transition-transform"} />
+                        </button>
+
+                        {/* Dropdown Popover KTP Tersimpan */}
+                        {activePassengerPopover === idx && (
+                          <div 
+                            ref={popoverRef}
+                            className="absolute right-0 top-full mt-1.5 w-72 bg-white rounded-md shadow-2xl border border-gray-200 z-50 p-2 animate-in fade-in zoom-in-95 duration-150"
+                          >
+                            <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider px-2 py-1 border-b border-gray-100 mb-1">
+                              Daftar KTP di Akun KAI
+                            </p>
+                            <div className="space-y-1">
+                              {savedAccountPassengers.map((saved) => (
+                                <button
+                                  key={saved.id}
+                                  type="button"
+                                  onClick={() => handleSelectSavedPassenger(idx, saved)}
+                                  className="w-full text-left p-2 rounded hover:bg-blue-50/70 transition-colors cursor-pointer group flex flex-col"
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-xs font-bold text-gray-900 group-hover:text-[#003C71]">
+                                      {saved.name}
+                                    </span>
+                                    <span className="text-[10px] font-medium text-blue-700 bg-blue-100/60 px-1.5 py-0.5 rounded">
+                                      {saved.label}
+                                    </span>
+                                  </div>
+                                  <span className="text-[11px] text-gray-500 font-mono mt-0.5">
+                                    {saved.idType}: {saved.idNumber}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   {p.type === "Bayi" && (
                     <div className="mx-6 mt-4 p-3 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800 flex items-center gap-2">
@@ -922,9 +1058,17 @@ function IsiDataContent() {
                           required
                           type="text"
                           value={p.idNumber}
-                          onChange={(e) =>
-                            updatePassenger(idx, "idNumber", e.target.value)
-                          }
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            const matched = savedAccountPassengers.find((s) => s.idNumber === val.trim());
+                            if (matched && !p.name) {
+                              updatePassenger(idx, "idNumber", val);
+                              updatePassenger(idx, "name", matched.name);
+                              updatePassenger(idx, "title", matched.title);
+                            } else {
+                              updatePassenger(idx, "idNumber", val);
+                            }
+                          }}
                           className="w-full px-4 py-3 bg-white border border-gray-300 rounded-sm outline-none focus:bg-white focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/10 transition-all font-medium text-black placeholder:font-normal"
                           placeholder={
                             p.type === "Bayi"
@@ -932,6 +1076,12 @@ function IsiDataContent() {
                               : "NIK / No. Paspor"
                           }
                         />
+                        {savedAccountPassengers.some((s) => s.idNumber === p.idNumber.trim()) && (
+                          <p className="text-[11px] text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                            <CheckCircle2 size={12} className="text-emerald-600 shrink-0" />
+                            <span>KTP Akun Terdaftar & Terverifikasi</span>
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
