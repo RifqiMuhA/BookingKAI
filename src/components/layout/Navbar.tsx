@@ -184,13 +184,6 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
                     <span>Riwayat Pemesanan</span>
                     <span className="text-xs bg-blue-50 text-[#003C71] font-medium px-2 py-0.5 rounded-sm border border-blue-100">3 Tiket</span>
                   </Link>
-                  <Link 
-                    href="/cek-pesanan" 
-                    className="px-4 py-2.5 text-sm font-normal text-gray-700 hover:bg-gray-50 hover:text-[#003C71] transition-colors" 
-                    onClick={() => setIsProfileOpen(false)}
-                  >
-                    Cek Kode Booking Lain
-                  </Link>
                   <button 
                     onClick={() => {
                       logout();
