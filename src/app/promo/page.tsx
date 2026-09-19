@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Suspense, useRef, useEffect } from "react";
+import React, { useState, useMemo, Suspense, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,35 +22,25 @@ import {
   ExternalLink,
   ChevronDown,
   Filter,
-  MapPin,
-  Flame,
-  Clock,
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
 import { PromoItem, PROMOS_DATA } from "@/lib/promosData";
 
 
-// Opsi Kota dengan Kategori Terpopuler
-const POPULAR_CITIES = [
-  { id: "Bandung", label: "Bandung", province: "Jawa Barat" },
-  { id: "Yogyakarta", label: "Yogyakarta", province: "D.I. Yogyakarta" },
-  { id: "Surabaya", label: "Surabaya", province: "Jawa Timur" },
-];
-
-const OTHER_CITIES = [
-  { id: "Jakarta", label: "Jakarta", province: "DKI Jakarta" },
-  { id: "Malang", label: "Malang", province: "Jawa Timur" },
-  { id: "Semarang", label: "Semarang", province: "Jawa Tengah" },
-  { id: "Solo", label: "Solo", province: "Jawa Tengah" },
-  { id: "Cirebon", label: "Cirebon", province: "Jawa Barat" },
-  { id: "Purwokerto", label: "Purwokerto", province: "Jawa Tengah" },
-  { id: "Banyuwangi", label: "Banyuwangi", province: "Jawa Timur" },
-];
-
-const ALL_CITIES_LIST = [
-  ...POPULAR_CITIES,
-  ...OTHER_CITIES
+// Opsi Kota Destinasi
+const CITIES_LIST = [
+  { id: "semua", label: "Semua Kota" },
+  { id: "Bandung", label: "Bandung" },
+  { id: "Yogyakarta", label: "Yogyakarta" },
+  { id: "Surabaya", label: "Surabaya" },
+  { id: "Jakarta", label: "Jakarta" },
+  { id: "Malang", label: "Malang" },
+  { id: "Semarang", label: "Semarang" },
+  { id: "Solo", label: "Solo" },
+  { id: "Cirebon", label: "Cirebon" },
+  { id: "Purwokerto", label: "Purwokerto" },
+  { id: "Banyuwangi", label: "Banyuwangi" },
 ];
 
 // Opsi Waktu Promo
@@ -68,63 +58,12 @@ function PromoPageContent() {
   const [selectedTime, setSelectedTime] = useState("semua");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // State untuk searchable city dropdown
-  const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
-  const [citySearchInput, setCitySearchInput] = useState("");
-  const cityDropdownRef = useRef<HTMLDivElement>(null);
-
-  // State untuk custom time dropdown
-  const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
-  const timeDropdownRef = useRef<HTMLDivElement>(null);
-
-  // Click outside listener untuk kedua dropdown
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        cityDropdownRef.current &&
-        !cityDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsCityDropdownOpen(false);
-      }
-      if (
-        timeDropdownRef.current &&
-        !timeDropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsTimeDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Filter kota berdasarkan input ketikan user
-  const filteredPopularCities = useMemo(() => {
-    if (!citySearchInput.trim()) return POPULAR_CITIES;
-    const q = citySearchInput.toLowerCase();
-    return POPULAR_CITIES.filter(
-      (c) => c.label.toLowerCase().includes(q) || c.province.toLowerCase().includes(q)
-    );
-  }, [citySearchInput]);
-
-  const filteredOtherCities = useMemo(() => {
-    if (!citySearchInput.trim()) return OTHER_CITIES;
-    const q = citySearchInput.toLowerCase();
-    return OTHER_CITIES.filter(
-      (c) => c.label.toLowerCase().includes(q) || c.province.toLowerCase().includes(q)
-    );
-  }, [citySearchInput]);
-
   // Dapatkan label kota yang sedang aktif
   const selectedCityLabel = useMemo(() => {
     if (selectedCity === "semua") return "Semua Kota";
-    const found = ALL_CITIES_LIST.find((c) => c.id === selectedCity);
+    const found = CITIES_LIST.find((c) => c.id.toLowerCase() === selectedCity.toLowerCase());
     return found ? found.label : selectedCity;
   }, [selectedCity]);
-
-  // Dapatkan opsi waktu yang sedang aktif
-  const selectedTimeOption = useMemo(() => {
-    return TIME_OPTIONS.find((t) => t.id === selectedTime) || TIME_OPTIONS[0];
-  }, [selectedTime]);
 
   // State pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -218,231 +157,99 @@ function PromoPageContent() {
           </div>
         </div>
 
-        {/* ===================== DUA FILTER BERBENTUK DROPDOWN ===================== */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* ===================== FILTER PROMO ===================== */}
+        <div className="bg-white border border-gray-200 rounded-sm p-4 mb-8 shadow-xs">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             
-            {/* Jumlah Promo Tersedia */}
-            <div className="text-sm text-gray-700 font-medium self-start sm:self-center">
+            {/* Kiri: Info Jumlah Promo */}
+            <div className="text-sm text-gray-700">
               Menampilkan <span className="font-bold text-[#003C71]">{filteredPromos.length}</span> promo tiket kereta
+              {selectedCity !== "semua" && (
+                <span className="text-gray-500"> tujuan <span className="font-semibold text-gray-900">{selectedCityLabel}</span></span>
+              )}
             </div>
 
-            {/* Container Dua Dropdown */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            {/* Kanan: Dropdown Filter Kota & Waktu */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
               
-              {/* Dropdown 1: Kota Destinasi (Bisa Diketik & Ada Kategori Terpopuler) */}
-              <div className="relative w-full sm:w-60" ref={cityDropdownRef}>
-                <div
-                  onClick={() => setIsCityDropdownOpen((prev) => !prev)}
-                  className={`w-full bg-white border ${
-                    isCityDropdownOpen ? "border-[#003C71] ring-2 ring-[#003C71]/10" : "border-gray-300 hover:border-[#003C71]"
-                  } text-gray-800 text-xs font-bold py-2 px-3 rounded-sm cursor-pointer transition-colors flex items-center justify-between shadow-2xs select-none`}
-                >
-                  <span className="truncate flex items-center gap-1.5">
-                    <MapPin size={13} className="text-[#003C71] flex-shrink-0" />
-                    <span>{selectedCityLabel}</span>
-                  </span>
+              {/* Filter Kota */}
+              <div className="w-full sm:w-48">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
+                  Kota Tujuan
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-sm text-xs font-semibold text-gray-800 focus:outline-none focus:border-[#003C71] focus:ring-1 focus:ring-[#003C71] appearance-none cursor-pointer transition-colors shadow-2xs"
+                  >
+                    <option value="semua">Semua Kota</option>
+                    <optgroup label="Kota Populer">
+                      <option value="Bandung">Bandung</option>
+                      <option value="Yogyakarta">Yogyakarta</option>
+                      <option value="Surabaya">Surabaya</option>
+                    </optgroup>
+                    <optgroup label="Kota Lainnya">
+                      <option value="Jakarta">Jakarta</option>
+                      <option value="Malang">Malang</option>
+                      <option value="Semarang">Semarang</option>
+                      <option value="Solo">Solo</option>
+                      <option value="Cirebon">Cirebon</option>
+                      <option value="Purwokerto">Purwokerto</option>
+                      <option value="Banyuwangi">Banyuwangi</option>
+                    </optgroup>
+                  </select>
                   <ChevronDown
                     size={14}
-                    className={`text-gray-400 transition-transform duration-200 ${
-                      isCityDropdownOpen ? "rotate-180 text-[#003C71]" : ""
-                    }`}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
                   />
                 </div>
-
-                {/* Popover Dropdown Searchable */}
-                {isCityDropdownOpen && (
-                  <div className="absolute top-[calc(100%+4px)] left-0 right-0 sm:w-72 bg-white border border-gray-300 rounded-sm shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
-                    {/* Search Input Box */}
-                    <div className="p-2.5 border-b border-gray-100 bg-gray-50">
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={citySearchInput}
-                          onChange={(e) => setCitySearchInput(e.target.value)}
-                          placeholder="Ketik nama kota..."
-                          autoFocus
-                          className="w-full bg-white border border-gray-300 rounded-sm text-xs px-2.5 py-1.5 pl-7 text-gray-800 focus:outline-none focus:border-[#003C71] placeholder:text-gray-400 font-medium"
-                        />
-                        <Search
-                          size={13}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
-                        />
-                        {citySearchInput && (
-                          <button
-                            type="button"
-                            onClick={() => setCitySearchInput("")}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-[10px]"
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* List Items */}
-                    <div className="max-h-60 overflow-y-auto divide-y divide-gray-100 text-xs">
-                      {/* Opsi Semua Kota */}
-                      {!citySearchInput && (
-                        <div
-                          onClick={() => {
-                            setSelectedCity("semua");
-                            setIsCityDropdownOpen(false);
-                            setCitySearchInput("");
-                          }}
-                          className={`px-3 py-2 cursor-pointer flex items-center justify-between hover:bg-blue-50 transition-colors ${
-                            selectedCity === "semua" ? "bg-blue-50/80 font-bold text-[#003C71]" : "text-gray-700 font-medium"
-                          }`}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <Train size={12} className="text-[#003C71]" />
-                            <span>Semua Kota</span>
-                          </span>
-                          {selectedCity === "semua" && <Check size={13} className="text-[#003C71]" />}
-                        </div>
-                      )}
-
-                      {/* SECTION 1: TERPOPULER (Paling Atas Sesuai Permintaan) */}
-                      {filteredPopularCities.length > 0 && (
-                        <div>
-                          <div className="bg-amber-50/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-amber-800 border-b border-amber-100 flex items-center gap-1">
-                            <Flame size={12} className="text-[#F58220]" />
-                            <span>Terpopuler</span>
-                          </div>
-                          {filteredPopularCities.map((c) => {
-                            const isSelected = selectedCity.toLowerCase() === c.id.toLowerCase();
-                            return (
-                              <div
-                                key={c.id}
-                                onClick={() => {
-                                  setSelectedCity(c.id);
-                                  setIsCityDropdownOpen(false);
-                                  setCitySearchInput("");
-                                }}
-                                className={`px-3 py-2 cursor-pointer flex items-center justify-between hover:bg-blue-50 transition-colors ${
-                                  isSelected ? "bg-blue-50/80 font-bold text-[#003C71]" : "text-gray-700"
-                                }`}
-                              >
-                                <div>
-                                  <div className="font-semibold text-gray-900">{c.label}</div>
-                                  <div className="text-[10px] text-gray-400">{c.province}</div>
-                                </div>
-                                {isSelected && <Check size={13} className="text-[#003C71]" />}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-
-                      {/* SECTION 2: KOTA LAINNYA */}
-                      {filteredOtherCities.length > 0 && (
-                        <div>
-                          <div className="bg-gray-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                            Kota Lainnya
-                          </div>
-                          {filteredOtherCities.map((c) => {
-                            const isSelected = selectedCity.toLowerCase() === c.id.toLowerCase();
-                            return (
-                              <div
-                                key={c.id}
-                                onClick={() => {
-                                  setSelectedCity(c.id);
-                                  setIsCityDropdownOpen(false);
-                                  setCitySearchInput("");
-                                }}
-                                className={`px-3 py-2 cursor-pointer flex items-center justify-between hover:bg-blue-50 transition-colors ${
-                                  isSelected ? "bg-blue-50/80 font-bold text-[#003C71]" : "text-gray-700"
-                                }`}
-                              >
-                                <div>
-                                  <div className="font-semibold text-gray-900">{c.label}</div>
-                                  <div className="text-[10px] text-gray-400">{c.province}</div>
-                                </div>
-                                {isSelected && <Check size={13} className="text-[#003C71]" />}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-
-                      {/* State Jika Hasil Pencarian Kota Kosong */}
-                      {filteredPopularCities.length === 0 && filteredOtherCities.length === 0 && (
-                        <div className="p-4 text-center text-xs text-gray-500">
-                          Kota &ldquo;{citySearchInput}&rdquo; tidak ditemukan.
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
 
-              {/* Dropdown 2: Waktu Promo (Sederhana, Bersih & Tanpa Emot/Teks Berlebih) */}
-              <div className="relative w-full sm:w-52" ref={timeDropdownRef}>
-                {/* Trigger Button */}
-                <div
-                  onClick={() => setIsTimeDropdownOpen((prev) => !prev)}
-                  className={`w-full bg-white border ${
-                    isTimeDropdownOpen ? "border-[#003C71] ring-2 ring-[#003C71]/10" : "border-gray-300 hover:border-[#003C71]"
-                  } text-gray-800 text-xs font-bold py-2 px-3 rounded-sm cursor-pointer transition-colors flex items-center justify-between shadow-2xs select-none`}
-                >
-                  <span className="truncate">
-                    {selectedTimeOption.label}
-                  </span>
+              {/* Filter Waktu */}
+              <div className="w-full sm:w-48">
+                <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
+                  Periode Promo
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedTime}
+                    onChange={(e) => setSelectedTime(e.target.value)}
+                    className="w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-sm text-xs font-semibold text-gray-800 focus:outline-none focus:border-[#003C71] focus:ring-1 focus:ring-[#003C71] appearance-none cursor-pointer transition-colors shadow-2xs"
+                  >
+                    {TIME_OPTIONS.map((opt) => (
+                      <option key={opt.id} value={opt.id}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
                   <ChevronDown
                     size={14}
-                    className={`text-gray-400 transition-transform duration-200 ${
-                      isTimeDropdownOpen ? "rotate-180 text-[#003C71]" : ""
-                    }`}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
                   />
                 </div>
-
-                {/* Popover Menu Waktu Promo */}
-                {isTimeDropdownOpen && (
-                  <div className="absolute top-[calc(100%+4px)] left-0 right-0 bg-white border border-gray-300 rounded-sm shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
-                    <div className="py-1 divide-y divide-gray-100 text-xs">
-                      {TIME_OPTIONS.map((t) => {
-                        const isSelected = selectedTime === t.id;
-                        return (
-                          <div
-                            key={t.id}
-                            onClick={() => {
-                              setSelectedTime(t.id);
-                              setIsTimeDropdownOpen(false);
-                            }}
-                            className={`px-3.5 py-2 cursor-pointer flex items-center justify-between hover:bg-blue-50 transition-colors ${
-                              isSelected ? "bg-blue-50 font-bold text-[#003C71]" : "text-gray-700"
-                            }`}
-                          >
-                            <span>{t.label}</span>
-                            {isSelected && (
-                              <Check size={13} className="text-[#003C71] flex-shrink-0" />
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
               </div>
 
-              {/* Tombol Reset (Hanya muncul jika ada filter aktif) */}
-              {(selectedCity !== "semua" || selectedTime !== "semua") && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedCity("semua");
-                    setSelectedTime("semua");
-                  }}
-                  className="h-[34px] px-2.5 text-xs font-bold text-gray-600 hover:text-red-600 hover:bg-red-50 border border-gray-300 hover:border-red-200 rounded-sm transition-colors cursor-pointer flex items-center justify-center gap-1"
-                  title="Kembalikan semua filter ke awal"
-                >
-                  <X size={12} />
-                  <span>Reset</span>
-                </button>
+              {/* Tombol Reset jika ada filter aktif */}
+              {(selectedCity !== "semua" || selectedTime !== "semua" || searchQuery) && (
+                <div className="w-full sm:w-auto self-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCity("semua");
+                      setSelectedTime("semua");
+                      setSearchQuery("");
+                    }}
+                    className="w-full sm:w-auto h-[35px] px-3 text-xs font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 rounded-sm transition-colors cursor-pointer flex items-center justify-center gap-1"
+                    title="Reset semua filter"
+                  >
+                    <X size={13} />
+                    <span>Reset</span>
+                  </button>
+                </div>
               )}
 
             </div>
-
           </div>
         </div>
 
