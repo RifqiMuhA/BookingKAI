@@ -634,7 +634,21 @@ function SearchResultsContent() {
                   <span>Pencarian</span>
                 </span>
                 <ChevronRight size={13} className="text-gray-400 flex-shrink-0" strokeWidth={2} />
-                <span className="font-medium text-gray-500 flex-shrink-0">{isReturnTrip ? "Pilih Kereta Pulang" : "Pilih Kereta Berangkat"}</span>
+                {isReturnTrip ? (
+                  <>
+                    <span 
+                      className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0 inline-flex items-center gap-1 sm:gap-1.5"
+                      onClick={() => router.back()}
+                    >
+                      <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+                      <span>Pilih Kereta Berangkat</span>
+                    </span>
+                    <ChevronRight size={13} className="text-gray-400 flex-shrink-0" strokeWidth={2} />
+                    <span className="font-medium text-gray-500 flex-shrink-0">Pilih Kereta Pulang</span>
+                  </>
+                ) : (
+                  <span className="font-medium text-gray-500 flex-shrink-0">Pilih Kereta</span>
+                )}
               </div>
 
               {/* Big Title */}
