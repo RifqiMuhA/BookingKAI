@@ -39,7 +39,7 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
       {/* Top Bar - Always Navy */}
       <div className="bg-[var(--color-primary-dark)] text-white text-xs py-2 px-4 md:px-8 hidden sm:flex justify-end items-center">
         <div className="flex items-center gap-4 ml-auto font-medium">
-          <Link href="#" className="hover:underline hidden sm:block">FAQ</Link>
+          <Link href="/faq" className="hover:underline hidden sm:block">FAQ</Link>
           <Link href="#" className="hover:underline hidden sm:block">Hubungi Kami</Link>
           {!isLoggedIn && (
             <>
@@ -252,7 +252,7 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
           {/* Footer section - Pushed to bottom */}
           <div className="mt-auto px-6 pb-8 pt-6 border-t border-gray-200">
             <div className="flex flex-col gap-4 text-[15px] text-gray-700">
-              <Link href="#" className="hover:text-[var(--color-primary)] transition-colors">FAQ</Link>
+              <Link href="/faq" className="hover:text-[var(--color-primary)] transition-colors">FAQ</Link>
               <Link href="#" className="hover:text-[var(--color-primary)] transition-colors">Hubungi Kami</Link>
               <div className="h-px bg-gray-100 my-1"></div>
               

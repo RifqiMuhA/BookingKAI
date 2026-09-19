@@ -147,7 +147,10 @@ export function Footer() {
             <ul className="space-y-2.5">
               {bantuan.map((item) => (
                 <li key={item}>
-                  <Link href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
+                  <Link
+                    href={item === "FAQ" ? "/faq" : "#"}
+                    className="text-sm text-gray-300 hover:text-white transition-colors"
+                  >
                     {item}
                   </Link>
                 </li>
