@@ -147,7 +147,7 @@ function CekPesananContent() {
 
         {/* Notifikasi Cepat Riwayat Pesanan Pengguna Terdaftar */}
         {isLoggedIn && !isBannerDismissed && (
-          <div className="relative mb-6 p-4 sm:p-5 bg-white border border-gray-200 border-l-4 border-l-[#003C71] rounded-sm shadow-xs">
+          <div className="relative mb-6 p-4 sm:p-5 bg-white border border-gray-200 rounded-sm shadow-xs">
             {/* Tombol Tutup (Silang) */}
             <button
               onClick={() => setIsBannerDismissed(true)}
