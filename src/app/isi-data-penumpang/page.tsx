@@ -877,9 +877,11 @@ function IsiDataContent() {
               {passengers.map((p, idx) => (
                 <div
                   key={p.id}
-                  className="bg-white rounded-md shadow-md border border-gray-200 overflow-hidden relative"
+                  className={`bg-white rounded-md shadow-md border border-gray-200 relative ${
+                    activePassengerPopover === idx ? "z-30" : "z-10"
+                  }`}
                 >
-                  <div className="absolute top-0 left-0 w-1 h-full bg-[var(--color-accent)]"></div>
+                  <div className="absolute top-0 left-0 w-1 h-full bg-[var(--color-accent)] rounded-l-md"></div>
                   <div className="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between ml-1 relative">
                     <h2 className="font-extrabold text-lg text-[var(--color-primary-dark)] flex items-center gap-2">
                       Penumpang {idx + 1}
@@ -911,87 +913,51 @@ function IsiDataContent() {
                           <ChevronDown size={14} className={`transition-transform duration-200 ${activePassengerPopover === idx ? "rotate-180" : ""}`} />
                         </button>
 
-                        {/* Dropdown Popover KTP Tersimpan Elegan KAI */}
+                        {/* Dropdown Popover KTP Tersimpan Simpel & Elegan */}
                         {activePassengerPopover === idx && (
                           <div 
                             ref={popoverRef}
-                            className="absolute right-0 top-full mt-2 w-80 sm:w-[360px] bg-white rounded-sm shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+                            className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 bg-white rounded-md shadow-2xl border border-gray-200 z-50 overflow-hidden animate-in fade-in duration-150"
                           >
-                            {/* Garis Aksen Oranye KAI */}
-                            <div className="h-1 w-full bg-[#F58220]" />
-
-                            {/* Header Navy KAI */}
-                            <div className="bg-[#001F3F] text-white px-4 py-3 flex items-center justify-between">
-                              <div className="flex items-center gap-2.5">
-                                <div className="w-6 h-6 rounded bg-white/10 flex items-center justify-center">
-                                  <CreditCard size={13} className="text-[#F58220]" />
-                                </div>
-                                <div>
-                                  <h4 className="font-bold text-xs sm:text-sm leading-tight text-white tracking-wide">
-                                    Daftar KTP di Akun KAI
-                                  </h4>
-                                  <p className="text-[11px] text-white/70 leading-tight mt-0.5 font-normal">
-                                    Pilih profil untuk auto-fill Penumpang {idx + 1}
-                                  </p>
-                                </div>
-                              </div>
+                            <div className="px-3.5 py-2.5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                              <span className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                Pilih KTP Tersimpan
+                              </span>
                               <button
                                 type="button"
                                 onClick={() => setActivePassengerPopover(null)}
-                                className="text-white/60 hover:text-white text-xs w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
+                                className="text-gray-400 hover:text-gray-700 text-xs font-bold p-1 cursor-pointer"
                                 aria-label="Tutup"
                               >
                                 ✕
                               </button>
                             </div>
 
-                            {/* Daftar KTP Tersimpan */}
-                            <div className="p-2 space-y-1 divide-y divide-gray-100 max-h-72 overflow-y-auto bg-white">
+                            <div className="p-1.5 divide-y divide-gray-100 max-h-60 overflow-y-auto bg-white">
                               {savedAccountPassengers.map((saved) => (
                                 <button
                                   key={saved.id}
                                   type="button"
                                   onClick={() => handleSelectSavedPassenger(idx, saved)}
-                                  className="w-full text-left p-2.5 rounded-sm hover:bg-blue-50/80 transition-all cursor-pointer group flex items-center gap-3 pt-2.5"
+                                  className="w-full text-left p-2.5 rounded hover:bg-blue-50/70 transition-colors cursor-pointer group flex items-center justify-between"
                                 >
-                                  {/* Avatar Bulat Initial */}
-                                  <div className="w-9 h-9 rounded-sm bg-slate-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-[#003C71] group-hover:bg-[#003C71] group-hover:text-white group-hover:border-[#003C71] transition-colors flex-shrink-0">
-                                    {saved.name.slice(0, 2).toUpperCase()}
+                                  <div>
+                                    <p className="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-[#003C71]">
+                                      {saved.name}
+                                    </p>
+                                    <p className="text-xs text-gray-500 font-mono mt-0.5">
+                                      KTP: {saved.idNumber}
+                                    </p>
                                   </div>
-
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between gap-1 mb-1">
-                                      <span className="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-[#003C71] truncate">
-                                        {saved.name}
-                                      </span>
-                                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-sm flex-shrink-0 ${
-                                        saved.id === "self"
-                                          ? "bg-orange-50 text-[#E07015] border border-orange-200"
-                                          : "bg-slate-100 text-gray-700 border border-gray-200"
-                                      }`}>
-                                        {saved.label}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 text-xs text-gray-500 font-mono">
-                                      <span className="font-semibold text-gray-600">NIK:</span>
-                                      <span className="tracking-wider text-gray-700">
-                                        {saved.idNumber.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1 $2 $3 $4")}
-                                      </span>
-                                    </div>
-                                  </div>
+                                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                                    saved.id === "self"
+                                      ? "bg-orange-50 text-[#E07015] border border-orange-200"
+                                      : "bg-gray-100 text-gray-600"
+                                  }`}>
+                                    {saved.label}
+                                  </span>
                                 </button>
                               ))}
-                            </div>
-
-                            {/* Footer Info */}
-                            <div className="px-3.5 py-2 bg-slate-50 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
-                              <span className="flex items-center gap-1 text-gray-600">
-                                <CheckCircle2 size={12} className="text-emerald-600" />
-                                <span>Auto-fill Identitas Cepat</span>
-                              </span>
-                              <span className="font-bold text-[#003C71] text-[10px] tracking-wider uppercase">
-                                Akun Resmi KAI
-                              </span>
                             </div>
                           </div>
                         )}
