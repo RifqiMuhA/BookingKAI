@@ -203,7 +203,7 @@ export default function RegisterPage() {
         {/* Modal Simpel untuk Kebutuhan Testing */}
         {showTestingModal && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl max-w-sm w-full p-6 text-center shadow-2xl border border-gray-100">
+            <div className="bg-white rounded-sm max-w-sm w-full p-6 text-center shadow-2xl border border-gray-200">
               <div className="w-24 h-24 mx-auto mb-3 relative">
                 <Image
                   src="/Maskot/maskot_lambai.webp"
@@ -214,7 +214,7 @@ export default function RegisterPage() {
                   priority
                 />
               </div>
-              <h3 className="text-base font-bold text-gray-900 mb-1.5">
+              <h3 className="text-base font-bold text-[#003C71] mb-1.5">
                 Pemberitahuan Testing
               </h3>
               <p className="text-sm text-gray-600 mb-5 leading-relaxed">
@@ -223,7 +223,7 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowTestingModal(false)}
-                className="w-full py-2.5 bg-[#003C71] hover:bg-[#002B52] text-white text-sm font-bold rounded-md transition-colors cursor-pointer"
+                className="w-full py-2.5 bg-[#003C71] hover:bg-[#002B52] text-white text-sm font-bold rounded-sm transition-colors cursor-pointer"
               >
                 Mengerti
               </button>

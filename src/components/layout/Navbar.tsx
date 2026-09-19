@@ -56,8 +56,6 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
             <>
               <div className="hidden sm:block w-px h-3 bg-white/30"></div>
               <Link href="/login" className="hover:underline hidden sm:block font-bold">Login</Link>
-              <span className="text-white/40 hidden sm:block">/</span>
-              <Link href="/register" className="hover:underline hidden sm:block font-bold">Daftar</Link>
             </>
           )}
 
@@ -313,10 +311,14 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
                   </Link>
                 </div>
               ) : (
-                <div className="flex items-center gap-3">
-                  <Link href="/login" className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors">Login</Link>
-                  <span className="text-gray-300">/</span>
-                  <Link href="/register" className="font-bold text-[#F58220] hover:text-[#d46a10] transition-colors">Daftar Akun</Link>
+                <div className="flex items-center">
+                  <Link 
+                    href="/login" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors"
+                  >
+                    Login
+                  </Link>
                 </div>
               )}
               <div className="flex items-center gap-3 mt-2">
