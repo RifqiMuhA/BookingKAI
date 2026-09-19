@@ -158,11 +158,20 @@ export default function RiwayatPesananPage() {
                   />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[11px] font-bold uppercase tracking-wider bg-[#F58220] text-white px-2 py-0.5 rounded-sm">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider bg-[#F58220] text-white px-2.5 py-0.5 rounded-sm">
                       Daftar Pesanan
                     </span>
-                    <span className="text-xs text-white/80">Akun Resmi KAI</span>
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#003C71] bg-white px-2.5 py-0.5 rounded-sm shadow-xs">
+                      <Image
+                        src="/Logo/logo_kai.webp"
+                        alt="Logo KAI"
+                        width={38}
+                        height={16}
+                        className="h-3.5 w-auto object-contain"
+                      />
+                      <span>Resmi KAI</span>
+                    </span>
                   </div>
                   <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                     Riwayat Pemesanan Tiket
@@ -260,12 +269,12 @@ export default function RiwayatPesananPage() {
 
                     <div className="flex items-center gap-2">
                       {ticket.status === "LUNAS" ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
-                          <CheckCircle2 size={12} />
-                          LUNAS / SIAP DIGUNAKAN
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-xs font-black bg-emerald-600 text-white shadow-xs tracking-wide">
+                          <CheckCircle2 size={13} className="text-white" />
+                          <span>LUNAS / SIAP DIGUNAKAN</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-gray-100 text-gray-600 border border-gray-300">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-sm text-xs font-bold bg-gray-200 text-gray-700 border border-gray-300">
                           SELESAI
                         </span>
                       )}
