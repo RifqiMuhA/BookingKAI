@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { ChevronRight, ChevronUp, ChevronDown, ArrowRight, User, AlertCircle, Phone, Mail, CheckCircle2, X, AlertTriangle, Tag } from "lucide-react";
+import { ChevronRight, ChevronUp, ChevronDown, ArrowRight, User, AlertCircle, Phone, Mail, CheckCircle2, X, AlertTriangle, Tag, UserCheck, Copy, Check } from "lucide-react";
 import { TRAIN_SCHEDULES, formatPrice, getStationByCode } from "@/lib/mockData";
 import { calculatePromoDiscount, getPromoByCode } from "@/lib/promosData";
 
@@ -132,7 +132,67 @@ function IsiDataContent() {
     router.push(`/pilih-kursi?${params.toString()}`);
   };
 
+  const [isSameAsBooker, setIsSameAsBooker] = useState(false);
+
+  const handleToggleSameAsBooker = () => {
+    if (!isSameAsBooker) {
+      setIsSameAsBooker(true);
+      setPassengers((prev) => {
+        if (prev.length === 0) return prev;
+        const updated = [...prev];
+        updated[0] = {
+          ...updated[0],
+          name: booker.name || updated[0].name,
+          idType: booker.idType || updated[0].idType,
+          idNumber: booker.idNumber || updated[0].idNumber,
+        };
+        return updated;
+      });
+    } else {
+      setIsSameAsBooker(false);
+      setPassengers((prev) => {
+        if (prev.length === 0) return prev;
+        const updated = [...prev];
+        updated[0] = {
+          ...updated[0],
+          name: "",
+          idNumber: "",
+        };
+        return updated;
+      });
+    }
+  };
+
+  // Otomatis sinkronkan Penumpang 1 jika isSameAsBooker aktif dan data pemesan diperbarui
+  useEffect(() => {
+    if (isSameAsBooker) {
+      setPassengers((prev) => {
+        if (prev.length === 0) return prev;
+        if (
+          prev[0].name === booker.name &&
+          prev[0].idType === booker.idType &&
+          prev[0].idNumber === booker.idNumber
+        ) {
+          return prev;
+        }
+        const updated = [...prev];
+        updated[0] = {
+          ...updated[0],
+          name: booker.name,
+          idType: booker.idType,
+          idNumber: booker.idNumber,
+        };
+        return updated;
+      });
+    }
+  }, [booker.name, booker.idType, booker.idNumber, isSameAsBooker]);
+
   const updatePassenger = (index: number, field: string, value: string) => {
+    if (index === 0 && isSameAsBooker && (field === "name" || field === "idNumber")) {
+      if (value !== booker[field as keyof typeof booker]) {
+        setIsSameAsBooker(false);
+      }
+    }
     const newP = [...passengers];
     newP[index] = { ...newP[index], [field]: value };
     setPassengers(newP);
@@ -701,6 +761,45 @@ function IsiDataContent() {
               </div>
 
               {/* Data Penumpang */}
+              {/* Tombol Di Atas Penumpang 1: Jadikan data pemesan ke data penumpang 1 */}
+              <div className="bg-white rounded-md border border-gray-200 p-3.5 sm:p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-sm bg-[#003C71]/10 text-[#003C71] flex items-center justify-center flex-shrink-0">
+                    <UserCheck size={18} strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs sm:text-sm font-bold text-gray-900 leading-snug">
+                      Penumpang 1 sama dengan Pemesan?
+                    </h3>
+                    <p className="text-[11px] text-gray-500 leading-normal">
+                      Salin nama dan nomor identitas pemesan langsung ke Penumpang 1
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleToggleSameAsBooker}
+                  className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-sm text-xs font-bold transition-all cursor-pointer flex-shrink-0 select-none ${
+                    isSameAsBooker
+                      ? "bg-[#003C71] text-white border border-[#003C71] shadow-2xs hover:bg-[#002B52]"
+                      : "bg-white text-[#003C71] border border-[#003C71]/40 hover:border-[#003C71] hover:bg-blue-50/70"
+                  }`}
+                >
+                  {isSameAsBooker ? (
+                    <>
+                      <Check size={14} strokeWidth={3} className="text-white" />
+                      <span>Data Pemesan Diterapkan</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={13} strokeWidth={2.2} />
+                      <span>Gunakan Data Pemesan</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
               {passengers.map((p, idx) => (
                 <div
                   key={p.id}
@@ -720,6 +819,13 @@ function IsiDataContent() {
                         {p.type}
                       </span>
                     </h2>
+
+                    {idx === 0 && isSameAsBooker && (
+                      <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-sm">
+                        <Check size={12} strokeWidth={3} />
+                        <span>Sama dengan Pemesan</span>
+                      </span>
+                    )}
                   </div>
                   {p.type === "Bayi" && (
                     <div className="mx-6 mt-4 p-3 bg-amber-50 border border-amber-200 rounded text-xs text-amber-800 flex items-center gap-2">
