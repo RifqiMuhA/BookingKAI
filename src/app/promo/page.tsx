@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Suspense, useEffect } from "react";
+import React, { useState, useMemo, Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,13 +27,14 @@ import {
 } from "lucide-react";
 import { PromoItem, PROMOS_DATA } from "@/lib/promosData";
 
-
-// Opsi Kota Destinasi
-const CITIES_LIST = [
-  { id: "semua", label: "Semua Kota" },
+// Opsi Kota Populer & Kota Lainnya
+const POPULAR_CITIES = [
   { id: "Bandung", label: "Bandung" },
   { id: "Yogyakarta", label: "Yogyakarta" },
   { id: "Surabaya", label: "Surabaya" },
+];
+
+const OTHER_CITIES = [
   { id: "Jakarta", label: "Jakarta" },
   { id: "Malang", label: "Malang" },
   { id: "Semarang", label: "Semarang" },
@@ -58,12 +59,37 @@ function PromoPageContent() {
   const [selectedTime, setSelectedTime] = useState("semua");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [isCityOpen, setIsCityOpen] = useState(false);
+  const [isTimeOpen, setIsTimeOpen] = useState(false);
+  const cityRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (cityRef.current && !cityRef.current.contains(event.target as Node)) {
+        setIsCityOpen(false);
+      }
+      if (timeRef.current && !timeRef.current.contains(event.target as Node)) {
+        setIsTimeOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Dapatkan label kota yang sedang aktif
   const selectedCityLabel = useMemo(() => {
     if (selectedCity === "semua") return "Semua Kota";
-    const found = CITIES_LIST.find((c) => c.id.toLowerCase() === selectedCity.toLowerCase());
+    const all = [...POPULAR_CITIES, ...OTHER_CITIES];
+    const found = all.find((c) => c.id.toLowerCase() === selectedCity.toLowerCase());
     return found ? found.label : selectedCity;
   }, [selectedCity]);
+
+  // Dapatkan label waktu yang sedang aktif
+  const selectedTimeLabel = useMemo(() => {
+    const found = TIME_OPTIONS.find((t) => t.id === selectedTime);
+    return found ? found.label : "Semua Waktu";
+  }, [selectedTime]);
 
   // State pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -172,62 +198,167 @@ function PromoPageContent() {
             {/* Kanan: Dropdown Filter Kota & Waktu */}
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
               
-              {/* Filter Kota */}
-              <div className="w-full sm:w-48">
+              {/* Dropdown 1: Kota Tujuan (Melebar Luas & Background Kategori Berwarna) */}
+              <div className="relative w-full sm:w-60" ref={cityRef}>
                 <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
                   Kota Tujuan
                 </label>
-                <div className="relative">
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-sm text-xs font-semibold text-gray-800 focus:outline-none focus:border-[#003C71] focus:ring-1 focus:ring-[#003C71] appearance-none cursor-pointer transition-colors shadow-2xs"
-                  >
-                    <option value="semua">Semua Kota</option>
-                    <optgroup label="Kota Populer">
-                      <option value="Bandung">Bandung</option>
-                      <option value="Yogyakarta">Yogyakarta</option>
-                      <option value="Surabaya">Surabaya</option>
-                    </optgroup>
-                    <optgroup label="Kota Lainnya">
-                      <option value="Jakarta">Jakarta</option>
-                      <option value="Malang">Malang</option>
-                      <option value="Semarang">Semarang</option>
-                      <option value="Solo">Solo</option>
-                      <option value="Cirebon">Cirebon</option>
-                      <option value="Purwokerto">Purwokerto</option>
-                      <option value="Banyuwangi">Banyuwangi</option>
-                    </optgroup>
-                  </select>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCityOpen(!isCityOpen);
+                    setIsTimeOpen(false);
+                  }}
+                  className={`w-full bg-white border ${
+                    isCityOpen ? "border-[#003C71] ring-2 ring-[#003C71]/15" : "border-gray-300 hover:border-[#003C71]"
+                  } text-gray-800 text-xs py-2 px-3 rounded-sm cursor-pointer transition-all flex items-center justify-between shadow-2xs select-none`}
+                >
+                  <span className="truncate font-bold text-gray-900">{selectedCityLabel}</span>
                   <ChevronDown
-                    size={14}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                    size={15}
+                    className={`text-gray-400 transition-transform duration-200 shrink-0 ml-2 ${
+                      isCityOpen ? "rotate-180 text-[#003C71]" : ""
+                    }`}
                   />
-                </div>
+                </button>
+
+                {/* Popover Melebar dengan Pewarnaan Background Kategori */}
+                {isCityOpen && (
+                  <div className="absolute top-[calc(100%+4px)] left-0 sm:left-auto sm:right-0 sm:w-84 bg-white border border-gray-300 rounded-sm shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                    <div className="max-h-80 overflow-y-auto">
+                      {/* Opsi Semua Kota */}
+                      <div
+                        onClick={() => {
+                          setSelectedCity("semua");
+                          setIsCityOpen(false);
+                        }}
+                        className={`px-4 py-2.5 cursor-pointer flex items-center justify-between text-xs transition-colors border-b border-gray-200 ${
+                          selectedCity === "semua"
+                            ? "bg-[#003C71] text-white font-bold"
+                            : "text-gray-800 font-semibold hover:bg-gray-100"
+                        }`}
+                      >
+                        <span>Semua Kota</span>
+                        {selectedCity === "semua" && <Check size={14} className="text-white" />}
+                      </div>
+
+                      {/* SECTION 1: KOTA POPULER (Background Amber Hangat) */}
+                      <div className="bg-amber-50/50">
+                        <div className="bg-amber-100/90 px-4 py-1.5 text-[11px] font-bold text-amber-900 border-b border-amber-200/80 tracking-wider">
+                          KOTA POPULER
+                        </div>
+                        <div className="divide-y divide-amber-100/70">
+                          {POPULAR_CITIES.map((c) => {
+                            const isSelected = selectedCity.toLowerCase() === c.id.toLowerCase();
+                            return (
+                              <div
+                                key={c.id}
+                                onClick={() => {
+                                  setSelectedCity(c.id);
+                                  setIsCityOpen(false);
+                                }}
+                                className={`px-4 py-2.5 cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                                  isSelected
+                                    ? "bg-[#003C71] text-white font-bold"
+                                    : "text-gray-900 font-medium hover:bg-amber-100/70"
+                                }`}
+                              >
+                                <span>{c.label}</span>
+                                {isSelected && <Check size={14} className="text-white" />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* SECTION 2: KOTA LAINNYA (Background Slate Rapi) */}
+                      <div className="bg-slate-50/60 border-t border-gray-200">
+                        <div className="bg-slate-100 px-4 py-1.5 text-[11px] font-bold text-slate-700 border-b border-slate-200 tracking-wider">
+                          KOTA LAINNYA
+                        </div>
+                        <div className="divide-y divide-gray-100">
+                          {OTHER_CITIES.map((c) => {
+                            const isSelected = selectedCity.toLowerCase() === c.id.toLowerCase();
+                            return (
+                              <div
+                                key={c.id}
+                                onClick={() => {
+                                  setSelectedCity(c.id);
+                                  setIsCityOpen(false);
+                                }}
+                                className={`px-4 py-2.5 cursor-pointer flex items-center justify-between text-xs transition-colors ${
+                                  isSelected
+                                    ? "bg-[#003C71] text-white font-bold"
+                                    : "text-gray-800 font-medium hover:bg-blue-50/70"
+                                }`}
+                              >
+                                <span>{c.label}</span>
+                                {isSelected && <Check size={14} className="text-white" />}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Filter Waktu */}
-              <div className="w-full sm:w-48">
+              {/* Dropdown 2: Periode Promo */}
+              <div className="relative w-full sm:w-52" ref={timeRef}>
                 <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">
                   Periode Promo
                 </label>
-                <div className="relative">
-                  <select
-                    value={selectedTime}
-                    onChange={(e) => setSelectedTime(e.target.value)}
-                    className="w-full pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-sm text-xs font-semibold text-gray-800 focus:outline-none focus:border-[#003C71] focus:ring-1 focus:ring-[#003C71] appearance-none cursor-pointer transition-colors shadow-2xs"
-                  >
-                    {TIME_OPTIONS.map((opt) => (
-                      <option key={opt.id} value={opt.id}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsTimeOpen(!isTimeOpen);
+                    setIsCityOpen(false);
+                  }}
+                  className={`w-full bg-white border ${
+                    isTimeOpen ? "border-[#003C71] ring-2 ring-[#003C71]/15" : "border-gray-300 hover:border-[#003C71]"
+                  } text-gray-800 text-xs py-2 px-3 rounded-sm cursor-pointer transition-all flex items-center justify-between shadow-2xs select-none`}
+                >
+                  <span className="truncate font-bold text-gray-900">{selectedTimeLabel}</span>
                   <ChevronDown
-                    size={14}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                    size={15}
+                    className={`text-gray-400 transition-transform duration-200 shrink-0 ml-2 ${
+                      isTimeOpen ? "rotate-180 text-[#003C71]" : ""
+                    }`}
                   />
-                </div>
+                </button>
+
+                {/* Popover Waktu Promo */}
+                {isTimeOpen && (
+                  <div className="absolute top-[calc(100%+4px)] left-0 sm:left-auto sm:right-0 sm:w-60 bg-white border border-gray-300 rounded-sm shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                    <div className="bg-gray-100 px-4 py-1.5 text-[11px] font-bold text-gray-700 border-b border-gray-200 tracking-wider">
+                      PILIH PERIODE
+                    </div>
+                    <div className="divide-y divide-gray-100 text-xs">
+                      {TIME_OPTIONS.map((t) => {
+                        const isSelected = selectedTime === t.id;
+                        return (
+                          <div
+                            key={t.id}
+                            onClick={() => {
+                              setSelectedTime(t.id);
+                              setIsTimeOpen(false);
+                            }}
+                            className={`px-4 py-2.5 cursor-pointer flex items-center justify-between transition-colors ${
+                              isSelected
+                                ? "bg-[#003C71] text-white font-bold"
+                                : "text-gray-800 font-medium hover:bg-blue-50/70"
+                            }`}
+                          >
+                            <span>{t.label}</span>
+                            {isSelected && <Check size={14} className="text-white shrink-0" />}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Tombol Reset jika ada filter aktif */}
@@ -240,7 +371,7 @@ function PromoPageContent() {
                       setSelectedTime("semua");
                       setSearchQuery("");
                     }}
-                    className="w-full sm:w-auto h-[35px] px-3 text-xs font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 rounded-sm transition-colors cursor-pointer flex items-center justify-center gap-1"
+                    className="w-full sm:w-auto h-[35px] px-3.5 text-xs font-bold text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100 border border-red-200 rounded-sm transition-colors cursor-pointer flex items-center justify-center gap-1 shadow-2xs"
                     title="Reset semua filter"
                   >
                     <X size={13} />
