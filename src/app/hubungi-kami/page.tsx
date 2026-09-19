@@ -6,13 +6,12 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import {
   Phone,
   Mail,
-  ArrowUpRight,
 } from "lucide-react";
 
 export default function HubungiKamiPage() {
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gray-50/60 text-gray-900 pt-[72px] sm:pt-[84px] selection:bg-[#003C71] selection:text-white pb-24">
+      <div className="min-h-screen bg-gray-50/70 text-gray-900 pt-[72px] sm:pt-[84px] selection:bg-[#003C71] selection:text-white pb-24">
         
         {/* ============================================================ */}
         {/* HERO BANNER — Natural Photo Atmosphere (Not Too Blue) */}
@@ -59,198 +58,129 @@ export default function HubungiKamiPage() {
         </section>
 
         {/* ============================================================ */}
-        {/* MAIN SECTION — Layanan Pelanggan (Cards with Blue & Orange Artwork) */}
+        {/* MAIN SECTION — Layanan Pelanggan (1 Unified Card Style with Elegant Colors) */}
         {/* ============================================================ */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="mb-8 sm:mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
               Layanan Pelanggan
             </h2>
           </div>
 
-          {/* 4 Cards Grid with Blue & Orange Artwork Header */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* 4 Unified Cards Grid with Elegant Colored Blue & Orange Backgrounds */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             
             {/* ==================== CARD 1: CALL CENTER ==================== */}
-            <div className="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#F58220]/50 transition-all duration-300 flex flex-col group">
-              {/* Artwork Banner: Blue & Orange Theme */}
-              <div className="h-40 w-full bg-gradient-to-br from-[#001F3F] via-[#003C71] to-[#00264d] relative overflow-hidden flex items-center justify-center">
-                {/* Glowing Orbs */}
-                <div className="absolute -top-6 -right-6 w-28 h-28 bg-[#F58220] rounded-full blur-2xl opacity-45 group-hover:opacity-65 transition-opacity" />
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#005bb5] rounded-full blur-xl opacity-60" />
-                
-                {/* Soundwave lines */}
-                <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 200 120">
-                  <path d="M10 60 Q50 25 100 60 T190 60" fill="none" stroke="#F58220" strokeWidth="2.5" />
-                  <path d="M10 75 Q50 45 100 75 T190 75" fill="none" stroke="#ffffff" strokeWidth="1.5" />
-                </svg>
+            <a
+              href="tel:121"
+              className="relative overflow-hidden rounded-2xl p-6 sm:p-7 bg-gradient-to-br from-[#001F3F] via-[#002B52] to-[#00152B] border border-white/10 hover:border-[#F58220]/60 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[190px] group cursor-pointer"
+            >
+              {/* Ambient Glow: KAI Blue & Orange */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F58220] rounded-full blur-2xl opacity-25 group-hover:opacity-45 transition-opacity pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#005bb5] rounded-full blur-2xl opacity-35 pointer-events-none" />
+              
+              {/* Subtle decorative background waves */}
+              <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" viewBox="0 0 200 120">
+                <path d="M0 60 Q50 20 100 60 T200 60" fill="none" stroke="#F58220" strokeWidth="2" />
+                <path d="M0 85 Q50 45 100 85 T200 85" fill="none" stroke="#ffffff" strokeWidth="1.5" />
+              </svg>
 
-                {/* Center Graphic */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#F58220] to-[#FFA048] flex items-center justify-center text-white shadow-md">
-                      <Phone size={20} strokeWidth={2.5} />
-                    </div>
-                  </div>
-                  <span className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-[#001F3F]/85 border border-[#F58220]/50 px-3 py-0.5 rounded-full shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#F58220] animate-pulse" />
-                    Telepon 24 Jam
-                  </span>
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] mb-6 group-hover:scale-110 transition-transform">
+                  <Phone size={22} strokeWidth={2.2} />
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold tracking-wider text-gray-400 uppercase">
-                      CALL CENTER
-                    </span>
-                    <a
-                      href="tel:121"
-                      className="text-gray-400 hover:text-[#003C71] transition-colors"
-                      title="Panggil 121"
-                    >
-                      <ArrowUpRight size={16} />
-                    </a>
-                  </div>
-                  <a
-                    href="tel:121"
-                    className="text-lg font-extrabold text-gray-900 hover:text-[#003C71] transition-colors block"
-                  >
-                    121 / (021) 121
-                  </a>
-                </div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold tracking-wider text-[#FFA048] uppercase block mb-1">
+                  CALL CENTER
+                </span>
+                <span className="text-lg sm:text-xl font-black text-white group-hover:text-amber-200 transition-colors block">
+                  121 / (021) 121
+                </span>
               </div>
-            </div>
+            </a>
 
             {/* ==================== CARD 2: WHATSAPP ==================== */}
-            <div className="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#25D366]/50 transition-all duration-300 flex flex-col group">
-              {/* Artwork Banner: Blue & Orange Theme */}
-              <div className="h-40 w-full bg-gradient-to-br from-[#001F3F] via-[#003C71] to-[#00264d] relative overflow-hidden flex items-center justify-center">
-                {/* Glowing Orbs */}
-                <div className="absolute -top-6 -left-6 w-28 h-28 bg-[#F58220] rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity" />
-                <div className="absolute -bottom-6 -right-6 w-28 h-28 bg-[#25D366] rounded-full blur-2xl opacity-35" />
+            <a
+              href="https://wa.me/6281122233121"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative overflow-hidden rounded-2xl p-6 sm:p-7 bg-gradient-to-br from-[#001F3F] via-[#002B52] to-[#00152B] border border-white/10 hover:border-[#25D366]/60 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[190px] group cursor-pointer"
+            >
+              {/* Ambient Glow: Blue & Orange */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F58220] rounded-full blur-2xl opacity-25 group-hover:opacity-45 transition-opacity pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#25D366] rounded-full blur-2xl opacity-25 pointer-events-none" />
 
-                {/* Geometric Chat Bubbles Decor */}
-                <svg className="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 200 120">
-                  <circle cx="165" cy="35" r="22" fill="none" stroke="#F58220" strokeWidth="2" strokeDasharray="4 4" />
-                  <circle cx="35" cy="85" r="18" fill="none" stroke="#25D366" strokeWidth="1.5" />
-                </svg>
+              {/* Subtle decorative circles */}
+              <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" viewBox="0 0 200 120">
+                <circle cx="170" cy="30" r="30" fill="none" stroke="#F58220" strokeWidth="2" strokeDasharray="4 4" />
+                <circle cx="30" cy="90" r="20" fill="none" stroke="#25D366" strokeWidth="1.5" />
+              </svg>
 
-                {/* Center Graphic */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#25D366] to-[#1ebe5d] flex items-center justify-center text-white shadow-md">
-                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <span className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-[#001F3F]/85 border border-[#25D366]/50 px-3 py-0.5 rounded-full shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                    Pesan Cepat
-                  </span>
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] mb-6 group-hover:scale-110 transition-transform">
+                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                  </svg>
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold tracking-wider text-gray-400 uppercase">
-                      WHATSAPP
-                    </span>
-                    <a
-                      href="https://wa.me/6281122233121"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-[#25D366] transition-colors"
-                      title="Kirim Pesan WhatsApp"
-                    >
-                      <ArrowUpRight size={16} />
-                    </a>
-                  </div>
-                  <a
-                    href="https://wa.me/6281122233121"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lg font-extrabold text-gray-900 hover:text-[#003C71] transition-colors block"
-                  >
-                    +62 811 2223 3121
-                  </a>
-                </div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold tracking-wider text-[#FFA048] uppercase block mb-1">
+                  WHATSAPP
+                </span>
+                <span className="text-lg sm:text-xl font-black text-white group-hover:text-amber-200 transition-colors block">
+                  +62 811 2223 3121
+                </span>
               </div>
-            </div>
+            </a>
 
             {/* ==================== CARD 3: EMAIL ==================== */}
-            <div className="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#003C71]/50 transition-all duration-300 flex flex-col group">
-              {/* Artwork Banner: Blue & Orange Theme */}
-              <div className="h-40 w-full bg-gradient-to-br from-[#001F3F] via-[#003C71] to-[#00264d] relative overflow-hidden flex items-center justify-center">
-                {/* Glowing Orbs */}
-                <div className="absolute -top-6 -right-6 w-28 h-28 bg-[#F58220] rounded-full blur-2xl opacity-45 group-hover:opacity-65 transition-opacity" />
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#005bb5] rounded-full blur-xl opacity-60" />
+            <a
+              href="mailto:cs@kai.id"
+              className="relative overflow-hidden rounded-2xl p-6 sm:p-7 bg-gradient-to-br from-[#001F3F] via-[#002B52] to-[#00152B] border border-white/10 hover:border-[#F58220]/60 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[190px] group cursor-pointer"
+            >
+              {/* Ambient Glow: Blue & Orange */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F58220] rounded-full blur-2xl opacity-25 group-hover:opacity-45 transition-opacity pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#005bb5] rounded-full blur-2xl opacity-35 pointer-events-none" />
 
-                {/* Envelope flight path */}
-                <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 200 120">
-                  <path d="M20 40 L100 85 L180 40" fill="none" stroke="#F58220" strokeWidth="2" strokeDasharray="5 4" />
-                </svg>
+              {/* Subtle decorative mail lines */}
+              <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" viewBox="0 0 200 120">
+                <path d="M20 30 L100 85 L180 30" fill="none" stroke="#F58220" strokeWidth="2" strokeDasharray="5 4" />
+              </svg>
 
-                {/* Center Graphic */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#003C71] to-[#005bb5] border border-white/30 flex items-center justify-center text-[#F58220] shadow-md">
-                      <Mail size={20} strokeWidth={2.3} className="text-white" />
-                    </div>
-                  </div>
-                  <span className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-bold text-white bg-[#001F3F]/85 border border-[#F58220]/50 px-3 py-0.5 rounded-full shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#F58220]" />
-                    Email Resmi
-                  </span>
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] mb-6 group-hover:scale-110 transition-transform">
+                  <Mail size={22} strokeWidth={2.2} />
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-bold tracking-wider text-gray-400 uppercase">
-                      EMAIL
-                    </span>
-                    <a
-                      href="mailto:cs@kai.id"
-                      className="text-gray-400 hover:text-[#003C71] transition-colors"
-                      title="Kirim Email ke cs@kai.id"
-                    >
-                      <ArrowUpRight size={16} />
-                    </a>
-                  </div>
-                  <a
-                    href="mailto:cs@kai.id"
-                    className="text-lg font-extrabold text-gray-900 hover:text-[#003C71] transition-colors block"
-                  >
-                    cs@kai.id
-                  </a>
-                </div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold tracking-wider text-[#FFA048] uppercase block mb-1">
+                  EMAIL
+                </span>
+                <span className="text-lg sm:text-xl font-black text-white group-hover:text-amber-200 transition-colors block">
+                  cs@kai.id
+                </span>
               </div>
-            </div>
+            </a>
 
             {/* ==================== CARD 4: MEDIA SOSIAL ==================== */}
-            <div className="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#F58220]/50 transition-all duration-300 flex flex-col group">
-              {/* Artwork Banner: Blue & Orange Theme */}
-              <div className="h-40 w-full bg-gradient-to-br from-[#001F3F] via-[#003C71] to-[#00264d] relative overflow-hidden flex items-center justify-center">
-                {/* Glowing Orbs */}
-                <div className="absolute -top-6 -left-6 w-28 h-28 bg-[#F58220] rounded-full blur-2xl opacity-45 group-hover:opacity-65 transition-opacity" />
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-[#005bb5] rounded-full blur-xl opacity-60" />
+            <div className="relative overflow-hidden rounded-2xl p-6 sm:p-7 bg-gradient-to-br from-[#001F3F] via-[#002B52] to-[#00152B] border border-white/10 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between min-h-[190px] group">
+              {/* Ambient Glow: Blue & Orange */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F58220] rounded-full blur-2xl opacity-25 group-hover:opacity-45 transition-opacity pointer-events-none" />
+              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#005bb5] rounded-full blur-2xl opacity-35 pointer-events-none" />
 
-                {/* Floating Social Elements */}
-                <div className="relative z-10 flex items-center gap-2.5">
-                  {/* Instagram Badge */}
+              <div className="relative z-10">
+                {/* 3 Circular White Badges: Instagram, TikTok, YouTube */}
+                <div className="flex items-center gap-3 mb-6">
+                  {/* Instagram */}
                   <a
                     href="https://instagram.com/kai121_"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#F58220] via-[#E1306C] to-[#833AB4] flex items-center justify-center text-white shadow-md group-hover:-translate-y-1 transition-transform"
+                    className="w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] hover:bg-[#E1306C] hover:text-white hover:scale-110 transition-all cursor-pointer"
                     title="Instagram @kai121_"
                   >
                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -258,25 +188,25 @@ export default function HubungiKamiPage() {
                     </svg>
                   </a>
 
-                  {/* TikTok Badge */}
+                  {/* TikTok */}
                   <a
                     href="https://tiktok.com/@kai121_"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-black border border-white/20 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform"
+                    className="w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] hover:bg-black hover:text-white hover:scale-110 transition-all cursor-pointer"
                     title="TikTok @kai121_"
                   >
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                       <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1.01-.02 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
                     </svg>
                   </a>
 
-                  {/* YouTube Badge */}
+                  {/* YouTube */}
                   <a
                     href="https://youtube.com/@KeretaApiKitaOfficial"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FF0000] to-[#F58220] flex items-center justify-center text-white shadow-md group-hover:-translate-y-1 transition-transform"
+                    className="w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center text-[#003C71] hover:bg-[#FF0000] hover:text-white hover:scale-110 transition-all cursor-pointer"
                     title="YouTube KAI"
                   >
                     <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -286,16 +216,13 @@ export default function HubungiKamiPage() {
                 </div>
               </div>
 
-              {/* Card Body */}
-              <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
-                <div>
-                  <span className="text-xs font-bold tracking-wider text-gray-400 uppercase block mb-3">
-                    MEDIA SOSIAL
-                  </span>
-                  <span className="text-lg font-extrabold text-gray-900 block">
-                    KAI121_
-                  </span>
-                </div>
+              <div className="relative z-10">
+                <span className="text-xs font-bold tracking-wider text-[#FFA048] uppercase block mb-1">
+                  MEDIA SOSIAL
+                </span>
+                <span className="text-lg sm:text-xl font-black text-white block">
+                  KAI121_
+                </span>
               </div>
             </div>
 
