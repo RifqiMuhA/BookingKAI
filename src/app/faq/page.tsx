@@ -11,7 +11,6 @@ import {
   Phone,
   MessageSquare,
   Building2,
-  Sparkles,
 } from "lucide-react";
 
 interface FAQItem {
@@ -148,15 +147,6 @@ const PLACEHOLDER_PROMPTS = [
   "Cari face recognition boarding...",
 ];
 
-const QUICK_SEARCH_TOPICS = [
-  "Batas Waktu Pembayaran",
-  "Reschedule",
-  "Refund",
-  "Bagasi Gratis",
-  "Tiket Anak",
-  "Face Recognition",
-];
-
 // Helper function untuk highlight kata pencarian
 function highlightMatches(text: string, query: string): React.ReactNode {
   if (!query || !query.trim()) return text;
@@ -247,11 +237,11 @@ export default function FAQPage() {
               src="/Background/background_cs.webp"
               alt="Background Customer Service KAI"
               fill
-              className="object-cover object-center opacity-30"
+              className="object-cover object-center opacity-45"
               priority
             />
             {/* Deep Navy Gradient Tint to prevent clashing with text */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#001F3F]/90 via-[#001F3F]/85 to-[#001F3F]/95" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#001F3F]/85 via-[#00264d]/80 to-[#001F3F]/90" />
           </div>
 
           {/* Top Left Blue Glow Orb (like login) */}
@@ -319,8 +309,8 @@ export default function FAQPage() {
                 )}
               </div>
 
-              {/* Live Search Status & Quick Suggestions */}
-              {isSearching ? (
+              {/* Live Search Status */}
+              {isSearching && (
                 <div className="flex items-center justify-between text-sm text-gray-200 mt-3 px-1">
                   <span>
                     Ditemukan <strong className="text-white font-bold">{filteredFAQs.length}</strong> pertanyaan relevan
@@ -328,22 +318,6 @@ export default function FAQPage() {
                   <span className="text-amber-300 font-semibold">
                     Menyorot kata kunci: &ldquo;{searchQuery}&rdquo;
                   </span>
-                </div>
-              ) : (
-                <div className="flex items-center flex-wrap gap-2 mt-3.5">
-                  <span className="text-sm text-gray-300 mr-1 flex items-center gap-1">
-                    <Sparkles size={14} className="text-amber-300" />
-                    Topik Populer:
-                  </span>
-                  {QUICK_SEARCH_TOPICS.map((topic) => (
-                    <button
-                      key={topic}
-                      onClick={() => setSearchQuery(topic)}
-                      className="text-sm text-white/90 bg-white/10 hover:bg-white/20 px-3 py-1 rounded-sm transition-colors cursor-pointer border border-white/10"
-                    >
-                      {topic}
-                    </button>
-                  ))}
                 </div>
               )}
             </div>
