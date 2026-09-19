@@ -23,7 +23,8 @@ import {
   Info,
   MapPin,
   Tag,
-  Check
+  Check,
+  CheckCircle2
 } from "lucide-react";
 
 // Tipe data kereta setelah dikelompokkan
@@ -625,7 +626,13 @@ function SearchResultsContent() {
             <div className="mb-4 sm:mb-8">
               {/* Breadcrumb */}
               <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm mb-2.5 sm:mb-6 whitespace-nowrap overflow-x-auto hide-scrollbar">
-                <span className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0" onClick={() => router.push("/")}>Pencarian</span>
+                <span 
+                  className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0 inline-flex items-center gap-1 sm:gap-1.5" 
+                  onClick={() => router.push("/")}
+                >
+                  <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+                  <span>Pencarian</span>
+                </span>
                 <ChevronRight size={13} className="text-gray-400 flex-shrink-0" strokeWidth={2} />
                 <span className="font-medium text-gray-500 flex-shrink-0">{isReturnTrip ? "Pilih Kereta Pulang" : "Pilih Kereta Berangkat"}</span>
               </div>

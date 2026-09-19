@@ -928,20 +928,24 @@ function PembayaranContent() {
         
         {/* Breadcrumb (Non-clickable karena pada tahap pembayaran tiket sudah di-lock) */}
         <div className="flex items-center gap-2 text-sm mb-4 whitespace-nowrap overflow-x-auto hide-scrollbar">
-          <span className="font-medium text-gray-400 flex-shrink-0 select-none">
-            Pencarian
+          <span className="font-medium text-gray-600 flex-shrink-0 select-none inline-flex items-center gap-1.5">
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Pencarian</span>
           </span>
           <ChevronRight size={14} className="text-gray-300 flex-shrink-0" strokeWidth={2} />
-          <span className="font-medium text-gray-400 flex-shrink-0 select-none">
-            Pilih Kereta
+          <span className="font-medium text-gray-600 flex-shrink-0 select-none inline-flex items-center gap-1.5">
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Pilih Kereta</span>
           </span>
           <ChevronRight size={14} className="text-gray-300 flex-shrink-0" strokeWidth={2} />
-          <span className="font-medium text-gray-400 flex-shrink-0 select-none">
-            Isi Data Penumpang
+          <span className="font-medium text-gray-600 flex-shrink-0 select-none inline-flex items-center gap-1.5">
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Isi Data Penumpang</span>
           </span>
           <ChevronRight size={14} className="text-gray-300 flex-shrink-0" strokeWidth={2} />
-          <span className="font-medium text-gray-400 flex-shrink-0 select-none">
-            Pilih Kursi
+          <span className="font-medium text-gray-600 flex-shrink-0 select-none inline-flex items-center gap-1.5">
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Pilih Kursi</span>
           </span>
           <ChevronRight size={14} className="text-gray-300 flex-shrink-0" strokeWidth={2} />
           <span className="font-bold text-[var(--color-primary-dark)] flex-shrink-0 select-none">

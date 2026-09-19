@@ -381,10 +381,11 @@ function IsiDataContent() {
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm mb-6 whitespace-nowrap overflow-x-auto hide-scrollbar">
           <span
-            className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0"
+            className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0 inline-flex items-center gap-1.5"
             onClick={() => router.push("/")}
           >
-            Pencarian
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Pencarian</span>
           </span>
           <ChevronRight
             size={14}
@@ -392,10 +393,11 @@ function IsiDataContent() {
             strokeWidth={2}
           />
           <span
-            className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0"
+            className="font-bold text-[var(--color-primary-dark)] cursor-pointer hover:underline flex-shrink-0 inline-flex items-center gap-1.5"
             onClick={() => router.back()}
           >
-            Pilih Kereta
+            <CheckCircle2 size={14} strokeWidth={2.5} className="text-emerald-600 flex-shrink-0" />
+            <span>Pilih Kereta</span>
           </span>
           <ChevronRight
             size={14}
