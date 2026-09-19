@@ -148,7 +148,7 @@ export function Footer() {
               {bantuan.map((item) => (
                 <li key={item}>
                   <Link
-                    href={item === "FAQ" ? "/faq" : "#"}
+                    href={item === "FAQ" ? "/faq" : item === "Hubungi Kami" ? "/hubungi-kami" : "#"}
                     className="text-sm text-gray-300 hover:text-white transition-colors"
                   >
                     {item}

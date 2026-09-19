@@ -7,10 +7,6 @@ import {
   Search,
   X,
   Plus,
-  ArrowUpRight,
-  Phone,
-  MessageSquare,
-  Building2,
 } from "lucide-react";
 
 interface FAQItem {
@@ -228,30 +224,28 @@ export default function FAQPage() {
       <div className="min-h-screen bg-white text-gray-900 pt-[72px] sm:pt-[84px] selection:bg-[#003C71] selection:text-white">
         
         {/* ============================================================ */}
-        {/* HERO SECTION — Atmospheric Background with Blue/Orange Orbs */}
+        {/* HERO SECTION — Natural Photo Background with Subtle Orbs */}
         {/* ============================================================ */}
-        <section className="relative overflow-hidden bg-[#001F3F] text-white border-b border-white/10">
-          {/* Background Image: background_cs.webp */}
+        <section className="relative overflow-hidden bg-slate-950 text-white border-b border-gray-200">
+          {/* Background Image: background_cs.webp - natural photo with balanced vignette */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/Background/background_cs.webp"
               alt="Background Customer Service KAI"
               fill
-              className="object-cover object-center opacity-45"
+              className="object-cover object-center opacity-85"
               priority
             />
-            {/* Deep Navy Gradient Tint to prevent clashing with text */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#001F3F]/85 via-[#00264d]/80 to-[#001F3F]/90" />
+            {/* Subtle natural gradient: dark on left for text legibility, clear on right */}
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/30" />
           </div>
 
-          {/* Top Left Blue Glow Orb (like login) */}
-          <div className="absolute -top-28 -left-28 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] bg-[#003C71] rounded-full blur-[120px] opacity-75 pointer-events-none z-1" />
+          {/* Top Left Blue Glow Orb (subtle ambient) */}
+          <div className="absolute -top-28 -left-28 w-[500px] h-[500px] bg-[#003C71] rounded-full blur-[140px] opacity-45 pointer-events-none z-1" />
 
-          {/* Bottom Right Orange Glow Orb (like login) */}
-          <div className="absolute -bottom-24 -right-24 w-[450px] h-[450px] sm:w-[520px] sm:h-[520px] bg-[#F58220] rounded-full blur-[130px] opacity-45 pointer-events-none z-1" />
-
-          {/* Subtle architectural grid pattern overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none z-1" />
+          {/* Bottom Right Orange Glow Orb (subtle ambient) */}
+          <div className="absolute -bottom-24 -right-24 w-[450px] h-[450px] bg-[#F58220] rounded-full blur-[140px] opacity-35 pointer-events-none z-1" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-12 sm:pb-14 relative z-10">
             {/* Official KAI Badge (Consistent with Cek Pesanan) */}
@@ -456,104 +450,7 @@ export default function FAQPage() {
                 </div>
               )}
             </div>
-
           </div>
-
-          {/* ============================================================ */}
-          {/* BOTTOM DOCK — Support Strip */}
-          {/* ============================================================ */}
-          <div className="mt-16 sm:mt-20 pt-10 border-t border-gray-200">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-              <div>
-                <span className="text-sm font-bold text-[var(--color-accent)] uppercase tracking-wider block mb-1">
-                  Butuh Bantuan Lebih Lanjut?
-                </span>
-                <h2 className="text-xl sm:text-2xl font-black text-[#003C71] tracking-tight">
-                  Hubungi Layanan Pelanggan KAI
-                </h2>
-              </div>
-              <p className="text-sm text-gray-600 max-w-md leading-relaxed">
-                Tim layanan pelanggan KAI121 siap melayani pertanyaan tiket, bantuan boarding, dan kendala transaksi selama 24 jam sehari.
-              </p>
-            </div>
-
-            {/* 3 Support Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Card 1: Contact Center */}
-              <a
-                href="tel:121"
-                className="group p-5 rounded-sm bg-gray-50 hover:bg-[#003C71] border border-gray-200 hover:border-[#003C71] transition-all flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-sm bg-white group-hover:bg-white/10 text-[#003C71] group-hover:text-white flex items-center justify-center border border-gray-200 group-hover:border-white/20 transition-colors">
-                    <Phone size={18} strokeWidth={2.2} />
-                  </div>
-                  <ArrowUpRight size={18} className="text-gray-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-                <div>
-                  <span className="text-sm font-bold text-[#003C71] group-hover:text-blue-200 block">
-                    Telepon 24 Jam
-                  </span>
-                  <span className="text-base font-bold text-gray-900 group-hover:text-white block mt-1">
-                    Call Center 121
-                  </span>
-                  <span className="text-sm text-gray-600 group-hover:text-gray-300 block mt-1">
-                    (021) 121
-                  </span>
-                </div>
-              </a>
-
-              {/* Card 2: WhatsApp */}
-              <a
-                href="https://wa.me/6281112111121"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group p-5 rounded-sm bg-gray-50 hover:bg-[#003C71] border border-gray-200 hover:border-[#003C71] transition-all flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-sm bg-white group-hover:bg-white/10 text-[#003C71] group-hover:text-white flex items-center justify-center border border-gray-200 group-hover:border-white/20 transition-colors">
-                    <MessageSquare size={18} strokeWidth={2.2} />
-                  </div>
-                  <ArrowUpRight size={18} className="text-gray-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-                <div>
-                  <span className="text-sm font-bold text-[#003C71] group-hover:text-blue-200 block">
-                    Pesan Cepat
-                  </span>
-                  <span className="text-base font-bold text-gray-900 group-hover:text-white block mt-1">
-                    WhatsApp KAI121
-                  </span>
-                  <span className="text-sm text-gray-600 group-hover:text-gray-300 block mt-1">
-                    0811-1211-1121
-                  </span>
-                </div>
-              </a>
-
-              {/* Card 3: Loket Stasiun */}
-              <div className="p-5 rounded-sm bg-gray-50 border border-gray-200 flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-sm bg-white text-[#003C71] flex items-center justify-center border border-gray-200">
-                    <Building2 size={18} strokeWidth={2.2} />
-                  </div>
-                  <span className="text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-sm">
-                    Stasiun
-                  </span>
-                </div>
-                <div>
-                  <span className="text-sm font-bold text-[#003C71] block">
-                    Bantuan Langsung
-                  </span>
-                  <span className="text-base font-bold text-gray-900 block mt-1">
-                    Customer Service On Station
-                  </span>
-                  <span className="text-sm text-gray-600 block mt-1">
-                    Tersedia di seluruh stasiun besar
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </section>
       </div>
     </MainLayout>
