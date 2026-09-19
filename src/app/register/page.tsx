@@ -6,12 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/Button";
-import { useAuth } from "@/contexts/AuthContext";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { login } = useAuth();
   
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -63,9 +61,8 @@ export default function RegisterPage() {
       console.error(err);
     }
 
-    // Login otomatis dengan akun yang baru dibuat
-    login({ name: name.trim(), email: email.trim() });
-    router.push("/");
+    // Arahkan ke halaman login agar pengguna melakukan login terlebih dahulu
+    router.push(`/login?registered=success&email=${encodeURIComponent(email.trim())}`);
   };
 
   return (

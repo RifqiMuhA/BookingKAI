@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthLayout } from "@/components/layout/AuthLayout";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/contexts/AuthContext";
-import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -17,7 +17,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [isCaptchaChecked, setIsCaptchaChecked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [showTestingModal, setShowTestingModal] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("registered") === "success") {
+        setSuccessMessage("Pendaftaran akun berhasil! Silakan masuk menggunakan email dan password Anda.");
+        const prefillEmail = params.get("email");
+        if (prefillEmail) {
+          setEmail(prefillEmail);
+        }
+      }
+    }
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +60,10 @@ export default function LoginPage() {
           (u: any) => u.email.toLowerCase() === email.trim().toLowerCase()
         );
         if (matched) {
+          if (matched.password && matched.password !== password) {
+            setErrorMessage("Password yang Anda masukkan salah.");
+            return;
+          }
           userName = matched.name;
         }
       }
@@ -65,6 +83,13 @@ export default function LoginPage() {
           <h1 className="text-2xl font-bold text-[#003C71] mb-1">Masuk ke Akun Anda</h1>
           <p className="text-sm text-gray-600">Pesan tiket lebih cepat dan mudah dengan akun KAI.</p>
         </div>
+
+        {successMessage && (
+          <div className="p-3 bg-green-50 border border-green-200 text-green-800 text-sm rounded-md flex items-center gap-2">
+            <CheckCircle2 size={16} className="flex-shrink-0 text-green-600" />
+            <span>{successMessage}</span>
+          </div>
+        )}
 
         {errorMessage && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md flex items-center gap-2">
