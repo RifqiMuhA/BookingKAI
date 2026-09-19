@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Search,
   Train,
@@ -25,6 +27,7 @@ import {
 import { formatPrice } from "@/lib/mockData";
 
 function CekPesananContent() {
+  const { user, isLoggedIn } = useAuth();
   const searchParams = useSearchParams();
   const initialCode = searchParams.get("code") || "";
 
@@ -139,6 +142,32 @@ function CekPesananContent() {
   return (
     <div className="min-h-screen bg-gray-50 pb-24 pt-[88px]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+
+        {/* Notifikasi Cepat Riwayat Pesanan Pengguna Terdaftar */}
+        {isLoggedIn && (
+          <div className="mb-6 p-3 sm:p-4 bg-white border-l-4 border-[#003C71] border-y border-r border-gray-200 rounded-sm shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-sm bg-blue-50 text-[#003C71] flex items-center justify-center shrink-0">
+                <FileText size={16} />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-[#003C71]">
+                  Halo, {user?.name || "Pelanggan KAI"}! Anda memiliki 3 tiket perjalanan yang tersimpan di akun Anda.
+                </p>
+                <p className="text-[11px] text-gray-500">
+                  Lihat tiket aktif dan riwayat pemesanan langsung tanpa perlu mengetik kode booking.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/riwayat-pesanan"
+              className="px-4 py-2 bg-[#003C71] hover:bg-[#002a50] text-white text-xs font-bold rounded-sm transition-colors shrink-0 shadow-xs flex items-center gap-1.5"
+            >
+              <span>Buka Riwayat Pesanan</span>
+              <ArrowRight size={13} />
+            </Link>
+          </div>
+        )}
 
         {/* ===================== HERO CARD PENCARIAN TIKET (COLORED KAI PRIMARY NAVY) ===================== */}
         <div className="bg-[#003C71] text-white border border-[#002a50] rounded-sm overflow-hidden mb-8 shadow-md">
