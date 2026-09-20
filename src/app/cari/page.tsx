@@ -398,8 +398,6 @@ function SearchResultsContent() {
         isOpen={showPromoSuccessModal}
         onClose={() => setShowPromoSuccessModal(false)}
         taskNumber={3}
-        title="Promo Berhasil Digunakan"
-        description="Promo diskon tiket telah aktif dan diterapkan ke daftar kereta. Silakan kembali ke Maze untuk mengisi kuesioner evaluasi PSSUQ."
       />
 
       {/* 1. Sticky Bar Pencarian Langsung Terbuka & Ramping */}

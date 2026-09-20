@@ -263,8 +263,6 @@ function LandingPageContent() {
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         taskNumber={1}
-        title="Registrasi & Login Berhasil"
-        description="Akun baru telah terdaftar dan Anda berhasil masuk. Silakan kembali ke Maze untuk melanjutkan ke Task 2."
       />
 
       {/* Modal Task 2 Selesai */}
@@ -272,8 +270,6 @@ function LandingPageContent() {
         isOpen={showBookingModal}
         onClose={() => setShowBookingModal(false)}
         taskNumber={2}
-        title="Pemesanan Tiket Berhasil"
-        description="E-Tiket resmi telah terbit dan pembayaran selesai. Silakan kembali ke Maze untuk melanjutkan ke Task 3."
       />
 
       {/* ── Page wrapper: split background ── */}

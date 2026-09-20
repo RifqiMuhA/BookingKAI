@@ -8,8 +8,8 @@ interface TaskSuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
   taskNumber: 1 | 2 | 3;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 export function TaskSuccessModal({
@@ -21,13 +21,35 @@ export function TaskSuccessModal({
 }: TaskSuccessModalProps) {
   if (!isOpen) return null;
 
+  // Default copy untuk masing-masing task
+  const defaultData = {
+    1: {
+      title: "Registrasi & Login Berhasil",
+      desc: "Akun baru telah aktif dan Anda berhasil masuk ke sistem.",
+      nextStep: "untuk melanjutkan ke Task 2.",
+    },
+    2: {
+      title: "Pemesanan Tiket Berhasil",
+      desc: "Tiket kereta dan bukti pembayaran resmi telah terbit.",
+      nextStep: "untuk melanjutkan ke Task 3.",
+    },
+    3: {
+      title: "Promo Berhasil Digunakan",
+      desc: "Promo diskon tiket telah aktif dan diterapkan ke daftar kereta.",
+      nextStep: "untuk mengisi kuesioner evaluasi PSSUQ.",
+    },
+  }[taskNumber];
+
+  const modalTitle = title || defaultData.title;
+  const modalDesc = description || defaultData.desc;
+
   return (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-xs p-4 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-sm bg-white rounded-xl shadow-2xl border-2 border-emerald-500 p-6 flex flex-col items-center text-center animate-in zoom-in-95 duration-200 overflow-hidden"
+        className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl border-2 border-[#065f46] p-6 pb-7 flex flex-col items-center text-center animate-in zoom-in-95 duration-200 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Tombol Close */}
@@ -40,7 +62,7 @@ export function TaskSuccessModal({
         </button>
 
         {/* Gambar Maskot KAI */}
-        <div className="relative w-28 h-28 mb-3">
+        <div className="relative w-28 h-28 mb-2">
           <Image
             src="/Maskot/maskot_lambai.webp"
             alt="Maskot KAI"
@@ -50,27 +72,28 @@ export function TaskSuccessModal({
           />
         </div>
 
-        {/* Badge Hijau Task Selesai */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
-          <CheckCircle2 size={14} className="text-emerald-600" />
+        {/* Badge Hijau Tua Task Selesai */}
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#064e3b] text-white text-xs font-bold uppercase tracking-wider mb-2.5 shadow-xs">
+          <CheckCircle2 size={14} className="text-emerald-400" />
           <span>Task {taskNumber} Selesai</span>
         </div>
 
         {/* Judul & Deskripsi Simpel */}
         <h3 className="text-lg font-extrabold text-gray-900 mb-1">
-          {title}
+          {modalTitle}
         </h3>
-        <p className="text-xs text-gray-600 leading-relaxed mb-5 max-w-xs">
-          {description}
+        <p className="text-xs text-gray-600 leading-relaxed mb-4 max-w-xs">
+          {modalDesc}
         </p>
 
-        {/* Tombol Konfirmasi Selesai */}
-        <button
-          onClick={onClose}
-          className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-sm font-bold rounded-lg shadow-sm transition-colors cursor-pointer"
-        >
-          Tutup & Kembali ke Maze
-        </button>
+        {/* Kotak Highlight End Task */}
+        <div className="w-full bg-emerald-50/90 border border-emerald-300/80 rounded-xl p-3.5 text-xs text-gray-800 leading-relaxed">
+          <span>Silakan klik </span>
+          <span className="inline-block px-2 py-0.5 bg-[#064e3b] text-white font-bold rounded shadow-xs tracking-wide mx-1">
+            End Task
+          </span>
+          <span>pada panel Maze di pojok layar {defaultData.nextStep}</span>
+        </div>
       </div>
     </div>
   );
