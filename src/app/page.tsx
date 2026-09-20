@@ -31,6 +31,7 @@ import {
   ChevronUp,
   Tag,
   X,
+  CheckCircle2,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -47,6 +48,16 @@ function LandingPageContent() {
   const queryOrigin = searchParams.get("origin") || "";
   const queryDest = searchParams.get("dest") || "";
   const queryPromo = searchParams.get("promo") || "";
+  const queryLogin = searchParams.get("login") || "";
+  const [showLoginToast, setShowLoginToast] = useState(false);
+
+  useEffect(() => {
+    if (queryLogin === "success") {
+      setShowLoginToast(true);
+      const timer = setTimeout(() => setShowLoginToast(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [queryLogin]);
 
   const PROMO_ROUTE_MAPPING: Record<string, { origin: string; dest: string }> = {
     PARAHYANGAN: { origin: "GMR", dest: "BDO" },
@@ -241,6 +252,24 @@ function LandingPageContent() {
 
   return (
     <MainLayout>
+      {/* Toast Notifikasi Berhasil Login */}
+      {showLoginToast && (
+        <div className="fixed top-24 right-4 z-50 bg-white border border-emerald-200 border-l-4 border-l-emerald-500 shadow-xl rounded-sm p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm">
+          <CheckCircle2 className="text-emerald-500 shrink-0" size={20} />
+          <div className="flex-1">
+            <p className="text-sm font-bold text-gray-900">Login Berhasil</p>
+            <p className="text-xs text-gray-600">Selamat datang kembali! Silakan mulai cari tiket Anda.</p>
+          </div>
+          <button 
+            onClick={() => setShowLoginToast(false)} 
+            className="text-gray-400 hover:text-gray-600 text-xs font-bold p-1 cursor-pointer"
+            aria-label="Tutup"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* ── Page wrapper: split background ── */}
       <div className="relative min-h-screen">
 

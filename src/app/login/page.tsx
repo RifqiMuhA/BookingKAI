@@ -73,7 +73,7 @@ export default function LoginPage() {
 
     // Simpan status login
     login({ name: userName, email: email.trim() });
-    router.push("/riwayat-pesanan");
+    router.push("/?login=success");
   };
 
   return (
