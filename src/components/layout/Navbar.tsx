@@ -52,18 +52,7 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
         <div className="flex items-center gap-4 ml-auto font-medium">
           <Link href="/faq" className="hover:underline hidden sm:block">FAQ</Link>
           <Link href="/hubungi-kami" className="hover:underline hidden sm:block">Hubungi Kami</Link>
-          {!isLoggedIn && (
-            <>
-              <div className="hidden sm:block w-px h-3 bg-white/30"></div>
-              <Link 
-                href="/login" 
-                className="hover:underline hidden sm:flex items-center gap-1.5 font-bold hover:text-orange-300 transition-colors"
-              >
-                <User size={13} className="shrink-0" />
-                <span>Masuk / Daftar</span>
-              </Link>
-            </>
-          )}
+
 
           {/* Language Dropdown - Hidden on mobile top bar */}
           <div className="relative hidden sm:block">
@@ -209,19 +198,16 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
             <Link
               href="/login"
               className={cn(
-                "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs ml-3 border",
+                "inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs ml-3 border text-white",
                 isSolid
-                  ? "bg-[#003C71] text-white hover:bg-[#002d55] border-[#003C71]"
-                  : "bg-white/15 hover:bg-white text-white hover:text-[#003C71] border-white/40 hover:border-white"
+                  ? "bg-[#003C71] hover:bg-[#F58220] border-[#003C71] hover:border-[#F58220]"
+                  : "bg-white/20 hover:bg-[#F58220] border-white/40 hover:border-[#F58220] backdrop-blur-xs"
               )}
             >
-              <div className={cn(
-                "w-5 h-5 rounded-full flex items-center justify-center transition-colors",
-                isSolid ? "bg-white/20 text-white" : "bg-white/25 text-white"
-              )}>
-                <User size={12} className="shrink-0" />
+              <div className="w-5 h-5 rounded-full bg-white/25 flex items-center justify-center shrink-0">
+                <User size={13} className="text-white" />
               </div>
-              <span>Masuk</span>
+              <span className="tracking-wide">Masuk</span>
             </Link>
           )}
         </nav>
