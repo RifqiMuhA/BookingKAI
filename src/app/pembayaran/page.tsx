@@ -1629,7 +1629,10 @@ function PembayaranContent() {
                     <span>Kembali ke Beranda</span>
                   </button>
                   <button
-                    onClick={() => alert("E-Tiket resmi KAI berhasil disimpan dalam format PDF.")}
+                    onClick={() => {
+                      alert("E-Tiket resmi KAI berhasil disimpan dalam format PDF.");
+                      router.push("/?booking=success");
+                    }}
                     className="w-full sm:w-1/2 py-2.5 sm:py-3 bg-[#F58220] hover:bg-[#E07015] text-white font-extrabold text-xs sm:text-sm rounded-lg shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2"
                   >
                     <Download size={15} />
