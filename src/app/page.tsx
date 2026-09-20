@@ -49,7 +49,9 @@ function LandingPageContent() {
   const queryDest = searchParams.get("dest") || "";
   const queryPromo = searchParams.get("promo") || "";
   const queryLogin = searchParams.get("login") || "";
+  const queryBooking = searchParams.get("booking") || "";
   const [showLoginToast, setShowLoginToast] = useState(false);
+  const [showBookingToast, setShowBookingToast] = useState(false);
 
   useEffect(() => {
     if (queryLogin === "success") {
@@ -58,6 +60,14 @@ function LandingPageContent() {
       return () => clearTimeout(timer);
     }
   }, [queryLogin]);
+
+  useEffect(() => {
+    if (queryBooking === "success") {
+      setShowBookingToast(true);
+      const timer = setTimeout(() => setShowBookingToast(false), 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [queryBooking]);
 
   const PROMO_ROUTE_MAPPING: Record<string, { origin: string; dest: string }> = {
     PARAHYANGAN: { origin: "GMR", dest: "BDO" },
@@ -262,6 +272,24 @@ function LandingPageContent() {
           </div>
           <button 
             onClick={() => setShowLoginToast(false)} 
+            className="text-gray-400 hover:text-gray-600 text-xs font-bold p-1 cursor-pointer"
+            aria-label="Tutup"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Toast Notifikasi Berhasil Pemesanan & Pembayaran Tiket */}
+      {showBookingToast && (
+        <div className="fixed top-24 right-4 z-50 bg-white border border-emerald-200 border-l-4 border-l-emerald-500 shadow-xl rounded-sm p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-md">
+          <CheckCircle2 className="text-emerald-500 shrink-0" size={22} />
+          <div className="flex-1">
+            <p className="text-sm font-bold text-gray-900">Pemesanan & Pembayaran Berhasil!</p>
+            <p className="text-xs text-gray-600">E-Tiket resmi KAI telah terbit dan siap digunakan untuk perjalanan Anda.</p>
+          </div>
+          <button 
+            onClick={() => setShowBookingToast(false)} 
             className="text-gray-400 hover:text-gray-600 text-xs font-bold p-1 cursor-pointer"
             aria-label="Tutup"
           >

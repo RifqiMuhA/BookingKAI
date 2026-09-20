@@ -1623,7 +1623,7 @@ function PembayaranContent() {
                 {/* Tombol Aksi */}
                 <div className="pt-1 flex flex-col-reverse sm:flex-row gap-2.5">
                   <button
-                    onClick={() => router.push("/")}
+                    onClick={() => router.push("/?booking=success")}
                     className="w-full sm:w-1/2 py-2.5 sm:py-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold text-xs sm:text-sm rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2"
                   >
                     <span>Kembali ke Beranda</span>
