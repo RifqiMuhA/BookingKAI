@@ -74,7 +74,7 @@ export function TaskSuccessModal({
 
         {/* Badge Hijau Tua Task Selesai */}
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#064e3b] text-white text-xs font-bold uppercase tracking-wider mb-2.5 shadow-xs">
-          <CheckCircle2 size={14} className="text-emerald-400" />
+          <CheckCircle2 size={14} className="text-white" />
           <span>Task {taskNumber} Selesai</span>
         </div>
 
