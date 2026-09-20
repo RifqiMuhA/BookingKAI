@@ -198,16 +198,20 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
             <Link
               href="/login"
               className={cn(
-                "inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs ml-3 border text-white",
+                "group relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer shadow-xs ml-3 border text-white overflow-hidden transition-all duration-300",
                 isSolid
-                  ? "bg-[#003C71] hover:bg-[#F58220] border-[#003C71] hover:border-[#F58220]"
-                  : "bg-white/20 hover:bg-[#F58220] border-white/40 hover:border-[#F58220] backdrop-blur-xs"
+                  ? "bg-[#003C71] border-[#003C71] hover:border-[#F58220]"
+                  : "bg-white/20 border-white/40 hover:border-[#F58220] backdrop-blur-xs"
               )}
             >
-              <div className="w-5 h-5 rounded-full bg-white/25 flex items-center justify-center shrink-0">
+              {/* Animasi Slide Warna Oranye KAI dari Kiri ke Kanan */}
+              <span className="absolute inset-0 bg-[#F58220] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+
+              {/* Konten Ikon & Teks Berada di Layer Atas */}
+              <div className="relative z-10 w-5 h-5 rounded-full bg-white/25 flex items-center justify-center shrink-0">
                 <User size={13} className="text-white" />
               </div>
-              <span className="tracking-wide">Masuk</span>
+              <span className="relative z-10 tracking-wide">Masuk</span>
             </Link>
           )}
         </nav>
