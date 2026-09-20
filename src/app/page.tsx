@@ -264,15 +264,15 @@ function LandingPageContent() {
     <MainLayout>
       {/* Toast Notifikasi Berhasil Login */}
       {showLoginToast && (
-        <div className="fixed top-24 right-4 z-50 bg-white border border-emerald-200 border-l-4 border-l-emerald-500 shadow-xl rounded-sm p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm">
-          <CheckCircle2 className="text-emerald-500 shrink-0" size={20} />
+        <div className="fixed top-24 right-4 z-50 bg-emerald-600 text-white shadow-xl rounded-lg px-4 py-3 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm border border-emerald-500">
+          <CheckCircle2 className="text-white shrink-0" size={20} />
           <div className="flex-1">
-            <p className="text-sm font-bold text-gray-900">Login Berhasil</p>
-            <p className="text-xs text-gray-600">Selamat datang kembali! Silakan mulai cari tiket Anda.</p>
+            <p className="text-sm font-bold leading-tight">Login Berhasil</p>
+            <p className="text-xs text-emerald-100 mt-0.5">Selamat datang kembali!</p>
           </div>
           <button 
             onClick={() => setShowLoginToast(false)} 
-            className="text-gray-400 hover:text-gray-600 text-xs font-bold p-1 cursor-pointer"
+            className="text-emerald-200 hover:text-white text-sm font-bold p-1 cursor-pointer transition-colors"
             aria-label="Tutup"
           >
             ✕
@@ -282,15 +282,15 @@ function LandingPageContent() {
 
       {/* Toast Notifikasi Berhasil Pemesanan & Pembayaran Tiket */}
       {showBookingToast && (
-        <div className="fixed top-24 right-4 z-50 bg-white border border-emerald-200 border-l-4 border-l-emerald-500 shadow-xl rounded-sm p-4 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-md">
-          <CheckCircle2 className="text-emerald-500 shrink-0" size={22} />
+        <div className="fixed top-24 right-4 z-50 bg-emerald-600 text-white shadow-xl rounded-lg px-4 py-3 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm border border-emerald-500">
+          <CheckCircle2 className="text-white shrink-0" size={20} />
           <div className="flex-1">
-            <p className="text-sm font-bold text-gray-900">Pemesanan & Pembayaran Berhasil!</p>
-            <p className="text-xs text-gray-600">E-Tiket resmi KAI telah terbit dan siap digunakan untuk perjalanan Anda.</p>
+            <p className="text-sm font-bold leading-tight">Pembayaran Berhasil</p>
+            <p className="text-xs text-emerald-100 mt-0.5">E-Tiket Anda telah aktif dan terbit.</p>
           </div>
           <button 
             onClick={() => setShowBookingToast(false)} 
-            className="text-gray-400 hover:text-gray-600 text-xs font-bold p-1 cursor-pointer"
+            className="text-emerald-200 hover:text-white text-sm font-bold p-1 cursor-pointer transition-colors"
             aria-label="Tutup"
           >
             ✕
