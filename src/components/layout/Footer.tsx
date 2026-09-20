@@ -3,31 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 
 const layananTiket = [
-  "Pesan Tiket",
-  "Cek Pesanan",
-  "Promo & Diskon",
-  "Jadwal Kereta",
-  "Info Tarif",
-  "Pilih Kursi",
+  { name: "Pesan Tiket", href: "/" },
+  { name: "Cek Pesanan", href: "/cek-pesanan" },
+  { name: "Promo & Diskon", href: "/promo" },
+  { name: "Peta Rute Kereta", href: "/peta-rute" },
 ];
 
 const bantuan = [
-  "FAQ",
-  "Hubungi Kami",
-  "Syarat & Ketentuan",
-  "Kebijakan Privasi",
-  "Panduan Booking",
-  "Reschedule & Refund",
+  { name: "FAQ", href: "/faq" },
+  { name: "Hubungi Kami", href: "/hubungi-kami" },
 ];
-
-
 
 export function Footer() {
   return (
     <footer className="bg-[#1e1b4b] text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 pt-12 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
 
           {/* Column 1 - Logo & Contact (spans 2 cols on lg) */}
           <div className="lg:col-span-2 space-y-6">
@@ -82,16 +74,18 @@ export function Footer() {
             {/* Social Media */}
             <div className="flex items-center gap-4 pt-2">
               {[
-                { name: "Facebook", icon: <FacebookIcon /> },
-                { name: "X", icon: <XIcon /> },
-                { name: "Instagram", icon: <InstagramIcon /> },
-                { name: "TikTok", icon: <TikTokIcon /> },
-                { name: "Threads", icon: <ThreadsIcon /> },
-                { name: "YouTube", icon: <YouTubeIcon /> },
+                { name: "Facebook", href: "https://www.facebook.com/keretaapikita", icon: <FacebookIcon /> },
+                { name: "X", href: "https://twitter.com/keretaapikita", icon: <XIcon /> },
+                { name: "Instagram", href: "https://www.instagram.com/keretaapikita", icon: <InstagramIcon /> },
+                { name: "TikTok", href: "https://www.tiktok.com/@keretaapikita", icon: <TikTokIcon /> },
+                { name: "Threads", href: "https://www.threads.net/@keretaapikita", icon: <ThreadsIcon /> },
+                { name: "YouTube", href: "https://www.youtube.com/@keretaapikita", icon: <YouTubeIcon /> },
               ].map((social) => (
                 <a
                   key={social.name}
-                  href="#"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-colors cursor-pointer"
                   title={social.name}
                 >
@@ -102,7 +96,12 @@ export function Footer() {
 
             {/* App Stores */}
             <div className="flex items-center gap-3 pt-1">
-              <a href="#" className="cursor-pointer hover:opacity-80 transition-opacity">
+              <a 
+                href="https://play.google.com/store/apps/details?id=com.kai.kaitaccess" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+              >
                 <Image
                   src="/Logo/get_googleplay.webp"
                   alt="Get it on Google Play"
@@ -111,7 +110,12 @@ export function Footer() {
                   className="object-contain h-9 w-auto"
                 />
               </a>
-              <a href="#" className="cursor-pointer hover:opacity-80 transition-opacity">
+              <a 
+                href="https://apps.apple.com/id/app/access-by-kai/id1459637770" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+              >
                 <Image
                   src="/Logo/get_appstore.webp"
                   alt="Download on the App Store"
@@ -130,34 +134,33 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {layananTiket.map((item) => (
-                <li key={item}>
-                  <Link href="#" className="text-sm text-gray-300 hover:text-white transition-colors">
-                    {item}
+                <li key={item.name}>
+                  <Link href={item.href} className="text-sm text-gray-300 hover:text-white transition-colors">
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3 - Bantuan & Informasi */}
+          {/* Column 3 - Bantuan */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
               Bantuan
             </h4>
             <ul className="space-y-2.5">
               {bantuan.map((item) => (
-                <li key={item}>
+                <li key={item.name}>
                   <Link
-                    href={item === "FAQ" ? "/faq" : item === "Hubungi Kami" ? "/hubungi-kami" : "#"}
+                    href={item.href}
                     className="text-sm text-gray-300 hover:text-white transition-colors"
                   >
-                    {item}
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
 
         </div>
       </div>
@@ -165,11 +168,7 @@ export function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-400">
-          <p>&copy; {new Date().getFullYear()} PT Kereta Api Indonesia (Persero).</p>
-          <div className="flex items-center gap-4">
-            <Link href="#" className="hover:text-white transition-colors">Syarat Penggunaan</Link>
-            <Link href="#" className="hover:text-white transition-colors underline underline-offset-2">Perlindungan dan Privasi Data</Link>
-          </div>
+          <p>&copy; {new Date().getFullYear()} PT Kereta Api Indonesia (Persero). All rights reserved.</p>
         </div>
       </div>
     </footer>
