@@ -129,14 +129,6 @@ function IsiDataContent() {
     }
   }, [isLoggedIn, user]);
 
-  const handleSelectSavedPassenger = (passengerIndex: number, saved: typeof savedAccountPassengers[0]) => {
-    updatePassenger(passengerIndex, "title", saved.title);
-    updatePassenger(passengerIndex, "name", saved.name);
-    updatePassenger(passengerIndex, "idType", saved.idType);
-    updatePassenger(passengerIndex, "idNumber", saved.idNumber);
-    setActivePassengerPopover(null);
-  };
-
   // Close dropdowns on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -266,9 +258,36 @@ function IsiDataContent() {
         setIsSameAsBooker(false);
       }
     }
-    const newP = [...passengers];
-    newP[index] = { ...newP[index], [field]: value };
-    setPassengers(newP);
+    setPassengers((prev) => {
+      const newP = [...prev];
+      if (newP[index]) {
+        newP[index] = { ...newP[index], [field]: value };
+      }
+      return newP;
+    });
+  };
+
+  const updatePassengerFields = (index: number, fields: Record<string, string>) => {
+    if (index === 0 && isSameAsBooker) {
+      setIsSameAsBooker(false);
+    }
+    setPassengers((prev) => {
+      const newP = [...prev];
+      if (newP[index]) {
+        newP[index] = { ...newP[index], ...fields };
+      }
+      return newP;
+    });
+  };
+
+  const handleSelectSavedPassenger = (passengerIndex: number, saved: typeof savedAccountPassengers[0]) => {
+    updatePassengerFields(passengerIndex, {
+      title: saved.title,
+      name: saved.name,
+      idType: saved.idType,
+      idNumber: saved.idNumber,
+    });
+    setActivePassengerPopover(null);
   };
 
   // Find train details for summary
@@ -1075,9 +1094,11 @@ function IsiDataContent() {
                             const val = e.target.value;
                             const matched = savedAccountPassengers.find((s) => s.idNumber === val.trim());
                             if (matched && !p.name) {
-                              updatePassenger(idx, "idNumber", val);
-                              updatePassenger(idx, "name", matched.name);
-                              updatePassenger(idx, "title", matched.title);
+                              updatePassengerFields(idx, {
+                                idNumber: val,
+                                name: matched.name,
+                                title: matched.title,
+                              });
                             } else {
                               updatePassenger(idx, "idNumber", val);
                             }
