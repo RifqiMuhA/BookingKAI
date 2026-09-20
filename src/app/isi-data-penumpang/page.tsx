@@ -921,15 +921,15 @@ function IsiDataContent() {
                         <button
                           type="button"
                           onClick={() => setActivePassengerPopover(activePassengerPopover === idx ? null : idx)}
-                          className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-sm text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-2xs ${
+                          className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm ${
                             activePassengerPopover === idx
-                              ? "bg-[#003C71] text-white border border-[#003C71]"
-                              : "bg-white hover:bg-slate-50 text-[#003C71] border border-gray-300 hover:border-[#003C71]"
+                              ? "bg-[#002b52] text-white ring-2 ring-[#003C71]/30"
+                              : "bg-[#003C71] hover:bg-[#002d55] text-white"
                           }`}
                         >
-                          <CreditCard size={14} className={activePassengerPopover === idx ? "text-[#F58220]" : "text-[#003C71]"} />
+                          <CreditCard size={15} className="text-[#F58220] shrink-0" />
                           <span>Pilih KTP Tersimpan</span>
-                          <ChevronDown size={14} className={`transition-transform duration-200 ${activePassengerPopover === idx ? "rotate-180" : ""}`} />
+                          <ChevronDown size={14} className={`text-white/80 transition-transform duration-200 shrink-0 ${activePassengerPopover === idx ? "rotate-180" : ""}`} />
                         </button>
 
                         {/* Dropdown Popover KTP Tersimpan Simpel & Elegan */}
