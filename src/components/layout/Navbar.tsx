@@ -55,7 +55,13 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
           {!isLoggedIn && (
             <>
               <div className="hidden sm:block w-px h-3 bg-white/30"></div>
-              <Link href="/login" className="hover:underline hidden sm:block font-bold">Login</Link>
+              <Link 
+                href="/login" 
+                className="hover:underline hidden sm:flex items-center gap-1.5 font-bold hover:text-orange-300 transition-colors"
+              >
+                <User size={13} className="shrink-0" />
+                <span>Masuk / Daftar</span>
+              </Link>
             </>
           )}
 
@@ -197,6 +203,27 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
               )}
             </div>
           )}
+
+          {/* Tombol Masuk ketika belum login */}
+          {!isLoggedIn && (
+            <Link
+              href="/login"
+              className={cn(
+                "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs ml-3 border",
+                isSolid
+                  ? "bg-[#003C71] text-white hover:bg-[#002d55] border-[#003C71]"
+                  : "bg-white/15 hover:bg-white text-white hover:text-[#003C71] border-white/40 hover:border-white"
+              )}
+            >
+              <div className={cn(
+                "w-5 h-5 rounded-full flex items-center justify-center transition-colors",
+                isSolid ? "bg-white/20 text-white" : "bg-white/25 text-white"
+              )}>
+                <User size={12} className="shrink-0" />
+              </div>
+              <span>Masuk</span>
+            </Link>
+          )}
         </nav>
 
         {/* Mobile Menu Toggle (Visible on lg and smaller) */}
@@ -308,9 +335,10 @@ export function Navbar({ hideMain = false }: { hideMain?: boolean }) {
                   <Link 
                     href="/login" 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="font-bold text-[var(--color-primary)] hover:text-[#002f59] transition-colors"
+                    className="w-full py-2.5 px-4 rounded-md font-bold text-xs bg-[#003C71] hover:bg-[#002d55] text-white flex items-center justify-center gap-2 shadow-sm transition-colors"
                   >
-                    Login
+                    <User size={15} />
+                    <span>Masuk / Daftar Akun</span>
                   </Link>
                 </div>
               )}
