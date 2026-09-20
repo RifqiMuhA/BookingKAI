@@ -1,7 +1,7 @@
 "use client";
 // Force HMR refresh
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -35,9 +35,9 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getPromoByCode, isRouteEligibleForPromo, PromoItem } from "@/lib/promosData";
+import { TaskSuccessModal } from "@/components/common/TaskSuccessModal";
 
 function LandingPageContent() {
   const router = useRouter();
@@ -50,22 +50,18 @@ function LandingPageContent() {
   const queryPromo = searchParams.get("promo") || "";
   const queryLogin = searchParams.get("login") || "";
   const queryBooking = searchParams.get("booking") || "";
-  const [showLoginToast, setShowLoginToast] = useState(false);
-  const [showBookingToast, setShowBookingToast] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   useEffect(() => {
     if (queryLogin === "success") {
-      setShowLoginToast(true);
-      const timer = setTimeout(() => setShowLoginToast(false), 5000);
-      return () => clearTimeout(timer);
+      setShowLoginModal(true);
     }
   }, [queryLogin]);
 
   useEffect(() => {
     if (queryBooking === "success") {
-      setShowBookingToast(true);
-      const timer = setTimeout(() => setShowBookingToast(false), 7000);
-      return () => clearTimeout(timer);
+      setShowBookingModal(true);
     }
   }, [queryBooking]);
 
@@ -262,41 +258,23 @@ function LandingPageContent() {
 
   return (
     <MainLayout>
-      {/* Toast Notifikasi Berhasil Login */}
-      {showLoginToast && (
-        <div className="fixed top-24 right-4 z-50 bg-emerald-600 text-white shadow-xl rounded-lg px-4 py-3 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm border border-emerald-500">
-          <CheckCircle2 className="text-white shrink-0" size={20} />
-          <div className="flex-1">
-            <p className="text-sm font-bold leading-tight">Login Berhasil</p>
-            <p className="text-xs text-emerald-100 mt-0.5">Selamat datang kembali!</p>
-          </div>
-          <button 
-            onClick={() => setShowLoginToast(false)} 
-            className="text-emerald-200 hover:text-white text-sm font-bold p-1 cursor-pointer transition-colors"
-            aria-label="Tutup"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Modal Task 1 Selesai */}
+      <TaskSuccessModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        taskNumber={1}
+        title="Registrasi & Login Berhasil"
+        description="Akun baru telah terdaftar dan Anda berhasil masuk. Silakan kembali ke Maze untuk melanjutkan ke Task 2."
+      />
 
-      {/* Toast Notifikasi Berhasil Pemesanan & Pembayaran Tiket */}
-      {showBookingToast && (
-        <div className="fixed top-24 right-4 z-50 bg-emerald-600 text-white shadow-xl rounded-lg px-4 py-3 flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm border border-emerald-500">
-          <CheckCircle2 className="text-white shrink-0" size={20} />
-          <div className="flex-1">
-            <p className="text-sm font-bold leading-tight">Pembayaran Berhasil</p>
-            <p className="text-xs text-emerald-100 mt-0.5">E-Tiket Anda telah aktif dan terbit.</p>
-          </div>
-          <button 
-            onClick={() => setShowBookingToast(false)} 
-            className="text-emerald-200 hover:text-white text-sm font-bold p-1 cursor-pointer transition-colors"
-            aria-label="Tutup"
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      {/* Modal Task 2 Selesai */}
+      <TaskSuccessModal
+        isOpen={showBookingModal}
+        onClose={() => setShowBookingModal(false)}
+        taskNumber={2}
+        title="Pemesanan Tiket Berhasil"
+        description="E-Tiket resmi telah terbit dan pembayaran selesai. Silakan kembali ke Maze untuk melanjutkan ke Task 3."
+      />
 
       {/* ── Page wrapper: split background ── */}
       <div className="relative min-h-screen">
