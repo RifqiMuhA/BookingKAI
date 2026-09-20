@@ -1596,22 +1596,22 @@ function PembayaranContent() {
                   </div>
 
                   {/* Total Tagihan Bar */}
-                  <div className="px-3.5 py-2.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs">
-                    <div>
-                      <span className="text-gray-500 font-medium">Total Pembayaran:</span>
+                  <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div className="flex flex-wrap items-center gap-2 min-w-0">
+                      <span className="text-gray-600 font-semibold whitespace-nowrap">Total Pembayaran:</span>
                       {discountChannel > 0 && activePromo && (
-                        <span className="ml-2 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded">
+                        <span className="inline-flex items-center whitespace-nowrap text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-md shadow-2xs">
                           Hemat {formatPrice(discountChannel)} ({activePromo.code})
                         </span>
                       )}
                     </div>
-                    <div className="flex items-baseline gap-1.5">
+                    <div className="flex items-baseline justify-end gap-2 shrink-0 whitespace-nowrap">
                       {discountChannel > 0 && (
-                        <span className="text-xs text-gray-400 line-through">
+                        <span className="text-xs text-gray-400 line-through whitespace-nowrap">
                           {formatKaiRupiah(baseTicketTotal)}
                         </span>
                       )}
-                      <span className="font-black text-sm text-[#003C71]">
+                      <span className="font-black text-base text-[#003C71] whitespace-nowrap">
                         {formatKaiRupiah(grandTotal)}
                       </span>
                     </div>
