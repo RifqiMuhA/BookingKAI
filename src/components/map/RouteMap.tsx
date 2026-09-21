@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, LayersControl, ZoomControl, GeoJSON, useMap } from "react-leaflet";
+import React, { useEffect, useState, useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Popup, LayersControl, ZoomControl, GeoJSON, Polyline, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { STATIONS } from "@/lib/mockData";
+import { getRailwayRouteCoordinates } from "@/lib/railwayRouting";
 
 // Fix leaflet icon issues with webpack
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,11 +67,27 @@ function PopupCloser({ origin, destination }: { origin: string, destination: str
   return null;
 }
 
+// Helper to smoothly zoom and fit bounds when an active route is selected
+function RouteFocuser({ routeCoords }: { routeCoords: [number, number][] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (routeCoords && routeCoords.length > 1) {
+      const bounds = L.latLngBounds(routeCoords.map(pt => L.latLng(pt[0], pt[1])));
+      map.fitBounds(bounds, { padding: [60, 60], maxZoom: 11 });
+    }
+  }, [routeCoords, map]);
+  return null;
+}
+
 export default function RouteMap({ origin, destination, onSetOrigin, onSetDestination }: RouteMapProps) {
   const defaultCenter: [number, number] = [-7.1509, 110.1402];
 
   const originStation = STATIONS.find(s => s.code === origin);
   const destStation = STATIONS.find(s => s.code === destination);
+
+  const activeRouteCoords = useMemo(() => {
+    return getRailwayRouteCoordinates(origin, destination);
+  }, [origin, destination]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createClusterIcon = (cluster: any) => {
@@ -153,6 +170,37 @@ export default function RouteMap({ origin, destination, onSetOrigin, onSetDestin
               opacity: 0.6
             }}
           />
+        )}
+
+        {/* Auto fit map bounds when route is active */}
+        <RouteFocuser routeCoords={activeRouteCoords} />
+
+        {/* Highlighted Traversed Railway Route (Orange) */}
+        {activeRouteCoords.length > 1 && (
+          <>
+            {/* White contrast outline */}
+            <Polyline
+              positions={activeRouteCoords}
+              pathOptions={{
+                color: "#FFFFFF",
+                weight: 8,
+                opacity: 0.95,
+                lineCap: "round",
+                lineJoin: "round",
+              }}
+            />
+            {/* Vibrant KAI Orange traversed path */}
+            <Polyline
+              positions={activeRouteCoords}
+              pathOptions={{
+                color: "#F58220",
+                weight: 5,
+                opacity: 1,
+                lineCap: "round",
+                lineJoin: "round",
+              }}
+            />
+          </>
         )}
 
         <MarkerClusterGroup
