@@ -52,6 +52,7 @@ function LandingPageContent() {
   const queryBooking = searchParams.get("booking") || "";
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showPromoModal, setShowPromoModal] = useState(false);
 
   useEffect(() => {
     if (queryLogin === "success") {
@@ -108,6 +109,7 @@ function LandingPageContent() {
           if (!origin) setOrigin(PROMO_ROUTE_MAPPING[promo.code].origin);
           if (!destination) setDestination(PROMO_ROUTE_MAPPING[promo.code].dest);
         }
+        setShowPromoModal(true);
       }
     }
   }, [queryPromo]);
@@ -145,6 +147,7 @@ function LandingPageContent() {
         type: "success",
         message: `Promo ${promo.code} aktif (${discountText}).`
       });
+      setShowPromoModal(true);
     } else {
       setAppliedPromo(null);
       setPromoFeedback({
@@ -270,6 +273,13 @@ function LandingPageContent() {
         isOpen={showBookingModal}
         onClose={() => setShowBookingModal(false)}
         taskNumber={2}
+      />
+
+      {/* Modal Task 3 Selesai */}
+      <TaskSuccessModal
+        isOpen={showPromoModal}
+        onClose={() => setShowPromoModal(false)}
+        taskNumber={3}
       />
 
       {/* ── Page wrapper: split background ── */}

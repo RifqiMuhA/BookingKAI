@@ -7,7 +7,6 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { getStationByCode, TRAIN_SCHEDULES, formatPrice, STATIONS } from "@/lib/mockData";
 import { PriceCalendar } from "@/components/booking/PriceCalendar";
 import { getPromoByCode, calculatePromoDiscount, isRouteEligibleForPromo } from "@/lib/promosData";
-import { TaskSuccessModal } from "@/components/common/TaskSuccessModal";
 import {
   ArrowRight,
   Pencil,
@@ -133,14 +132,6 @@ function SearchResultsContent() {
     () => isRouteEligibleForPromo(promoCode, originCode, destCode),
     [promoCode, originCode, destCode]
   );
-
-  const [showPromoSuccessModal, setShowPromoSuccessModal] = useState(false);
-
-  useEffect(() => {
-    if (promoCode && activePromo && promoEligibility.isEligible) {
-      setShowPromoSuccessModal(true);
-    }
-  }, [promoCode, activePromo, promoEligibility.isEligible]);
 
   const formatLocalYYYYMMDD = (d: Date) => {
     const y = d.getFullYear();
@@ -393,13 +384,6 @@ function SearchResultsContent() {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg-muted)] pb-32 lg:pb-12 pt-0 sm:pt-[32px]">
-      {/* Modal Task 3 Selesai */}
-      <TaskSuccessModal
-        isOpen={showPromoSuccessModal}
-        onClose={() => setShowPromoSuccessModal(false)}
-        taskNumber={3}
-      />
-
       {/* 1. Sticky Bar Pencarian Langsung Terbuka & Ramping */}
       <div className="sticky top-0 sm:top-[32px] z-40 bg-[var(--color-primary-dark)] text-white shadow-md border-t-0 sm:border-t border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">

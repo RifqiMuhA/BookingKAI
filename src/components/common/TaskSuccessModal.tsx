@@ -34,9 +34,9 @@ export function TaskSuccessModal({
       nextStep: "untuk melanjutkan ke Task 3.",
     },
     3: {
-      title: "Promo Berhasil Digunakan",
-      desc: "Promo diskon tiket telah aktif dan diterapkan ke daftar kereta.",
-      nextStep: "untuk mengisi kuesioner evaluasi PSSUQ.",
+      title: "Promo Berhasil Terpasang",
+      desc: "Kode promo diskon telah aktif dan terpasang pada formulir pemesanan di beranda.",
+      nextStep: "untuk menyelesaikan Task 3.",
     },
   }[taskNumber];
 
