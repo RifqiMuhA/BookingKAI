@@ -24,6 +24,7 @@ function getImage(filename, width = 240, height = 150) {
     const data = fs.readFileSync(filePath);
     return new Paragraph({
       alignment: AlignmentType.CENTER,
+      spacing: { before: 40, after: 40 },
       children: [
         new ImageRun({
           data: data,
@@ -49,7 +50,7 @@ function createHeading1(text) {
       new TextRun({
         text: text,
         bold: true,
-        size: 28,
+        size: 26,
         color: "003C71",
         font: "Times New Roman"
       })
@@ -65,7 +66,7 @@ function createHeading2(text) {
       new TextRun({
         text: text,
         bold: true,
-        size: 24,
+        size: 23,
         color: "003C71",
         font: "Times New Roman"
       })
@@ -75,13 +76,26 @@ function createHeading2(text) {
 
 function createParagraph(text, options = {}) {
   return new Paragraph({
-    spacing: { before: 60, after: 80, line: 276 },
+    spacing: { before: 50, after: 70, line: 260 },
     children: [
       new TextRun({
         text: text,
-        size: 22,
+        size: 21,
         font: "Times New Roman",
         ...options
+      })
+    ]
+  });
+}
+
+function createCellBullet(text) {
+  return new Paragraph({
+    spacing: { before: 20, after: 30, line: 230 },
+    children: [
+      new TextRun({
+        text: `• ${text}`,
+        size: 19,
+        font: "Times New Roman"
       })
     ]
   });
@@ -90,23 +104,23 @@ function createParagraph(text, options = {}) {
 function createQA(qNumber, question, answer) {
   return [
     new Paragraph({
-      spacing: { before: 140, after: 40 },
+      spacing: { before: 120, after: 30 },
       children: [
         new TextRun({
           text: `${qNumber}. ${question}`,
           bold: true,
-          size: 22,
+          size: 21,
           color: "003C71",
           font: "Times New Roman"
         })
       ]
     }),
     new Paragraph({
-      spacing: { before: 40, after: 100, line: 276 },
+      spacing: { before: 30, after: 90, line: 260 },
       children: [
         new TextRun({
           text: answer,
-          size: 22,
+          size: 21,
           font: "Times New Roman"
         })
       ]
@@ -123,7 +137,7 @@ async function generate() {
         document: {
           run: {
             font: "Times New Roman",
-            size: 22,
+            size: 21,
             color: "111111"
           }
         }
@@ -134,7 +148,7 @@ async function generate() {
         properties: {
           page: {
             margin: {
-              top: 1440, // 1 inch
+              top: 1440,
               bottom: 1440,
               left: 1440,
               right: 1440
@@ -145,12 +159,12 @@ async function generate() {
           // Title
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 100 },
+            spacing: { before: 0, after: 80 },
             children: [
               new TextRun({
                 text: "LAPORAN TUGAS INTERAKSI MANUSIA DAN KOMPUTER (IMK)",
                 bold: true,
-                size: 32,
+                size: 30,
                 color: "003C71",
                 font: "Times New Roman"
               })
@@ -158,12 +172,12 @@ async function generate() {
           }),
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 80 },
+            spacing: { before: 0, after: 60 },
             children: [
               new TextRun({
                 text: "ANALISIS DAN REDESAIN FITUR INFORMATION SEARCH",
                 bold: true,
-                size: 26,
+                size: 25,
                 color: "F58220",
                 font: "Times New Roman"
               })
@@ -171,12 +185,12 @@ async function generate() {
           }),
           new Paragraph({
             alignment: AlignmentType.CENTER,
-            spacing: { before: 0, after: 300 },
+            spacing: { before: 0, after: 260 },
             children: [
               new TextRun({
                 text: "Studi Kasus: Sistem Reservasi Tiket Kereta Api Indonesia (Booking KAI)",
                 italics: true,
-                size: 22,
+                size: 21,
                 font: "Times New Roman"
               })
             ]
@@ -190,7 +204,7 @@ async function generate() {
                 children: [
                   new TableCell({
                     shading: { type: ShadingType.CLEAR, fill: "F3F4F6" },
-                    margins: { top: 120, bottom: 120, left: 160, right: 160 },
+                    margins: { top: 100, bottom: 100, left: 140, right: 140 },
                     children: [
                       new Paragraph({
                         children: [
@@ -217,76 +231,76 @@ async function generate() {
             ]
           }),
 
-          new Paragraph({ spacing: { before: 200, after: 100 } }),
+          new Paragraph({ spacing: { before: 160, after: 80 } }),
 
           // 1. IDENTIFIKASI FITUR
           createHeading1("1. IDENTIFIKASI FITUR"),
           createParagraph("1.1. Nama Aplikasi / Website", { bold: true }),
-          createParagraph("Website Pemesanan Tiket Booking KAI (Redesain dari kanal digital resmi PT Kereta Api Indonesia, booking.kai.id). Prototipe interaktif dibangun menggunakan kerangka kerja Next.js dan Tailwind CSS dengan identitas visual khas KAI (Navy #003C71 dan Oranye #F58220)."),
+          createParagraph("Website Pemesanan Tiket Booking KAI (Redesain dari portal resmi booking.kai.id). Prototipe interaktif dibangun menggunakan kerangka kerja Next.js dan Tailwind CSS dengan tema visual khas KAI (Navy #003C71 dan Oranye #F58220)."),
 
           createParagraph("1.2. Fitur yang Dianalisis", { bold: true }),
-          createParagraph("Sistem Terpadu Penemuan Informasi (Integrated Information Search System), yang mencakup: (1) Pencarian Jadwal Tiket Kereta Api terstruktur, (2) Smart Suggestion & Autocomplete Stasiun, (3) Navigasi Spasial Rute Kereta Api via Peta Interaktif Pulau Jawa, (4) Panel Penyaringan (Filter) Multi-Kategori dan Pengurutan (Sorting) Dinamis, (5) Pencarian Promo & Penawaran Khusus, serta (6) Pencarian Dokumen Pengetahuan & Bantuan Perjalanan (FAQ Knowledge Base)."),
+          createParagraph("Sistem Terpadu Penemuan Informasi (Information Search System), meliputi: (1) Form Pencarian Jadwal Tiket Kereta Api, (2) Smart Suggestion & Autocomplete Stasiun, (3) Navigasi Spasial Rute via Peta Interaktif Pulau Jawa, (4) Toolbar Filter Dropdown Multi-Kategori dan Pengurutan (Sorting) Dinamis, (5) Pusat Promo & Voucher Terintegrasi, serta (6) Knowledge Search / FAQ Mandiri."),
 
           createParagraph("1.3. Tujuan Fitur", { bold: true }),
-          createParagraph("Memfasilitasi calon penumpang untuk merumuskan kueri pencarian, menemukan, menyaring, membandingkan tarif, serta memilih jadwal perjalanan kereta api antarkota yang paling sesuai dengan kebutuhan waktu dan anggaran mereka secara cepat, efisien, dan bebas friksi kognitif (cognitive overload)."),
+          createParagraph("Memfasilitasi calon penumpang untuk merumuskan kueri, mencari, menyaring, membandingkan tarif antartanggal, serta memilih jadwal kereta api yang paling ideal secara cepat, akurat, dan bebas beban kognitif."),
 
-          createParagraph("1.4. Informasi yang Ingin Ditemukan Pengguna (Information Needs)", { bold: true }),
-          createParagraph("• Informasi Perjalanan: Ketersediaan jadwal keberangkatan dan kedatangan, stasiun asal-tujuan, stasiun singgah, dan visualisasi jalur rel geografis yang dilalui.\n• Informasi Fasilitas & Kuota: Kelas kereta api (Ekonomi, Bisnis, Eksekutif, Luxury), denah gerbong, dan sisa kuota kursi secara real-time.\n• Informasi Finansial: Tarif tiket resmi, indikator harga termurah (best price), serta voucher diskon promo.\n• Informasi Ketentuan & Regulasi: Syarat usia tiket anak/bayi, batas berat bagasi gratis, ketentuan pembatalan (refund), dan tata cara boarding."),
+          createParagraph("1.4. Kebutuhan Informasi Pengguna (Information Needs)", { bold: true }),
+          createParagraph("• Informasi Jadwal & Rute: Waktu keberangkatan dan kedatangan, stasiun asal-tujuan, dan visualisasi rute spasial.\n• Informasi Fasilitas & Kursi: Kelas kereta (Ekonomi, Bisnis, Eksekutif, Luxury) dan sisa kuota kursi secara real-time.\n• Informasi Tarif & Promo: Harga tiket resmi, opsi tarif termurah, serta potongan voucher promo.\n• Informasi Regulasi: Aturan bagasi, ketentuan pembatalan/refund, dan persyaratan tiket anak."),
 
           createParagraph("1.5. Target Pengguna (User Persona)", { bold: true }),
-          createParagraph("• Mahasiswa & Pekerja Komuter (misal: Persona Muhammad Zidan & Nurihisha Nadia): Mengutamakan efisiensi pencarian tarif termurah, jam keberangkatan tercepat, dan kemudahan menemukan promo.\n• Wisatawan & Keluarga: Membutuhkan kepastian rute, perbandingan kelas kenyamanan gerbong, dan pemilihan kursi berdampingan.\n• Pengguna Baru / Pemula (First-time Users): Calon penumpang yang belum hafal singkatan kode 3 huruf stasiun di Pulau Jawa dan membutuhkan panduan visual peta rute."),
+          createParagraph("• Mahasiswa & Pekerja Komuter: Mengutamakan kecepatan pencarian tiket termurah dan jam berangkat pagi/malam.\n• Wisatawan & Keluarga: Membutuhkan kejelasan rute kota tujuan dan perbandingan kenyamanan kelas kursi.\n• Penumpang Pemula: Memerlukan bantuan visual rute peta karena belum hafal letak dan singkatan kode stasiun."),
 
           // 2. ANALISIS INFORMATION SEARCH
           createHeading1("2. ANALISIS PROSES INFORMATION SEARCH"),
-          createParagraph("Bagian ini mengamati dan mengevaluasi alur interaksi pengguna ketika mencari informasi tiket kereta api berdasarkan 11 indikator evaluasi IMK:"),
+          createParagraph("Berikut evaluasi alur penemuan informasi pengguna berdasarkan 11 indikator IMK:"),
 
           ...createQA("1", "Bagaimana pengguna memulai pencarian?", 
-            "Pengguna memulai pencarian melalui formulir pencarian terpadu (Search Card) yang terletak terpusat pada Hero Section di halaman beranda. Pengguna menentukan stasiun asal, stasiun tujuan (didukung tombol swap satu klik), tipe perjalanan (sekali jalan / pulang-pergi), tanggal keberangkatan, dan jumlah penumpang. Sebagai alternatif, pengguna juga dapat memulai pencarian secara spasial melalui tombol 'Pilih Rute via Peta' yang membuka peta rute interaktif Pulau Jawa."),
+            "Pengguna memulai pencarian dari Search Card yang berada di halaman utama. Di bagian ini, pengguna memilih stasiun asal, stasiun tujuan, tipe perjalanan, tanggal keberangkatan, dan jumlah penumpang. Terdapat tombol swap untuk menukar stasiun secara instan, serta tombol 'Pilih Rute via Peta' untuk melihat rute secara visual."),
 
           ...createQA("2", "Apakah fitur search mudah ditemukan?", 
-            "Sangat mudah ditemukan (High Visibility). Kotak pencarian utama berada tepat di atas lipatan layar (above the fold) beranda dengan kontras tinggi (kartu putih berbayang halus di atas latar belakang biru tua KAI #003C71). Dilengkapi ikon-ikon penjelas universal (MapPin, Navigation, Calendar, Users) yang mengarahkan fokus visual pengguna secara alami."),
+            "Ya, sangat mudah ditemukan. Kotak pencarian berada di posisi utama (above the fold) halaman beranda dengan kontras warna yang tegas terhadap latar belakang. Ikon penjelas pada setiap kolom membantu pengguna mengenali fungsi masing-masing elemen dengan cepat."),
 
           ...createQA("3", "Bagaimana pengguna memasukkan kata kunci?", 
-            "Pengguna mengklik kolom input stasiun asal atau tujuan, lalu mengetik nama stasiun (misal: 'Gambir'), nama kota (misal: 'Yogyakarta' atau 'Jogja'), maupun kode 3 huruf stasiun resmi KAI (misal: 'GMR', 'YK', 'BDO'). Sistem bersifat case-insensitive dan toleran terhadap pencarian parsial."),
+            "Pengguna memilih kolom stasiun asal atau tujuan, kemudian mengetik nama stasiun, kota, atau kode 3 huruf stasiun (misalnya 'GMR' untuk Gambir, 'YK' untuk Yogyakarta, atau 'BDO' untuk Bandung). Pencarian bersifat toleran (case-insensitive dan pencarian parsial)."),
 
           ...createQA("4", "Apakah terdapat autocomplete atau search suggestion?", 
-            "Ya, sistem dilengkapi Smart Autocomplete & Suggestion Modal. Sebelum pengguna mengetik, modal langsung menampilkan daftar 'Stasiun Populer' (Gambir, Bandung, Yogyakarta, Surabaya, dll). Saat pengguna mulai mengetik, daftar stasiun langsung terfilter secara real-time lengkap dengan lencana kota dan kode stasiun resmi."),
+            "Ya, sistem menyediakan Smart Autocomplete Modal. Sebelum mengetik, pengguna langsung disajikan rekomendasi 'Stasiun Populer'. Saat pengguna mulai mengetik huruf awal, daftar pilihan otomatis tersaring secara real-time lengkap dengan lencana kota dan kode stasiun."),
 
           ...createQA("5", "Bagaimana hasil pencarian ditampilkan?", 
-            "Hasil pencarian pada halaman /cari disajikan dalam bentuk daftar kartu kereta (Train Cards) terstruktur vertikal: jam berangkat & tiba di kiri dan kanan, garis alur durasi di tengah, nama dan nomor KA dicetak tegas, lencana kelas kursi warna-warni, serta harga tebal di sisi kanan bersebelahan dengan tombol aksi 'Pilih'."),
+            "Hasil pencarian disajikan dalam bentuk daftar kartu kereta (Train Cards) terstruktur: waktu keberangkatan dan kedatangan di kiri-kanan, alur durasi perjalanan di tengah, nama KA dan lencana kelas kursi yang jelas, serta tarif tebal di samping tombol aksi 'Pilih'."),
 
           ...createQA("6", "Apakah hasil yang paling relevan mudah ditemukan?", 
-            "Sangat mudah ditemukan. Jadwal langsung (direct train) yang melayani rute asal-tujuan diletakkan di urutan teratas. Selain itu, terdapat Date Strip Carousel tepat di atas daftar tiket yang memperlihatkan perbandingan harga termurah pada H-3 hingga H+3, memudahkan pengguna menemukan opsi paling hemat dalam 1 klik."),
+            "Sangat mudah. Jadwal langsung (direct) diletakkan di urutan teratas. Selain itu, terdapat Date Strip Carousel di atas daftar hasil pencarian yang menampilkan tarif termurah pada H-3 hingga H+3, memudahkan pengguna membandingkan harga dalam 1 klik."),
 
           ...createQA("7", "Apakah tersedia filter?", 
-            "Ya, tersedia Panel Filter Multi-Kategori di sisi kiri halaman hasil pencarian: (1) Filter Kelas Kereta (Ekonomi, Bisnis, Eksekutif, Luxury), (2) Filter Waktu Keberangkatan (Pagi, Siang, Sore, Malam), dan (3) Filter Nama Kereta Api. Filter bekerja secara reaktif dan memperbarui hasil seketika tanpa perlu me-reload halaman."),
+            "Ya, tersedia Toolbar Filter Dropdown berlatar biru primary (KAI Blue) tepat di atas hasil pencarian. Pengguna dapat menyaring Kelas (Ekonomi, Bisnis, Eksekutif) dan Waktu Keberangkatan (Pagi, Siang, Malam) via menu dropdown interaktif. Tersedia tombol Reset otomatis yang muncul ketika filter aktif, memperbarui hasil seketika tanpa reload halaman."),
 
           ...createQA("8", "Apakah tersedia sorting?", 
-            "Ya, tersedia Menu Dropdown Sorting di bagian atas daftar hasil: Harga Terendah → Tertinggi (Default / Paling Hemat), Keberangkatan Paling Awal & Paling Akhir, Kedatangan Paling Awal & Paling Akhir, serta Durasi Perjalanan Tercepat."),
+            "Ya, tersedia Menu Dropdown Sorting pada toolbar di atas hasil pencarian: Harga Paling Murah (Default / Rekomendasi), Waktu: Paling Awal, Waktu: Paling Akhir, dan Durasi: Paling Cepat."),
 
           ...createQA("9", "Apakah pengguna mendapatkan feedback dari sistem?", 
-            "Ya, sistem memberikan umpan balik (feedback) instan pada setiap aksi: (1) Feedback Visual Peta: saat asal dan tujuan dipilih di peta rute, jalur rel nyata otomatis menyala oranye (#F58220) dan kamera peta melakukan auto-fit zoom membingkai rute; (2) Feedback Kuota Kursi: lencana oranye menyala jika kursi tersisa sedikit; (3) Feedback Promo: muncul notifikasi hijau saat kode promo aktif; (4) Feedback Loading: animasi skeleton loader saat data jadwal disaring."),
+            "Ya, sistem memberikan umpan balik langsung pada setiap aksi: (1) Feedback visual peta menyala oranye (#F58220) saat asal-tujuan dipilih, (2) Lencana oranye peringatan sisa kuota kursi, (3) Notifikasi hijau saat promo aktif, dan (4) Skeleton loading saat data diperbarui."),
 
           ...createQA("10", "Apa yang terjadi jika pencarian tidak menghasilkan informasi (Empty State)?", 
-            "Sistem tidak menampilkan halaman kosong kaku atau kode galat teknis. Sistem menyajikan Empty State yang ramah berilustrasi maskot KAI dengan pesan empatik 'Jadwal Kereta Tidak Ditemukan', disertai rekomendasi solutif: mengubah tanggal keberangkatan melalui kalender tarif, memeriksa rute alternatif stasiun terdekat, atau tombol kembali ke beranda."),
+            "Sistem menyajikan Empty State empatik berilustrasi maskot KAI dengan pesan ramah 'Jadwal Kereta Tidak Ditemukan', dilengkapi rekomendasi solutif: tombol mengganti tanggal keberangkatan atau memeriksa rute alternatif via Peta Rute."),
 
           ...createQA("11", "Berapa langkah yang diperlukan pengguna sampai menemukan informasi yang dicari?", 
-            "Secara umum, pengguna hanya memerlukan 2 langkah aksi utama (two-action steps) untuk menemukan informasi jadwal dan tarif kereta yang diinginkan:\n1. Langkah 1 (Spesifikasi Parameter): Memilih stasiun asal, tujuan, dan tanggal pada formulir beranda (didukung Smart Suggestion stasiun populer & terdekat).\n2. Langkah 2 (Eksekusi Pencarian): Menekan tombol 'Cari Tiket'. Sistem seketika menyajikan hasil pencarian lengkap dengan matriks harga dan jadwal.\nJika pengguna memerlukan penyaringan spesifik (kelas atau jam tertentu), pengguna cukup melakukan 1 langkah penyempurnaan (refinement step) menggunakan toolbar filter/sorting yang memperbarui hasil secara instan tanpa reload halaman. Selain itu, perbandingan harga antartanggal dapat dilakukan dalam 1 klik langsung pada Date Strip Carousel."),
+            "Pengguna hanya memerlukan sekitar 2 sampai 3 langkah utama:\n• Langkah 1: Memilih stasiun asal, stasiun tujuan, dan tanggal keberangkatan pada formulir beranda (atau via Peta Rute).\n• Langkah 2: Menekan tombol 'Cari Tiket' untuk mengeksekusi pencarian.\n• Langkah 3: Pengguna langsung melihat jadwal dan harga tiket pada halaman hasil, serta dapat menggunakan filter dropdown atau sorting jika memerlukan penyaringan lebih lanjut."),
 
-          // 3. SOLUSI REDESIGN
-          createHeading1("3. SOLUSI REDESIGN DAN INOVASI FITUR"),
-          createParagraph("Berdasarkan evaluasi masalah pada sistem pemesanan konvensional, dibuat solusi redesain pada aspek-aspek berikut:"),
-          createParagraph("1. Search Bar & Suggestion: Mengganti dropdown teks kaku dengan modal pencarian terfokus (focused modal overlay) yang menyajikan rekomendasi 'Stasiun Populer', pengelompokan kota, dan toleransi singkatan kode stasiun."),
-          createParagraph("2. Navigasi Spasial (Peta Rute Interaktif Pulau Jawa): Menyediakan alternatif penemuan rute visual di /peta-rute bagi pengguna yang tidak hafal lokasi stasiun, lengkap dengan visualisasi jalur rel aktif berwarna oranye yang menelusuri lekukan rel nyata OpenStreetMap."),
-          createParagraph("3. Date Strip Carousel (Perbandingan Tarif Antartanggal): Menambahkan carousel tanggal di atas hasil pencarian untuk melihat tarif termurah di hari sebelum/sesudahnya tanpa perlu mengulang input pencarian."),
-          createParagraph("4. Panel Filter & Sorting Terbuka: Filter diletakkan di sisi kiri halaman hasil pencarian sehingga pengguna dapat langsung menyaring kelas dan jam dalam 1 klik (direct manipulation)."),
-          createParagraph("5. Empty State & Feedback Responsif: Mengganti pesan error kaku dengan ilustrasi maskot KAI dan panduan mencari rute/tanggal alternatif."),
-          createParagraph("6. Inovasi Fitur Baru — Pusat Promo Terintegrasi (/promo): Menyediakan halaman khusus promo dengan tombol 'Pakai Promo' yang otomatis memasang stasiun dan voucher di formulir beranda."),
-          createParagraph("7. Inovasi Fitur Baru — Knowledge Search FAQ (/faq): Menyediakan pencarian informasi aturan, bagasi, dan refund secara mandiri dengan fitur text highlighting (kata kunci disorot kuning) dan 7 tab kategori tematik."),
+          // 3. SOLUSI REDESAIN
+          createHeading1("3. SOLUSI REDESAIN DAN INOVASI FITUR"),
+          createParagraph("Berdasarkan masalah yang diidentifikasi pada sistem lama, solusi redesain dirumuskan pada aspek-aspek utama berikut:"),
+          createParagraph("1. Search Bar & Suggestion: Mengganti dropdown teks kaku dengan modal pencarian terfokus yang menyajikan rekomendasi 'Stasiun Populer', pengelompokan kota, dan pencarian kode stasiun."),
+          createParagraph("2. Navigasi Spasial (Peta Rute Interaktif Pulau Jawa): Menambahkan halaman /peta-rute untuk mencari rute secara visual bagi pengguna yang belum hafal lokasi stasiun."),
+          createParagraph("3. Date Strip Carousel: Menambahkan pilihan tanggal di atas hasil pencarian untuk melihat tarif termurah di sekitar tanggal pilihan tanpa harus mengulang pencarian."),
+          createParagraph("4. Toolbar Filter Dropdown & Sorting Terbuka: Filter dan sorting ditempatkan tepat di atas hasil pencarian agar mudah diakses dalam 1 baris terpadu."),
+          createParagraph("5. Empty State Responsif: Mengganti pesan error kaku dengan ilustrasi maskot ramah dan tombol panduan solutif."),
+          createParagraph("6. Pusat Promo Terintegrasi (/promo): Menyediakan pencarian promo dengan tombol 1-klik 'Pakai Promo' yang mengisi form pencarian secara otomatis."),
+          createParagraph("7. Knowledge Search FAQ (/faq): Menyediakan pencarian informasi aturan bagasi dan refund dengan fitur text highlighting (sorotan kuning)."),
 
-          // 4. BEFORE VS AFTER (TABEL KOMPARASI)
+          // 4. BEFORE VS AFTER (TABEL KOMPARASI PER POIN)
           createHeading1("4. FORM ANALISIS PROJECT REDESIGN: BEFORE VS AFTER"),
-          createParagraph("Tabel berikut menyajikan perbandingan apple-to-apple antara sistem eksisting (booking.kai.id) dan sistem hasil redesain (Booking KAI) pada materi Information Search:"),
+          createParagraph("Tabel berikut menyajikan komparasi per poin (ringkas) antara sistem eksisting (booking.kai.id) dan sistem hasil redesain (Booking KAI):"),
 
           // Table Before vs After
           new Table({
@@ -299,22 +313,22 @@ async function generate() {
                   new TableCell({
                     width: { size: 18, type: WidthType.PERCENTAGE },
                     shading: { type: ShadingType.CLEAR, fill: "003C71" },
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Aspek / Fitur", bold: true, color: "FFFFFF" })] })]
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Aspek / Fitur", bold: true, color: "FFFFFF", size: 20 })] })]
                   }),
                   new TableCell({
                     width: { size: 31, type: WidthType.PERCENTAGE },
                     shading: { type: ShadingType.CLEAR, fill: "003C71" },
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "BEFORE (Kondisi Eksisting)", bold: true, color: "FFFFFF" })] })]
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "BEFORE (Eksisting)", bold: true, color: "FFFFFF", size: 20 })] })]
                   }),
                   new TableCell({
                     width: { size: 31, type: WidthType.PERCENTAGE },
                     shading: { type: ShadingType.CLEAR, fill: "003C71" },
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "AFTER (Hasil Redesain)", bold: true, color: "FFFFFF" })] })]
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "AFTER (Redesain)", bold: true, color: "FFFFFF", size: 20 })] })]
                   }),
                   new TableCell({
                     width: { size: 20, type: WidthType.PERCENTAGE },
                     shading: { type: ShadingType.CLEAR, fill: "003C71" },
-                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Alasan / Prinsip IMK", bold: true, color: "FFFFFF" })] })]
+                    children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Prinsip IMK", bold: true, color: "FFFFFF", size: 20 })] })]
                   })
                 ]
               }),
@@ -323,22 +337,27 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "1. Search / Pencarian", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "1. Search / Pencarian", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Formulir input konvensional kaku dengan label terpisah dan latar belakang datar. Tidak ada panduan rute visual."),
-                      getImage("before_1_search.png", 200, 110)
+                      createCellBullet("Formulir konvensional dengan kontras rendah."),
+                      createCellBullet("Tidak tersedia panduan visual rute."),
+                      getImage("before_1_search.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Formulir modern dengan kontras tinggi (Navy-Oranye KAI), tombol swap stasiun 1-klik, dan tombol 'Pilih Rute via Peta'."),
-                      getImage("after_1_search.png", 200, 110)
+                      createCellBullet("Search Card modern dengan kontras tinggi (Navy-Oranye KAI)."),
+                      createCellBullet("Tombol swap stasiun 1-klik & opsi 'Pilih Rute via Peta'."),
+                      getImage("after_1_search.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Aesthetic and Minimalist Design & Error Prevention. Mengurangi beban kognitif saat perumusan kueri.")]
+                    children: [
+                      createCellBullet("Aesthetic & Minimalist Design."),
+                      createCellBullet("Error Prevention (meminimalkan salah input).")
+                    ]
                   })
                 ]
               }),
@@ -347,22 +366,26 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "2. Search Suggestion / Autocomplete", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "2. Search Suggestion / Autocomplete", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Dropdown teks sederhana tanpa rekomendasi stasiun populer di awal. Pengguna harus hafal nama stasiun."),
-                      getImage("before_2_autocomplete.png", 200, 110)
+                      createCellBullet("Dropdown teks standar tanpa saran awal."),
+                      createCellBullet("Pengguna wajib hafal nama lengkap stasiun."),
+                      getImage("before_2_autocomplete.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Smart Suggestion Modal dengan daftar 'Stasiun Populer', pencarian berbasis kota, dan lencana kode stasiun KAI 3 huruf."),
-                      getImage("after_2_autocomplete.png", 200, 110)
+                      createCellBullet("Smart Modal dengan daftar 'Stasiun Populer'."),
+                      createCellBullet("Mendukung pencarian nama kota maupun kode 3 huruf (GMR, YK, BDO)."),
+                      getImage("after_2_autocomplete.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Recognition rather than Recall (Nielsen #6). Pengguna cukup mengenali stasiun tanpa perlu mengingat kodenya.")]
+                    children: [
+                      createCellBullet("Recognition rather than Recall (Nielsen #6).")
+                    ]
                   })
                 ]
               }),
@@ -371,22 +394,26 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "3. Search Result", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "3. Search Result", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Daftar kereta statis memanjang ke bawah dengan tombol PESAN terpisah per subkelas tarif; tidak menampilkan perbandingan harga lintas tanggal."),
-                      getImage("before_3_result.png", 200, 110)
+                      createCellBullet("Daftar jadwal statis memanjang ke bawah."),
+                      createCellBullet("Tidak ada perbandingan harga lintas tanggal."),
+                      getImage("before_3_result.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Matriks hasil pencarian kereta interaktif (Jam x Kelas) dilengkapi Date Strip Carousel untuk perbandingan tarif termurah antartanggal."),
-                      getImage("after_3_result.png", 200, 110)
+                      createCellBullet("Kartu kereta terstruktur (jam, durasi, kelas, harga)."),
+                      createCellBullet("Date Strip Carousel untuk komparasi tarif H-3 s.d. H+3 dalam 1 klik."),
+                      getImage("after_3_result.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Flexibility & Efficiency of Use. Pengguna dapat membandingkan jadwal dan tarif antartanggal dalam 1 kali pandang.")]
+                    children: [
+                      createCellBullet("Flexibility & Efficiency of Use (Nielsen #7).")
+                    ]
                   })
                 ]
               }),
@@ -395,22 +422,26 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "4. Filter", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "4. Filter", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Tidak tersedia panel filter kategori komprehensif; opsi penyaringan harga tersembunyi di balik tombol toggle dan tidak ada filter waktu/kelas."),
-                      getImage("before_4_filter.png", 200, 110)
+                      createCellBullet("Tidak ada filter kategori langsung di halaman hasil."),
+                      createCellBullet("Pilihan filter kaku dan tersembunyi."),
+                      getImage("before_4_filter.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Toolbar Filter Dropdown berlatar biru primary (KAI Blue) di atas hasil pencarian. Pengguna dapat menyaring Kelas (Eksekutif, Bisnis, Ekonomi) dan Waktu Keberangkatan via menu dropdown interaktif dengan pembaruan instan serta tombol Reset otomatis."),
-                      getImage("after_4_filter.png", 200, 110)
+                      createCellBullet("Toolbar Filter Dropdown berlatar biru primary KAI."),
+                      createCellBullet("Filter Kelas dan Jam dengan tombol Reset otomatis."),
+                      getImage("after_4_filter.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Direct Manipulation & Immediate Feedback (Shneiderman). Hasil tersaring seketika tanpa reload halaman.")]
+                    children: [
+                      createCellBullet("Direct Manipulation & Immediate Feedback (Shneiderman).")
+                    ]
                   })
                 ]
               }),
@@ -419,22 +450,25 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "5. Sorting", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "5. Sorting", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Tombol urutan datar statis [Kelas][Stasiun][Kereta][Waktu][Harga] tanpa indikator jelas apakah urutan menaik (asc) atau menurun (desc)."),
-                      getImage("before_5_sorting.png", 200, 110)
+                      createCellBullet("Tombol sorting statis tanpa arah urutan jelas."),
+                      getImage("before_5_sorting.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Dropdown sorting dinamis: Harga Paling Murah (kereta termurah langsung tampil di posisi teratas), Waktu Berangkat, dan Durasi Tercepat."),
-                      getImage("after_5_sorting.png", 200, 110)
+                      createCellBullet("Menu Dropdown Sorting (Harga Termurah, Waktu, Durasi)."),
+                      createCellBullet("Pembaruan urutan instan tanpa reload halaman."),
+                      getImage("after_5_sorting.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("User Control and Freedom (Nielsen #3). Memberikan kendali penuh pada prioritas efisiensi biaya dan waktu pengguna.")]
+                    children: [
+                      createCellBullet("User Control and Freedom (Nielsen #3).")
+                    ]
                   })
                 ]
               }),
@@ -443,22 +477,26 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "6. Navigasi Menemukan Informasi", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "6. Navigasi Menemukan Informasi", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Hanya berbasis formulir teks linier statis; pengguna yang tidak hafal letak geografis stasiun kebingungan menentukan stasiun terdekat."),
-                      getImage("before_booking_kai.png", 200, 110)
+                      createCellBullet("Hanya berbasis input formulir teks linier."),
+                      createCellBullet("Sulit bagi pengguna yang belum hafal letak stasiun."),
+                      getImage("before_booking_kai.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Peta Rute Spasial Interaktif (/peta-rute); stasiun dapat diklik langsung di peta dan jalur rel kereta menyala oranye presisi."),
-                      getImage("after_6_map.png", 200, 110)
+                      createCellBullet("Peta Rute Interaktif Pulau Jawa (/peta-rute)."),
+                      createCellBullet("Stasiun dapat diklik langsung dengan visual rel oranye."),
+                      getImage("after_6_map.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Match between System and Real World (Nielsen #2). Membentuk model mental geografis yang konkret dan intuitif.")]
+                    children: [
+                      createCellBullet("Match between System and Real World (Nielsen #2).")
+                    ]
                   })
                 ]
               }),
@@ -467,40 +505,78 @@ async function generate() {
               new TableRow({
                 children: [
                   new TableCell({
-                    children: [new Paragraph({ children: [new TextRun({ text: "7. No-Result / Error / Feedback", bold: true })] })]
+                    children: [new Paragraph({ children: [new TextRun({ text: "7. No-Result / Error / Feedback", bold: true, size: 20 })] })]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Feedback eror berupa notifikasi toast merah kecil di pojok kanan bawah yang mudah terlewat dan tanpa panduan solutif."),
-                      getImage("before_7_empty_state.png", 200, 110)
+                      createCellBullet("Notifikasi error kecil di pojok layar tanpa solusi."),
+                      getImage("before_7_empty_state.png", 190, 105)
                     ]
                   }),
                   new TableCell({
                     children: [
-                      new Paragraph("Empty State empatik berpusat di layar dengan ilustrasi Maskot KAI ramah serta tombol aksi solutif: 'Reset Semua Filter' dan 'Cek di Peta Rute'."),
-                      getImage("after_7_empty_state.png", 200, 110)
+                      createCellBullet("Empty State empatik dengan ilustrasi maskot ramah."),
+                      createCellBullet("Tombol aksi solutif: ganti tanggal atau cek rute alternatif."),
+                      getImage("after_7_empty_state.png", 190, 105)
                     ]
                   }),
                   new TableCell({
-                    children: [new Paragraph("Help Users Recognize, Diagnose, and Recover from Errors (Nielsen #9).")]
+                    children: [
+                      createCellBullet("Help Users Recognize, Diagnose, and Recover from Errors (Nielsen #9).")
+                    ]
                   })
                 ]
               })
             ]
           }),
 
-          new Paragraph({ spacing: { before: 240, after: 100 } }),
+          new Paragraph({ spacing: { before: 200, after: 80 } }),
 
-          // 5. RINGKASAN HASIL & DAMPAK UX
-          createHeading1("5. RINGKASAN HASIL REDESAIN & DAMPAK UX"),
-          createParagraph("Masalah Utama pada BEFORE:", { bold: true }),
-          createParagraph("Sistem pencarian tiket lama pada booking.kai.id didominasi oleh formulir statis kaku yang membebankan memori pengguna (harus menghafal nama resmi stasiun), tidak memiliki bantuan konteks spasial/peta, tidak menyediakan perbandingan harga antartanggal secara simultan, serta opsi filter/sorting yang tersembunyi."),
+          // 5. FITUR REDESAIN TAMBAHAN (TANPA KOMPARASI BEFORE-AFTER)
+          createHeading1("5. FITUR REDESAIN TAMBAHAN (TANPA KOMPARASI BEFORE-AFTER)"),
+          createParagraph("Bagian ini memaparkan fitur-fitur baru hasil redesain yang tidak memiliki komparasi langsung (apple-to-apple) dengan sistem eksisting (booking.kai.id). Fitur-fitur ini merupakan inovasi penemuan informasi (information search) yang sebelumnya belum ada atau masih terpisah di luar sistem reservasi utama:"),
 
-          createParagraph("Perbaikan Utama pada AFTER:", { bold: true }),
-          createParagraph("Redesain menghadirkan sistem penemuan informasi holistik: Smart Modal Autocomplete dengan kelompok stasiun populer, Peta Rute Interaktif Pulau Jawa yang menyala oranye mengikuti rel nyata, Date Strip Carousel untuk perbandingan tarif termurah antartanggal dalam 1 klik, Panel Filter multi-kategori terbuka, dropdown sorting fleksibel, serta Empty State empatik berilustrasi maskot KAI."),
+          createHeading2("5.1. Pusat Promo & Voucher Terintegrasi (/promo)"),
+          createParagraph("• Latar Belakang Ketiadaan Fitur: Pada sistem reservasi lama KAI, informasi promo tiket dan diskon tarif hanya dipublikasikan melalui spanduk statis di situs eksternal atau media sosial. Pengguna harus mencatat kode voucher secara manual dan sering kali lupa saat mengisi formulir pemesanan."),
+          createParagraph("• Solusi Redesain: Disediakan halaman khusus Pusat Promo (/promo) yang terintegrasi langsung dengan sistem pencarian tiket."),
+          createParagraph("• Kemampuan Penemuan Informasi:"),
+          createParagraph("  - Filter Kategori Promo: Menyaring promo berdasarkan kota destinasi favorit serta periode waktu berlaku."),
+          createParagraph("  - Live Search Promo: Pencarian cepat nama event promo atau rute tujuan tertentu."),
+          createParagraph("  - Aksi 1-Klik 'Pakai Promo': Tombol pada kartu promo langsung mengarahkan pengguna ke formulir pemesanan beranda dengan rute stasiun dan kode voucher yang sudah terpasang otomatis (pre-filled), mencegah kesalahan pengetikan."),
+          createParagraph("• Prinsip IMK Terkait: Recognition rather than Recall & Flexibility and Efficiency of Use."),
+          getImage("after_promo.png", 460, 240),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 20, after: 120 },
+            children: [new TextRun({ text: "Gambar 5.1 Antarmuka Pusat Promo Terintegrasi (/promo)", italics: true, size: 18, color: "555555" })]
+          }),
+
+          createHeading2("5.2. Knowledge Search & FAQ Mandiri Cerdas (/faq)"),
+          createParagraph("• Latar Belakang Ketiadaan Fitur: Regulasi penting perjalanan (seperti batasan bagasi 20 kg, aturan pembatalan/refund 25%, reschedule, aturan tiket bayi, hingga hewan peliharaan) sebelumnya tersembunyi di dalam lembar syarat & ketentuan (T&C) statis yang sangat panjang tanpa sarana pencarian interaktif."),
+          createParagraph("• Solusi Redesain: Dihadirkan modul Knowledge Search mandiri pada halaman /faq untuk memudahkan penemuan informasi regulasi non-jadwal secara cepat."),
+          createParagraph("• Kemampuan Penemuan Informasi:"),
+          createParagraph("  - Live Search Bar: Pengguna cukup mengetik kata kunci pertanyaan (misal: 'bagasi', 'refund', 'anak')."),
+          createParagraph("  - Search Text Highlighting: Kata kunci yang cocok pada pertanyaan dan jawaban langsung disorot dengan latar belakang kuning cerah (yellow highlight), mempercepat pemindaian visual (scanning & skimming)."),
+          createParagraph("  - 7 Tab Kategori Tematik: Navigasi terstruktur mencakup Pemesanan, Pembatalan & Refund, Reschedule, Bagasi & Hewan, Pembayaran, Fasilitas Kereta, serta Akun & Keamanan."),
+          createParagraph("  - Accordion Interaktif: Format tanya-jawab yang dapat dibuka-tutup menjaga antarmuka tetap bersih dan ringkas."),
+          createParagraph("• Prinsip IMK Terkait: Help and Documentation (Nielsen #10) & Information Scent."),
+          getImage("after_faq.png", 460, 240),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 20, after: 120 },
+            children: [new TextRun({ text: "Gambar 5.2 Antarmuka Knowledge Search FAQ Cerdas dengan Text Highlighting (/faq)", italics: true, size: 18, color: "555555" })]
+          }),
+
+          // 6. RINGKASAN HASIL & DAMPAK UX
+          createHeading1("6. RINGKASAN HASIL REDESAIN & DAMPAK UX"),
+          createParagraph("Masalah Utama pada Sistem Lama (BEFORE):", { bold: true }),
+          createParagraph("Sistem pencarian tiket lama pada booking.kai.id didominasi formulir teks kaku yang membebani daya ingat pengguna (harus hafal nama stasiun), ketiadaan konteks spasial/peta, tidak ada perbandingan harga antartanggal, serta opsi filter dan pengurutan yang tersembunyi."),
+
+          createParagraph("Perbaikan Utama pada Sistem Baru (AFTER):", { bold: true }),
+          createParagraph("Redesain menghadirkan sistem penemuan informasi yang utuh: Smart Modal Autocomplete dengan kelompok stasiun populer, Peta Rute Spasial Interaktif Pulau Jawa, Date Strip Carousel untuk perbandingan tarif termurah dalam 1 klik, Toolbar Filter Dropdown dan sorting terpadu di atas hasil pencarian, Empty State empatik berilustrasi maskot, serta integrasi Pusat Promo (/promo) dan Knowledge Search FAQ (/faq)."),
 
           createParagraph("Dampak terhadap Pengalaman Pengguna (UX Impact):", { bold: true }),
-          createParagraph("• Efektivitas (Task Success Rate): Pengguna tidak lagi mengalami salah pilih stasiun berkat adanya konteks kota, lencana kode 3 huruf stasiun, dan jalur visual peta rute.\n• Efisiensi (Time-on-Task): Waktu pencarian jadwal dan tarif termurah terpangkas drastis karena pengguna dapat membandingkan tanggal di satu layar tanpa perlu mengulang kueri pencarian dari awal.\n• Kepuasan (User Satisfaction): Pengalaman interaksi menjadi menyenangkan, modern, dan bebas hambatan mental (low cognitive friction), terbukti dengan penurunan skor PSSUQ yang signifikan melampaui benchmark global.")
+          createParagraph("• Efektivitas (Task Success Rate): Pengguna tidak lagi salah memilih stasiun berkat adanya lencana kota, kode resmi 3 huruf, serta panduan rute visual pada peta.\n• Efisiensi (Time-on-Task): Waktu pencarian tiket termurah berkurang signifikan karena pengguna dapat membandingkan tanggal langsung pada satu layar tanpa mengulang formulir pencarian.\n• Kepuasan (User Satisfaction): Antarmuka modern, interaktif, dan responsif memberikan kenyamanan optimal dan mengurangi beban mental pengguna dalam merencanakan perjalanan.")
         ]
       }
     ]
