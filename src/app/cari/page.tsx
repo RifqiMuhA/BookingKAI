@@ -815,63 +815,53 @@ function SearchResultsContent() {
               )
             )}
 
-            {/* Toolbar Filter & Sorting Dropdown (Background Biru Primary) */}
-            <div className="bg-[#003C71] text-white rounded-lg shadow-sm p-3 mb-4 border border-[#002a50] flex flex-wrap items-center justify-between gap-3">
+            {/* Toolbar Filter & Sorting Dropdown (Background Biru Primary, Tombol Putih Bersih, 1 Baris Rapi) */}
+            <div className="bg-[#003C71] text-white rounded-lg shadow-sm px-3.5 py-2.5 mb-4 border border-[#002a50] flex items-center justify-between gap-2 overflow-x-auto hide-scrollbar">
               {/* Kiri: Kelompok Dropdown Filter */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-white">
-                  <Filter size={15} className="text-[#F58220]" />
-                  <span>Filter:</span>
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white pr-1">
+                  <Filter size={14} className="text-[#F58220]" />
+                  <span className="hidden sm:inline">Filter:</span>
                 </div>
 
-                {/* Dropdown 1: Kelas Kereta */}
-                <div className="flex items-center gap-1.5">
-                  <label htmlFor="filter-class-dropdown" className="text-xs font-medium text-white/80 hidden sm:inline">
-                    Kelas:
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="filter-class-dropdown"
-                      value={filterClass}
-                      onChange={(e) => setFilterClass(e.target.value)}
-                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
-                    >
-                      <option value="ALL" className="bg-[#003C71] text-white">Semua Kelas</option>
-                      <option value="Eksekutif" className="bg-[#003C71] text-white">Eksekutif</option>
-                      <option value="Bisnis" className="bg-[#003C71] text-white">Bisnis</option>
-                      <option value="Ekonomi" className="bg-[#003C71] text-white">Ekonomi</option>
-                    </select>
-                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
-                  </div>
+                {/* Dropdown 1: Kelas Kereta (Warna Putih) */}
+                <div className="relative">
+                  <select
+                    id="filter-class-dropdown"
+                    value={filterClass}
+                    onChange={(e) => setFilterClass(e.target.value)}
+                    className="bg-white text-gray-900 text-xs font-semibold rounded-md pl-2.5 pr-7 py-1.5 border border-gray-200 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                  >
+                    <option value="ALL">Semua Kelas</option>
+                    <option value="Eksekutif">Kelas Eksekutif</option>
+                    <option value="Bisnis">Kelas Bisnis</option>
+                    <option value="Ekonomi">Kelas Ekonomi</option>
+                  </select>
+                  <ChevronDown size={13} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
 
-                {/* Dropdown 2: Waktu Keberangkatan */}
-                <div className="flex items-center gap-1.5">
-                  <label htmlFor="filter-time-dropdown" className="text-xs font-medium text-white/80 hidden sm:inline">
-                    Waktu:
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="filter-time-dropdown"
-                      value={filterTime}
-                      onChange={(e) => setFilterTime(e.target.value)}
-                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
-                    >
-                      <option value="ALL" className="bg-[#003C71] text-white">Semua Jam</option>
-                      <option value="pagi" className="bg-[#003C71] text-white">Pagi (04:00 - 11:59)</option>
-                      <option value="siang" className="bg-[#003C71] text-white">Siang (12:00 - 17:59)</option>
-                      <option value="malam" className="bg-[#003C71] text-white">Malam (18:00 - 23:59)</option>
-                    </select>
-                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
-                  </div>
+                {/* Dropdown 2: Waktu Keberangkatan (Warna Putih) */}
+                <div className="relative">
+                  <select
+                    id="filter-time-dropdown"
+                    value={filterTime}
+                    onChange={(e) => setFilterTime(e.target.value)}
+                    className="bg-white text-gray-900 text-xs font-semibold rounded-md pl-2.5 pr-7 py-1.5 border border-gray-200 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                  >
+                    <option value="ALL">Semua Jam</option>
+                    <option value="pagi">Pagi (04:00 - 11:59)</option>
+                    <option value="siang">Siang (12:00 - 17:59)</option>
+                    <option value="malam">Malam (18:00 - 23:59)</option>
+                  </select>
+                  <ChevronDown size={13} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
 
                 {/* Tombol Reset Filter jika aktif */}
                 {(filterClass !== "ALL" || filterTime !== "ALL" || sortBy !== "time-asc") && (
                   <button
                     onClick={() => { setFilterClass("ALL"); setFilterTime("ALL"); setSortBy("time-asc"); }}
-                    className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#F58220] hover:bg-[#e07118] text-white text-xs font-bold rounded-md shadow-xs transition-colors cursor-pointer"
-                    title="Reset filter ke default"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#F58220] hover:bg-[#e07118] text-white text-xs font-bold rounded-md shadow-xs transition-colors cursor-pointer shrink-0"
+                    title="Reset semua filter ke default"
                   >
                     <RotateCcw size={12} />
                     <span>Reset</span>
@@ -879,25 +869,25 @@ function SearchResultsContent() {
                 )}
               </div>
 
-              {/* Kanan: Dropdown Sorting */}
-              <div className="flex items-center gap-2 ml-auto">
-                <ArrowUpDown size={14} className="text-white/80" />
-                <label htmlFor="sort-select" className="text-xs font-bold text-white">
-                  Urutkan:
-                </label>
+              {/* Kanan: Dropdown Sorting (Warna Putih) */}
+              <div className="flex items-center gap-2 shrink-0 ml-auto">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white hidden md:flex">
+                  <ArrowUpDown size={13} className="text-white/80" />
+                  <span>Urutkan:</span>
+                </div>
                 <div className="relative">
                   <select
                     id="sort-select"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                    className="bg-white text-gray-900 text-xs font-semibold rounded-md pl-2.5 pr-7 py-1.5 border border-gray-200 shadow-xs hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
                   >
-                    <option value="time-asc" className="bg-[#003C71] text-white">Waktu Berangkat (Paling Awal)</option>
-                    <option value="time-desc" className="bg-[#003C71] text-white">Waktu Berangkat (Paling Akhir)</option>
-                    <option value="price-asc" className="bg-[#003C71] text-white">Harga (Paling Murah)</option>
-                    <option value="duration-asc" className="bg-[#003C71] text-white">Durasi (Paling Cepat)</option>
+                    <option value="time-asc">Waktu: Paling Awal</option>
+                    <option value="time-desc">Waktu: Paling Akhir</option>
+                    <option value="price-asc">Harga: Paling Murah</option>
+                    <option value="duration-asc">Durasi: Paling Cepat</option>
                   </select>
-                  <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
+                  <ChevronDown size={13} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
               </div>
             </div>
