@@ -24,7 +24,11 @@ import {
   MapPin,
   Tag,
   Check,
-  CheckCircle2
+  CheckCircle2,
+  SlidersHorizontal,
+  ArrowUpDown,
+  Filter,
+  RotateCcw
 } from "lucide-react";
 
 // Tipe data kereta setelah dikelompokkan
@@ -285,6 +289,48 @@ function SearchResultsContent() {
     setGroupedTrains(Object.values(groups).sort((a, b) => a.departureTime.localeCompare(b.departureTime)));
     setSelectedTrain(null); // Reset pilihan jika tanggal berubah
   }, [selectedDate]);
+
+  // Filter & Sorting state
+  const [filterClass, setFilterClass] = useState<string>("ALL");
+  const [filterTime, setFilterTime] = useState<string>("ALL");
+  const [sortBy, setSortBy] = useState<string>("time-asc");
+
+  // Filtered & Sorted Trains
+  const displayedTrains = useMemo(() => {
+    if (searchParams.get("empty") === "true") {
+      return [];
+    }
+
+    let list = [...groupedTrains];
+
+    // Filter class
+    if (filterClass !== "ALL") {
+      list = list.filter(t => !!t.classes[filterClass as keyof typeof t.classes]);
+    }
+
+    // Filter time
+    if (filterTime === "pagi") {
+      list = list.filter(t => t.departureTime >= "04:00" && t.departureTime < "12:00");
+    } else if (filterTime === "siang") {
+      list = list.filter(t => t.departureTime >= "12:00" && t.departureTime < "18:00");
+    } else if (filterTime === "malam") {
+      list = list.filter(t => t.departureTime >= "18:00" || t.departureTime < "04:00");
+    }
+
+    // Sort
+    if (sortBy === "time-asc") {
+      list.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
+    } else if (sortBy === "time-desc") {
+      list.sort((a, b) => b.departureTime.localeCompare(a.departureTime));
+    } else if (sortBy === "price-asc") {
+      const getMinP = (t: GroupedTrain) => Math.min(...Object.values(t.classes).map(c => c?.price ?? Infinity));
+      list.sort((a, b) => getMinP(a) - getMinP(b));
+    } else if (sortBy === "duration-asc") {
+      list.sort((a, b) => a.duration.localeCompare(b.duration));
+    }
+
+    return list;
+  }, [groupedTrains, filterClass, filterTime, sortBy, searchParams]);
 
   // Hitung harga termurah efektif untuk hari terpilih (memperhitungkan promo aktif & kelayakan rute)
   const currentDayLowestPrice = useMemo(() => {
@@ -769,32 +815,151 @@ function SearchResultsContent() {
               )
             )}
 
-            {/* 3. Matriks Jam Keberangkatan x Kelas */}
-            <div className="pb-4">
-              {/* DESKTOP TABLE VIEW (hidden on mobile, visible on md and up) */}
-              <div className="hidden md:block">
-                <div className="min-w-[650px]">
-                  {/* Header Kelas - Sticky saat scroll */}
-                  <div className="sticky top-[84px] z-30 bg-[var(--color-bg-muted)] pt-2 pb-2">
-                    <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-0 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                      <div className="col-span-1 py-3 px-4 text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center bg-gray-50/80">
-                        Jadwal Kereta
-                      </div>
-                      <div className="col-span-1 text-center font-bold text-gray-700 text-sm border-t-4 border-t-gray-400 py-3 border-l border-gray-200 bg-white">
-                        Ekonomi
-                      </div>
-                      <div className="col-span-1 text-center font-bold text-[#003C71] text-sm border-t-4 border-t-[#003C71] py-3 border-l border-gray-200 bg-white">
-                        Bisnis
-                      </div>
-                      <div className="col-span-1 text-center font-bold text-[#F58220] text-sm border-t-4 border-t-[#F58220] py-3 border-l border-gray-200 bg-white">
-                        Eksekutif
+            {/* Toolbar Filter & Sorting Dropdown (Background Biru Primary) */}
+            <div className="bg-[#003C71] text-white rounded-lg shadow-sm p-3 mb-4 border border-[#002a50] flex flex-wrap items-center justify-between gap-3">
+              {/* Kiri: Kelompok Dropdown Filter */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white">
+                  <Filter size={15} className="text-[#F58220]" />
+                  <span>Filter:</span>
+                </div>
+
+                {/* Dropdown 1: Kelas Kereta */}
+                <div className="flex items-center gap-1.5">
+                  <label htmlFor="filter-class-dropdown" className="text-xs font-medium text-white/80 hidden sm:inline">
+                    Kelas:
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="filter-class-dropdown"
+                      value={filterClass}
+                      onChange={(e) => setFilterClass(e.target.value)}
+                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                    >
+                      <option value="ALL" className="bg-[#003C71] text-white">Semua Kelas</option>
+                      <option value="Eksekutif" className="bg-[#003C71] text-white">Eksekutif</option>
+                      <option value="Bisnis" className="bg-[#003C71] text-white">Bisnis</option>
+                      <option value="Ekonomi" className="bg-[#003C71] text-white">Ekonomi</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Dropdown 2: Waktu Keberangkatan */}
+                <div className="flex items-center gap-1.5">
+                  <label htmlFor="filter-time-dropdown" className="text-xs font-medium text-white/80 hidden sm:inline">
+                    Waktu:
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="filter-time-dropdown"
+                      value={filterTime}
+                      onChange={(e) => setFilterTime(e.target.value)}
+                      className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                    >
+                      <option value="ALL" className="bg-[#003C71] text-white">Semua Jam</option>
+                      <option value="pagi" className="bg-[#003C71] text-white">Pagi (04:00 - 11:59)</option>
+                      <option value="siang" className="bg-[#003C71] text-white">Siang (12:00 - 17:59)</option>
+                      <option value="malam" className="bg-[#003C71] text-white">Malam (18:00 - 23:59)</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Tombol Reset Filter jika aktif */}
+                {(filterClass !== "ALL" || filterTime !== "ALL" || sortBy !== "time-asc") && (
+                  <button
+                    onClick={() => { setFilterClass("ALL"); setFilterTime("ALL"); setSortBy("time-asc"); }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-[#F58220] hover:bg-[#e07118] text-white text-xs font-bold rounded-md shadow-xs transition-colors cursor-pointer"
+                    title="Reset filter ke default"
+                  >
+                    <RotateCcw size={12} />
+                    <span>Reset</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Kanan: Dropdown Sorting */}
+              <div className="flex items-center gap-2 ml-auto">
+                <ArrowUpDown size={14} className="text-white/80" />
+                <label htmlFor="sort-select" className="text-xs font-bold text-white">
+                  Urutkan:
+                </label>
+                <div className="relative">
+                  <select
+                    id="sort-select"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md pl-3 pr-8 py-1.5 border border-white/30 focus:outline-none focus:ring-2 focus:ring-[#F58220] cursor-pointer transition-all appearance-none"
+                  >
+                    <option value="time-asc" className="bg-[#003C71] text-white">Waktu Berangkat (Paling Awal)</option>
+                    <option value="time-desc" className="bg-[#003C71] text-white">Waktu Berangkat (Paling Akhir)</option>
+                    <option value="price-asc" className="bg-[#003C71] text-white">Harga (Paling Murah)</option>
+                    <option value="duration-asc" className="bg-[#003C71] text-white">Durasi (Paling Cepat)</option>
+                  </select>
+                  <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/80 pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Matriks Jam Keberangkatan x Kelas ATAU Empty State */}
+            {displayedTrains.length === 0 ? (
+              <div id="empty-state-card" className="bg-white rounded-xl border border-gray-200 p-8 sm:p-12 text-center flex flex-col items-center justify-center shadow-xs my-4">
+                <div className="relative w-36 h-36 mb-4">
+                  <Image 
+                    src="/Maskot/maskot_bingung.webp" 
+                    alt="Jadwal Tidak Ditemukan"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Jadwal Kereta Tidak Ditemukan</h3>
+                <p className="text-sm text-gray-500 max-w-md mx-auto mb-6 leading-relaxed">
+                  Tidak ada kereta yang sesuai dengan kombinasi filter atau jadwal pada tanggal ini. Silakan atur ulang filter atau pilih tanggal lain pada kalender di atas.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <button
+                    onClick={() => { setFilterClass("ALL"); setFilterTime("ALL"); setSortBy("time-asc"); }}
+                    className="px-5 py-2.5 bg-[var(--color-primary)] text-white text-sm font-bold rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors inline-flex items-center gap-2 shadow-xs cursor-pointer"
+                  >
+                    <RotateCcw size={16} />
+                    Reset Semua Filter
+                  </button>
+                  <button
+                    onClick={() => router.push(`/peta-rute?origin=${originCode}&dest=${destCode}`)}
+                    className="px-5 py-2.5 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors inline-flex items-center gap-2 cursor-pointer"
+                  >
+                    <MapPin size={16} />
+                    Cek di Peta Rute
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="pb-4">
+                {/* DESKTOP TABLE VIEW (hidden on mobile, visible on md and up) */}
+                <div className="hidden md:block">
+                  <div className="min-w-[650px]">
+                    {/* Header Kelas - Sticky saat scroll */}
+                    <div className="sticky top-[84px] z-30 bg-[var(--color-bg-muted)] pt-2 pb-2">
+                      <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-0 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div className="col-span-1 py-3 px-4 text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center bg-gray-50/80">
+                          Jadwal Kereta
+                        </div>
+                        <div className="col-span-1 text-center font-bold text-gray-700 text-sm border-t-4 border-t-gray-400 py-3 border-l border-gray-200 bg-white">
+                          Ekonomi
+                        </div>
+                        <div className="col-span-1 text-center font-bold text-[#003C71] text-sm border-t-4 border-t-[#003C71] py-3 border-l border-gray-200 bg-white">
+                          Bisnis
+                        </div>
+                        <div className="col-span-1 text-center font-bold text-[#F58220] text-sm border-t-4 border-t-[#F58220] py-3 border-l border-gray-200 bg-white">
+                          Eksekutif
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Rows (Schedules) */}
-                  <div className="space-y-4">
-                    {groupedTrains.map((train, idx) => (
+                    {/* Rows (Schedules) */}
+                    <div className="space-y-4">
+                      {displayedTrains.map((train, idx) => (
                       <div key={idx} className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-0 bg-white rounded-md shadow-sm border border-gray-200">
 
                         {/* Waktu & Kereta Info */}
@@ -912,7 +1077,7 @@ function SearchResultsContent() {
 
               {/* MOBILE ADAPTIVE CARD VIEW (visible on md:hidden) */}
               <div className="block md:hidden space-y-3.5">
-                {groupedTrains.map((train, idx) => {
+                {displayedTrains.map((train, idx) => {
                   const isAnySelected = selectedTrain && (
                     train.classes["Ekonomi"]?.id === selectedTrain.id ||
                     train.classes["Bisnis"]?.id === selectedTrain.id ||
@@ -1064,8 +1229,9 @@ function SearchResultsContent() {
                 })}
               </div>
             </div>
-          </div>
-          {/* End Left Column */}
+          )}
+        </div>
+        {/* End Left Column */}
 
           {/* 4. Sidebar Ringkasan Perjalanan */}
           <div className="w-full lg:w-80 flex-shrink-0 self-start lg:sticky lg:top-[104px] z-30">

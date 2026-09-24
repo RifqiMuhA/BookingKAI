@@ -42,6 +42,7 @@ next-env.d.ts
 
 # docs and temp scripts
 *.docx
+!Laporan_Information_Search_Booking_KAI.docx
 *.pdf
 Makalah_*.md
 __pycache__/
